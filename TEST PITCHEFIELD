@@ -1,392 +1,572 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pitchfield — Plateforme Intégrée Pro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --navy: #0D1B2E; --navy-mid: #1A3A5C; --navy-light: #243F60;
-            --gold: #C9A84C; --gold-light: #E8C96A; --gold-pale: #FFF8E7;
-            --cream: #F9F6F0; --white: #FFFFFF;
-            --text-dark: #0D1B2E; --text-mid: #4A5568; --text-light: #8898A8;
-            --border: rgba(13,27,46,0.08); --green: #1E7E34; --red: #E24B4A;
-            --sidebar-w: 260px; --shadow: 0 10px 30px rgba(13,27,46,0.05);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pitchfield — Là où ton futur commence</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0D1B2E;--navy-mid:#1A3A5C;--navy-light:#243F60;
+  --gold:#C9A84C;--gold-light:#E8C96A;--gold-pale:#FFF8E7;
+  --cream:#F9F6F0;--white:#FFFFFF;
+  --text-dark:#0D1B2E;--text-mid:#4A5568;--text-light:#8898A8;
+  --border:rgba(13,27,46,0.1);--green:#1E7E34;--green-light:#D4EDDA;
+  --red:#E24B4A;--sidebar-w:240px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text-dark);overflow-x:hidden;}
 
-        * { margin:0; padding:0; box-sizing:border-box; }
-        body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text-dark); overflow-x: hidden; scroll-behavior: smooth; }
-        
-        /* Visibilité par Rôles */
-        .admin-only, .pro-only, .user-only { display: none; }
-        body.role-admin .admin-only { display: block; }
-        body.role-pro .pro-only { display: block; }
-        body.role-user .user-only { display: block; }
+/* ── RESPONSIVE UTILITIES ── */
+@media(max-width:768px){
+  .hide-mobile{display:none!important;}
+  .nav-links{display:none!important;}
+  .hero{padding:100px 24px 60px!important;flex-direction:column!important;}
+  .hero-stats{position:static!important;transform:none!important;flex-direction:row!important;flex-wrap:wrap!important;gap:12px!important;margin-top:40px!important;width:100%!important;}
+  .hero h1{font-size:36px!important;letter-spacing:-1px!important;}
+  .features{padding:60px 24px!important;}
+  .features-grid{grid-template-columns:1fr!important;}
+  .reviews{padding:60px 24px!important;}
+  .reviews-grid{grid-template-columns:1fr!important;}
+  .offers-page{padding:80px 16px 40px!important;}
+  .offers-grid{grid-template-columns:1fr!important;}
+  .b2b-grid{grid-template-columns:1fr!important;}
+  .commission-banner{flex-direction:column!important;text-align:center!important;}
+  .login-page{flex-direction:column!important;}
+  .login-left{padding:60px 24px 40px!important;}
+  .login-right{padding:40px 24px!important;}
+  .app-layout{flex-direction:column!important;}
+  .sidebar{width:100%!important;position:relative!important;top:auto!important;height:auto!important;padding:12px 0!important;}
+  .sidebar-user{display:none!important;}
+  .sidebar-nav{display:flex!important;flex-wrap:wrap!important;padding:0 8px!important;gap:4px!important;}
+  .sidebar-nav li a{padding:8px 12px!important;font-size:12px!important;border-radius:8px!important;}
+  .sidebar-section{display:none!important;}
+  .main-content{margin-left:0!important;padding:16px!important;}
+  .dash-kpis{grid-template-columns:1fr 1fr!important;}
+  .dash-grid{grid-template-columns:1fr!important;}
+  .domains-grid{grid-template-columns:1fr 1fr!important;}
+  .favs-grid{grid-template-columns:1fr!important;}
+  .messages-layout{grid-template-columns:1fr!important;height:auto!important;}
+  .messages-list{display:none!important;}
+  .rdv-grid{grid-template-columns:1fr!important;}
+  .courses-grid{grid-template-columns:1fr!important;}
+  .footer-grid{grid-template-columns:1fr 1fr!important;}
+  .footer-brand{grid-column:1/-1!important;}
+  .section-title{font-size:28px!important;}
+  .nav-mobile-btn{display:flex!important;}
+  .mobile-menu{display:block!important;}
+}
 
-        /* --- NAVIGATION --- */
-        .nav {
-            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-            background: rgba(13,27,46,0.95); backdrop-filter: blur(15px);
-            height: 70px; display: flex; align-items: center; justify-content: space-between;
-            padding: 0 40px; border-bottom: 1px solid rgba(201,168,76,0.15);
-        }
-        .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 24px; color: var(--gold); cursor: pointer; letter-spacing: -1px; }
-        .nav-logo span { color: white; }
-        .role-badge { font-size: 10px; background: var(--gold); color: var(--navy); padding: 4px 12px; border-radius: 50px; font-weight: 800; text-transform: uppercase; }
+/* ── NAV ── */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(13,27,46,0.97);backdrop-filter:blur(12px);
+  height:64px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 40px;border-bottom:1px solid rgba(201,168,76,0.2);
+}
+.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--gold);letter-spacing:-0.5px;cursor:pointer;}
+.nav-logo span{color:var(--white);}
+.nav-links{display:flex;gap:32px;align-items:center;}
+.nav-links a{color:rgba(255,255,255,0.7);text-decoration:none;font-size:14px;cursor:pointer;transition:color .2s;}
+.nav-links a:hover{color:var(--white);}
+.nav-cta{background:var(--gold);color:var(--navy);padding:9px 22px;border-radius:50px;font-size:14px;font-weight:500;cursor:pointer;border:none;}
+.nav-mobile-btn{display:none;background:none;border:none;cursor:pointer;flex-direction:column;gap:5px;}
+.nav-mobile-btn span{display:block;width:22px;height:2px;background:var(--white);}
+.mobile-menu{display:none;position:fixed;top:64px;left:0;right:0;background:var(--navy);z-index:99;padding:16px;}
+.mobile-menu a{display:block;padding:12px 16px;color:rgba(255,255,255,0.8);text-decoration:none;}
 
-        /* --- LAYOUT --- */
-        .app-layout { display: flex; padding-top: 70px; min-height: 100vh; }
-        .sidebar {
-            width: var(--sidebar-w); background: var(--navy); position: fixed;
-            top: 70px; bottom: 0; left: 0; padding: 30px 15px;
-            border-right: 1px solid rgba(255,255,255,0.05); z-index: 99;
-        }
-        .sidebar-nav { list-style: none; }
-        .sidebar-nav li { margin-bottom: 8px; }
-        .sidebar-nav li a {
-            display: flex; align-items: center; gap: 15px; padding: 14px 18px;
-            border-radius: 12px; color: rgba(255,255,255,0.5); text-decoration: none;
-            font-size: 15px; font-weight: 500; cursor: pointer; transition: 0.3s;
-        }
-        .sidebar-nav li a:hover, .sidebar-nav li a.active { background: rgba(201,168,76,0.1); color: var(--gold); }
-        .sidebar-nav li a.active { border-left: 3px solid var(--gold); border-radius: 4px 12px 12px 4px; }
+/* ── PAGES ── */
+.page{display:none;min-height:100vh;padding-top:64px;}
+.page.active{display:block;}
 
-        .main-content { margin-left: var(--sidebar-w); flex: 1; padding: 40px; max-width: 1200px; }
+/* ── SIDEBAR LAYOUT ── */
+.app-layout{display:flex;min-height:calc(100vh - 64px);}
+.sidebar{
+  width:var(--sidebar-w);background:var(--navy);flex-shrink:0;position:fixed;
+  top:64px;bottom:0;left:0;overflow-y:auto;padding:24px 0;
+  border-right:1px solid rgba(255,255,255,0.06);
+}
+.sidebar-user{padding:0 20px 24px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:16px;}
+.sidebar-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;color:var(--navy);}
+.sidebar-name{font-size:14px;font-weight:500;color:var(--white);margin-top:10px;}
+.sidebar-role{font-size:12px;color:rgba(255,255,255,0.45);}
+.sidebar-nav{list-style:none;padding:0 8px;}
+.sidebar-nav li a{
+  display:flex;align-items:center;gap:12px;padding:10px 12px;
+  border-radius:10px;color:rgba(255,255,255,0.6);text-decoration:none;
+  font-size:13.5px;cursor:pointer;
+}
+.sidebar-nav li a.active{background:rgba(201,168,76,0.15);color:var(--gold);}
+.sidebar-section{font-size:10px;font-weight:500;color:rgba(255,255,255,0.25);text-transform:uppercase;padding:16px 20px 6px;}
+.main-content{margin-left:var(--sidebar-w);flex:1;padding:32px 36px;background:var(--cream);}
 
-        /* --- DASHBOARD ELEMENTS --- */
-        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 40px; }
-        .kpi-card { background: white; padding: 25px; border-radius: 20px; border: 1px solid var(--border); text-align: center; box-shadow: var(--shadow); }
-        .kpi-card h3 { font-size: 32px; font-family: 'Syne'; color: var(--navy); }
-        .kpi-card p { font-size: 13px; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }
+/* ── ROLES ADMIN / USER ── */
+.admin-only { display: none; }
+body.role-admin .admin-only { display: block; }
+.role-badge-admin { display:none; background:var(--gold); color:var(--navy); font-size:10px; font-weight:700; padding:2px 8px; border-radius:50px; }
+body.role-admin .role-badge-admin { display:inline-block; }
 
-        /* --- CARDS & UI --- */
-        .card { background: var(--white); border-radius: 24px; padding: 30px; border: 1px solid var(--border); margin-bottom: 25px; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; overflow: hidden; }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(13,27,46,0.1); border-color: var(--gold); }
-        .btn { padding: 14px 28px; border-radius: 50px; border: none; cursor: pointer; font-weight: 700; font-family: 'DM Sans'; transition: 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 10px; }
-        .btn-gold { background: var(--gold); color: var(--navy); }
-        .btn-gold:hover { background: var(--gold-light); box-shadow: 0 8px 20px rgba(201,168,76,0.3); }
-        .btn-navy { background: var(--navy); color: white; }
-        .tag { background: var(--cream); color: var(--navy-mid); padding: 5px 12px; border-radius: 50px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+/* ── DASHBOARD ── */
+.dash-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;}
+.kpi-card{background:var(--white);border-radius:16px;padding:20px;border:1px solid var(--border);}
+.kpi-value{font-family:'Syne',sans-serif;font-size:28px;font-weight:700;}
 
-        /* --- ACADEMY & EXPLORE --- */
-        .grid-3 { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }
-        .search-bar { width: 100%; padding: 15px 25px; border-radius: 50px; border: 1px solid var(--border); background: white; margin-bottom: 30px; font-family: 'DM Sans'; outline: none; transition: 0.3s; }
-        .search-bar:focus { border-color: var(--gold); box-shadow: 0 0 0 4px var(--gold-pale); }
+/* ── ACADEMY DYNAMIQUE ── */
+.academy-admin-panel { background:var(--navy); border-radius:16px; padding:24px; margin-bottom:24px; border:2px solid var(--gold); }
+.academy-admin-title { font-family:'Syne',sans-serif; font-size:16px; font-weight:700; color:var(--white); margin-bottom:16px; display:flex; align-items:center; gap:10px; }
+.admin-module-item { background:rgba(255,255,255,0.05); border-radius:10px; padding:12px; display:flex; align-items:center; gap:12px; margin-bottom:8px; }
+.admin-add-btn { background:var(--gold); color:var(--navy); border:none; padding:6px 12px; border-radius:50px; font-size:12px; font-weight:600; cursor:pointer; }
 
-        /* --- CHATBOT --- */
-        .chat-container { height: 500px; display: flex; flex-direction: column; background: white; border-radius: 24px; overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow); }
-        .chat-messages { flex: 1; padding: 25px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; background: var(--cream); }
-        .msg { padding: 15px 20px; border-radius: 18px; max-width: 75%; font-size: 14px; line-height: 1.6; position: relative; }
-        .msg-bot { background: var(--navy); color: white; align-self: flex-start; border-bottom-left-radius: 4px; box-shadow: 0 4px 15px rgba(13,27,46,0.1); }
-        .msg-user { background: var(--gold); color: var(--navy); align-self: flex-end; border-bottom-right-radius: 4px; font-weight: 500; }
+.academy-hero{background:var(--navy);border-radius:20px;padding:40px;margin-bottom:24px;color:white;}
+.academy-toolbar{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;}
+.academy-search input{padding:10px 16px;border-radius:50px;border:1px solid var(--border);width:300px;}
+.academy-cats{display:flex;gap:8px;margin-bottom:20px;}
+.academy-cat{padding:8px 16px;border-radius:50px;background:white;border:1px solid var(--border);cursor:pointer;font-size:13px;}
+.academy-cat.active{background:var(--navy);color:white;}
 
-        /* --- CALENDRIER --- */
-        .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-family: 'Syne'; }
-        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
-        .cal-day { aspect-ratio: 1; background: white; border: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; border-radius: 15px; font-weight: 700; transition: 0.3s; font-size: 16px; }
-        .cal-day:hover:not(.blocked) { background: var(--gold-pale); border-color: var(--gold); color: var(--gold); }
-        .cal-day.blocked { background: #FFE4E6; color: var(--red); cursor: not-allowed; opacity: 0.6; }
-        .cal-day.blocked::after { content: 'COMPLET'; font-size: 8px; margin-top: 4px; }
-        .cal-day.selected { background: var(--navy); color: white; border-color: var(--navy); transform: scale(1.1); box-shadow: 0 10px 20px rgba(13,27,46,0.2); }
+.courses-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.course-card{background:white;border-radius:20px;overflow:hidden;border:1px solid var(--border);transition:0.3s;display:flex;flex-direction:column;}
+.course-thumb{height:140px;display:flex;align-items:center;justify-content:center;font-size:40px;background:var(--navy-light);position:relative;}
+.course-body{padding:20px;flex:1;}
+.course-title{font-family:'Syne',sans-serif;font-weight:700;margin-bottom:10px;}
 
-        /* --- SIMULATEUR --- */
-        #test-panel { 
-            position: fixed; bottom: 25px; right: 25px; background: var(--navy); 
-            padding: 20px; border-radius: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.4); 
-            z-index: 2000; border: 1px solid var(--gold); width: 240px; color: white;
-        }
-        .test-btn { width: 100%; padding: 12px; margin-top: 8px; font-size: 12px; border-radius: 12px; border: none; cursor: pointer; font-weight: 700; text-align: left; transition: 0.2s; }
-        .test-btn:hover { filter: brightness(1.1); transform: translateX(5px); }
+.video-player-section { margin-top:15px; border-top:1px solid var(--border); padding-top:12px; display:none; }
+.video-player-section.has-videos { display:block; }
+.video-pill { display:inline-flex; align-items:center; gap:6px; background:var(--green-light); color:var(--green); font-size:11px; padding:4px 12px; border-radius:50px; cursor:pointer; margin:2px; font-weight:600; }
+.video-embed-area { margin-top:10px; border-radius:12px; overflow:hidden; display:none; background:#000; }
 
-        @media (max-width: 900px) {
-            .sidebar { width: 80px; padding: 30px 10px; }
-            .sidebar span { display: none; }
-            .main-content { margin-left: 80px; padding: 25px; }
-            .nav { padding: 0 20px; }
-        }
-    </style>
+/* ── RECHERCHE & FAVORIS ── */
+.domain-card{background:white;padding:24px;border-radius:16px;border:1px solid var(--border);cursor:pointer;}
+.fav-card{background:white;padding:20px;border-radius:16px;border:1px solid var(--border);display:flex;gap:15px;}
+.fav-avatar{width:50px;height:50px;border-radius:12px;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center;font-weight:700;}
+
+/* ── MESSAGES ── */
+.messages-layout{display:grid;grid-template-columns:280px 1fr;background:white;border-radius:20px;height:600px;overflow:hidden;}
+.messages-list{border-right:1px solid var(--border);overflow-y:auto;}
+.conv-item{padding:15px;border-bottom:1px solid var(--border);cursor:pointer;}
+.chat-area{display:flex;flex-direction:column;height:100%;}
+.chat-messages{flex:1;padding:20px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;}
+.msg-bubble{padding:10px 15px;border-radius:15px;max-width:70%;font-size:14px;}
+.msg-in .msg-bubble{background:var(--cream);}
+.msg-out{align-self:flex-end;}
+.msg-out .msg-bubble{background:var(--navy);color:white;}
+
+/* ── RDV ── */
+.calendar-card{background:white;padding:24px;border-radius:20px;}
+.cal-days{display:grid;grid-template-columns:repeat(7,1fr);border:1px solid var(--border);}
+.cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;cursor:pointer;border:0.5px solid var(--border);}
+.cal-day.today{background:var(--navy);color:white;}
+.cal-day.has-event::after{content:'';width:4px;height:4px;background:var(--gold);border-radius:50%;position:absolute;bottom:5px;}
+
+/* ── MODALES ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:1000;align-items:center;justify-content:center;}
+.modal-content{background:white;padding:32px;border-radius:24px;width:500px;max-width:90%;position:relative;}
+
+/* ── FORM ── */
+.form-group{margin-bottom:16px;}
+.form-label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;}
+.form-input, .form-select{width:100%;padding:12px;border-radius:10px;border:1px solid var(--border);font-family:inherit;}
+.form-btn{width:100%;padding:14px;background:var(--navy);color:white;border:none;border-radius:50px;font-weight:600;cursor:pointer;}
+
+</style>
 </head>
 <body class="role-user">
 
-    <div id="test-panel">
-        <strong style="font-size: 11px; opacity: 0.5; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 10px;">🛠 Switch de Session</strong>
-        <button class="test-btn" style="background: #3B82F6; color: white;" onclick="setRole('user')">📱 Session Étudiant</button>
-        <button class="test-btn" style="background: #F59E0B; color: var(--navy);" onclick="setRole('pro')">💼 Session Mentor Pro</button>
-        <button class="test-btn" style="background: #EF4444; color: white;" onclick="setRole('admin')">👑 Session Admin Master</button>
-    </div>
+<nav class="nav">
+  <div class="nav-logo" onclick="showPage('home')">Pitch<span>field</span></div>
+  <div class="nav-links">
+    <a onclick="showPage('home')">Accueil</a>
+    <a onclick="showPage('offres')">Offres</a>
+    <a onclick="showPage('recherche')">Explorer</a>
+    <a onclick="showPage('academy')">Académie</a>
+    <a onclick="showPage('contact')">Contact</a>
+  </div>
+  <div class="nav-right">
+    <button class="nav-cta" onclick="showPage('login')">Connexion</button>
+    <button class="nav-mobile-btn" onclick="toggleMobileMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
 
-    <nav class="nav">
-        <div class="nav-logo" onclick="showPage('dash')">Pitch<span>field</span></div>
-        <div style="display: flex; align-items: center; gap: 15px;">
-            <div id="role-tag" class="role-badge">ÉTUDIANT</div>
-            <div style="width: 35px; height: 35px; border-radius: 50%; background: var(--gold); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px; color: var(--navy);">JD</div>
+<div id="page-home" class="page active">
+  <div style="background:var(--navy); padding:100px 40px; color:white; text-align:center;">
+    <h1 style="font-family:'Syne'; font-size:60px; margin-bottom:20px;">Le terrain où tu apprends à <span style="color:var(--gold)">convaincre.</span></h1>
+    <p style="max-width:700px; margin:0 auto 40px; opacity:0.8;">Pitchfield connecte les étudiants avec des professionnels pour préparer l'avenir.</p>
+    <button class="form-btn" style="width:auto; padding:15px 40px; background:var(--gold); color:var(--navy);" onclick="showPage('login')">Démarrer gratuitement</button>
+  </div>
+  <div style="padding:80px 40px; text-align:center;">
+      <h2 style="font-family:'Syne'; font-size:32px;">Tout ce dont tu as besoin pour réussir</h2>
+      <div class="features-grid" style="display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:40px;">
+          <div class="feature-card"><h3>Orientation</h3><p>Trouve ta voie avec des mentors.</p></div>
+          <div class="feature-card"><h3>Alternance</h3><p>Accède au réseau Thales et plus.</p></div>
+          <div class="feature-card"><h3>Entretiens</h3><p>Simulations réelles avec RH.</p></div>
+      </div>
+  </div>
+</div>
+
+<div id="page-offres" class="page">
+    <div class="offers-page" style="padding:60px 40px; text-align:center;">
+        <h2 style="font-family:'Syne'; font-size:40px;">Nos Offres</h2>
+        <div class="offers-grid" style="display:grid; grid-template-columns:repeat(3,1fr); gap:30px; margin-top:50px;">
+            <div class="offer-card" style="background:white; padding:40px; border-radius:20px;">
+                <h3>Découverte</h3>
+                <p style="font-size:30px; font-weight:800;">Gratuit</p>
+                <button class="form-btn" style="margin-top:20px;" onclick="showPage('login')">Choisir</button>
+            </div>
+            <div class="offer-card" style="background:var(--navy); color:white; padding:40px; border-radius:20px; border:2px solid var(--gold);">
+                <h3>Étudiant Solo</h3>
+                <p style="font-size:30px; font-weight:800; color:var(--gold);">29€/mois</p>
+                <button class="form-btn" style="margin-top:20px; background:var(--gold); color:var(--navy);" onclick="showPage('login')">Choisir</button>
+            </div>
+            <div class="offer-card" style="background:white; padding:40px; border-radius:20px;">
+                <h3>À la carte</h3>
+                <p style="font-size:30px; font-weight:800;">49€/session</p>
+                <button class="form-btn" style="margin-top:20px;" onclick="showPage('login')">Choisir</button>
+            </div>
         </div>
-    </nav>
-
-    <div class="app-layout">
-        <aside class="sidebar">
-            <ul class="sidebar-nav">
-                <li><a onclick="showPage('dash')" id="nav-dash" class="active">🏠 <span>Dashboard</span></a></li>
-                <li><a onclick="showPage('explore')" id="nav-explore">🔍 <span>Explorer les Mentors</span></a></li>
-                <li><a onclick="showPage('rdv')" id="nav-rdv">📅 <span>Prendre RDV</span></a></li>
-                <li><a onclick="showPage('academy')" id="nav-academy">🎓 <span>Pitch Academy</span></a></li>
-                <li><a onclick="showPage('msg')" id="nav-msg">💬 <span>Assistant IA</span></a></li>
-                <li class="admin-only"><a onclick="alert('Accès aux logs systèmes...')" style="color: var(--red);">⚙️ <span>Admin Config</span></a></li>
-            </ul>
-            <div style="position: absolute; bottom: 30px; left: 15px; right: 15px; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 15px;" class="user-only">
-                <p style="color: white; font-size: 11px; font-weight: bold; margin-bottom: 8px;">OFFRE SOLO</p>
-                <div style="width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 10px;">
-                    <div style="width: 60%; height: 100%; background: var(--gold); border-radius: 10px;"></div>
-                </div>
-                <p style="color: rgba(255,255,255,0.4); font-size: 10px; margin-top: 8px;">60% de ton profil complété</p>
-            </div>
-        </aside>
-
-        <main class="main-content">
-            
-            <div id="page-dash" class="page">
-                <h1 style="font-family: Syne; font-size: 38px; margin-bottom: 10px;">Ravi de vous voir, <span id="user-display-name">Jean</span> !</h1>
-                <p style="color: var(--text-light); margin-bottom: 40px; font-size: 18px;">Voici l'état de ton futur aujourd'hui.</p>
-
-                <div class="kpi-grid">
-                    <div class="kpi-card"><h3>12</h3><p>Sessions faites</p></div>
-                    <div class="kpi-card"><h3>4</h3><p>Fiches lues</p></div>
-                    <div class="kpi-card"><h3>24/03</h3><p>Prochain RDV</p></div>
-                    <div class="kpi-card"><h3 style="color: var(--gold);">Pro</h3><p>Statut Compte</p></div>
-                </div>
-
-                <div class="admin-only card" style="background: var(--navy); color: white; border: 2px solid var(--gold);">
-                    <h3 style="font-family: Syne; color: var(--gold); margin-bottom: 15px;">Actions Administrateur 👑</h3>
-                    <div style="display: flex; gap: 15px;">
-                        <button class="btn btn-gold" onclick="addProPrompt()">+ Mentor</button>
-                        <button class="btn btn-navy" style="border: 1px solid white;" onclick="addFichePrompt()">+ Fiche de révision</button>
-                    </div>
-                </div>
-
-                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px;">
-                    <div class="card">
-                        <h4 style="font-family: Syne; margin-bottom: 20px;">⭐ Mes Mentors Favoris</h4>
-                        <div id="fav-list" style="display: flex; flex-wrap: wrap; gap: 10px;"></div>
-                    </div>
-                    <div class="card" style="background: var(--gold-pale); border-color: var(--gold);">
-                        <h4 style="font-family: Syne; margin-bottom: 15px;">🚀 Pitch Tip</h4>
-                        <p style="font-size: 14px; line-height: 1.6; color: var(--navy);">"N'oublie pas de mentionner tes projets associatifs lors de tes entretiens, Thales adore les profils engagés."</p>
-                    </div>
-                </div>
-            </div>
-
-            <div id="page-explore" class="page" style="display:none;">
-                <h2 style="font-family: Syne; font-size: 32px; margin-bottom: 10px;">Nos Mentors Certifiés</h2>
-                <input type="text" class="search-bar" placeholder="Rechercher par nom, entreprise ou métier (ex: Thales, Ingénieur...)" id="search-pro" oninput="filterPros()">
-                <div id="pro-grid" class="grid-3"></div>
-            </div>
-
-            <div id="page-academy" class="page" style="display:none;">
-                <h2 style="font-family: Syne; font-size: 32px; margin-bottom: 10px;">Pitchfield Academy</h2>
-                <p style="color: var(--text-light); margin-bottom: 30px;">Les meilleures fiches stratégiques rédigées par nos mentors.</p>
-                <div id="academy-grid" class="grid-3"></div>
-            </div>
-
-            <div id="page-rdv" class="page" style="display:none;">
-                <h2 style="font-family: Syne; margin-bottom: 10px;">Planifier une session</h2>
-                <div class="card">
-                    <div class="cal-header">
-                        <h3>Mars 2026</h3>
-                        <div style="display: flex; gap: 10px;">
-                            <span style="font-size: 12px; display: flex; align-items: center; gap: 5px;"><div style="width: 10px; height: 10px; background: #FFE4E6; border-radius: 3px;"></div> Complet</span>
-                            <span style="font-size: 12px; display: flex; align-items: center; gap: 5px;"><div style="width: 10px; height: 10px; border: 1px solid var(--border); border-radius: 3px;"></div> Libre</span>
-                        </div>
-                    </div>
-                    <div class="cal-grid" id="calendar"></div>
-                </div>
-                <div id="rdv-box" class="card" style="display:none; background: var(--gold-pale); border: 2px solid var(--gold);">
-                    <h4 style="font-family: Syne; color: var(--navy);">Confirmer votre demande</h4>
-                    <p id="rdv-text" style="margin: 10px 0; font-weight: 500;"></p>
-                    <button class="btn btn-gold" onclick="confirmBooking()">Envoyer la demande au mentor</button>
-                </div>
-            </div>
-
-            <div id="page-msg" class="page" style="display:none;">
-                <div class="chat-container">
-                    <div style="padding: 20px; background: var(--navy); color: white; display: flex; align-items: center; gap: 15px;">
-                        <div style="width: 10px; height: 10px; background: var(--green); border-radius: 50%;"></div>
-                        <h4 style="font-family: Syne;">Assistant PitchBot</h4>
-                    </div>
-                    <div class="chat-messages" id="chat-box">
-                        <div class="msg msg-bot">Salut ! Je suis PitchBot, ton assistant IA. Je connais toutes les fiches de l'Academy et les secrets des mentors. Comment puis-je t'aider ?</div>
-                    </div>
-                    <div style="padding: 20px; background: white; display: flex; gap: 15px;">
-                        <input type="text" id="chat-input" placeholder="Demande-moi : 'Comment pitcher ?' ou 'Conseils Thales'..." style="flex:1; padding: 15px; border-radius: 12px; border: 1px solid var(--border); outline: none;">
-                        <button class="btn btn-navy" onclick="askBot()">Envoyer</button>
-                    </div>
-                </div>
-            </div>
-
-        </main>
     </div>
+</div>
 
-    <script>
-        // --- DATA ENGINE ---
-        let db = JSON.parse(localStorage.getItem('pitchfield_db_v4')) || {
-            pros: [
-                { id: 1, name: "Léo Leszczynski", job: "Ingénieur Systèmes @ Thales", tags: ["TECH", "DÉFENSE"], verified: true, fav: true },
-                { id: 2, name: "Marie Andrieu", job: "Responsable Recrutement RH", tags: ["RH", "COACHING"], verified: true, fav: false },
-                { id: 3, name: "Julien Faure", job: "Expert Finance & Audit @ Deloitte", tags: ["FINANCE", "AUDIT"], verified: true, fav: false },
-                { id: 4, name: "Sarah Ben", job: "Consultante Marketing Digital", tags: ["MARKETING", "COMM"], verified: false, fav: false }
-            ],
-            fiches: [
-                { id: 1, title: "L'art du Pitch en 2 minutes", cat: "SOFT SKILLS", dur: "5 min" },
-                { id: 2, title: "Optimiser son CV pour Thales", cat: "CARRIÈRE", dur: "8 min" },
-                { id: 3, title: "Les secrets du Networking LinkedIn", cat: "RÉSEAU", dur: "6 min" },
-                { id: 4, title: "Réussir son oral de Bac", cat: "SCOLAIRE", dur: "10 min" }
-            ],
-            blockedDays: [1, 2, 8, 15, 22, 29]
-        };
+<div id="page-login" class="page">
+    <div style="max-width:400px; margin:100px auto; background:white; padding:40px; border-radius:20px; box-shadow:0 10px 30px rgba(0,0,0,0.1);">
+        <h2 style="font-family:'Syne'; margin-bottom:20px;">Connexion</h2>
+        <div class="login-hint" style="margin-bottom:20px; font-size:12px; color:var(--text-mid);">Admin: admin@pitchfield.fr / admin123</div>
+        <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" id="login-email" class="form-input" placeholder="votre@email.com">
+        </div>
+        <div class="form-group">
+            <label class="form-label">Mot de passe</label>
+            <input type="password" id="login-pwd" class="form-input" placeholder="••••••••">
+        </div>
+        <div id="login-err" style="color:red; font-size:12px; margin-bottom:10px; display:none;">Email ou mot de passe incorrect.</div>
+        <button class="form-btn" onclick="doLogin()">Se connecter</button>
+    </div>
+</div>
 
-        function save() { localStorage.setItem('pitchfield_db_v4', JSON.stringify(db)); }
+<div id="page-app" class="page">
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar">LL</div>
+        <div class="sidebar-name" id="sb-name">Utilisateur</div>
+        <div style="margin-top:5px;"><span class="role-badge-admin">👑 Admin</span></div>
+        <div class="sidebar-role" id="sb-role">Étudiant Pitchfield</div>
+      </div>
+      <ul class="sidebar-nav">
+        <li><a onclick="showAppPage('dashboard')" id="nav-dashboard" class="active">Dashboard</a></li>
+        <li><a onclick="showAppPage('recherche')" id="nav-recherche">Recherche</a></li>
+        <li><a onclick="showAppPage('favoris')" id="nav-favoris">Favoris</a></li>
+        <li><a onclick="showAppPage('messages')" id="nav-messages">Messages</a></li>
+        <li><a onclick="showAppPage('rdv')" id="nav-rdv">Rendez-vous</a></li>
+        <li><a onclick="showAppPage('academy')" id="nav-academy">Académie</a></li>
+      </ul>
+      <div class="sidebar-section">Compte</div>
+      <ul class="sidebar-nav">
+        <li><a onclick="showPage('home')">Déconnexion</a></li>
+      </ul>
+    </aside>
 
-        // --- NAVIGATION ---
-        function setRole(role) {
-            document.body.className = 'role-' + role;
-            document.getElementById('role-tag').innerText = role.toUpperCase();
-            document.getElementById('user-display-name').innerText = role === 'admin' ? 'Master' : 'Jean';
-            renderPros();
-        }
+    <div class="main-content">
+      
+      <div id="app-dashboard">
+        <h2 style="font-family:'Syne'; margin-bottom:24px;">Tableau de bord</h2>
+        <div class="dash-kpis">
+          <div class="kpi-card"><div class="kpi-label">Sessions</div><div class="kpi-value">12</div></div>
+          <div class="kpi-card"><div class="kpi-label">Candidatures</div><div class="kpi-value">7</div></div>
+          <div class="kpi-card"><div class="kpi-label">Académie</div><div class="kpi-value">4/10</div></div>
+          <div class="kpi-card"><div class="kpi-label">Prochain RDV</div><div class="kpi-value" style="font-size:18px;">24 Mars</div></div>
+        </div>
+      </div>
 
-        function showPage(id) {
-            document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
-            document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
-            document.getElementById('page-' + id).style.display = 'block';
-            document.getElementById('nav-' + id).classList.add('active');
-            
-            if(id === 'explore') renderPros();
-            if(id === 'academy') renderAcademy();
-            if(id === 'rdv') renderCalendar();
-            if(id === 'dash') renderFavs();
-            window.scrollTo(0,0);
-        }
+      <div id="app-recherche" style="display:none;">
+          <h2 style="font-family:'Syne'; margin-bottom:20px;">Explorer les domaines</h2>
+          <div class="domains-grid" style="display:grid; grid-template-columns:repeat(3,1fr); gap:15px;">
+              <div class="domain-card"><h3>Ingénierie</h3><p>12 mentors</p></div>
+              <div class="domain-card"><h3>Business</h3><p>8 mentors</p></div>
+              <div class="domain-card"><h3>Finance</h3><p>5 mentors</p></div>
+          </div>
+      </div>
 
-        // --- MENTORS LOGIC ---
-        function renderPros() {
-            const grid = document.getElementById('pro-grid');
-            grid.innerHTML = db.pros.map(p => `
-                <div class="card">
-                    <span style="float:right; cursor:pointer; font-size: 20px; color:${p.fav ? 'var(--red)' : '#DDD'}" onclick="toggleFav(${p.id})">${p.fav ? '❤️' : '🤍'}</span>
-                    <div style="display:flex; gap:5px; margin-bottom:12px;">${p.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
-                    <h3 style="font-family: Syne; font-size: 20px; margin-bottom:5px;">${p.name} ${p.verified ? '🛡️' : ''}</h3>
-                    <p style="color: var(--text-mid); font-size: 14px; margin-bottom: 20px;">${p.job}</p>
-                    <button class="btn btn-navy" style="width:100%; font-size:13px;" onclick="showPage('msg')">Prendre contact</button>
-                    <div class="admin-only" style="margin-top:15px; border-top: 1px solid #EEE; padding-top:10px;">
-                        <button class="btn" style="width:100%; font-size:10px; background:#F8F8F8;" onclick="deletePro(${p.id})">Supprimer (Admin)</button>
+      <div id="app-favoris" style="display:none;">
+          <h2 style="font-family:'Syne'; margin-bottom:20px;">Mes Favoris</h2>
+          <div class="fav-card">
+              <div class="fav-avatar">LL</div>
+              <div>
+                  <div style="font-weight:700;">Léo Leszczynski</div>
+                  <div style="font-size:12px; color:var(--text-light);">Ingénieur Thales</div>
+              </div>
+          </div>
+      </div>
+
+      <div id="app-messages" style="display:none;">
+          <div class="messages-layout">
+              <div class="messages-list">
+                  <div class="conv-item"><strong>Léo Leszczynski</strong><p style="font-size:12px;">On se voit demain ?</p></div>
+              </div>
+              <div class="chat-area">
+                  <div class="chat-messages">
+                      <div class="msg msg-in"><div class="msg-bubble">Bonjour !</div></div>
+                      <div class="msg msg-out"><div class="msg-bubble">Hello Léo !</div></div>
+                  </div>
+                  <div style="padding:15px; border-top:1px solid var(--border); display:flex; gap:10px;">
+                      <input type="text" class="form-input" placeholder="Message...">
+                      <button class="form-btn" style="width:auto;">Envoyer</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <div id="app-rdv" style="display:none;">
+          <div class="calendar-card">
+              <h2 style="font-family:'Syne'; margin-bottom:20px;">Planifier une session</h2>
+              <div class="cal-days" id="cal-days"></div>
+          </div>
+      </div>
+
+      <div id="app-academy" style="display:none;">
+        
+        <div class="academy-admin-panel admin-only">
+          <div class="academy-admin-title">🎬 Gestion de l'Académie <span>(ADMIN)</span></div>
+          <p style="font-size:12px; color:rgba(255,255,255,0.6); margin-bottom:15px;">Ajoutez des contenus vidéo aux modules existants.</p>
+          <div id="admin-module-list"></div>
+        </div>
+
+        <div class="academy-hero">
+          <h2 style="font-family:'Syne'; font-size:28px;">Académie Pitchfield</h2>
+          <p style="opacity:0.8;">Apprends à pitcher ton futur avec nos modules experts.</p>
+        </div>
+
+        <div class="academy-toolbar">
+          <div class="academy-search">
+            <input type="text" id="academy-search-input" placeholder="Rechercher un cours..." oninput="filterAcademy()">
+          </div>
+          <div class="academy-cats" id="academy-cats">
+            <div class="academy-cat active" onclick="setAcademyCat('all', this)">Tous</div>
+            <div class="academy-cat" onclick="setAcademyCat('carriere', this)">Carrière</div>
+            <div class="academy-cat" onclick="setAcademyCat('soft', this)">Soft Skills</div>
+            <div class="academy-cat" onclick="setAcademyCat('tech', this)">Tech</div>
+          </div>
+        </div>
+
+        <div class="courses-grid" id="courses-grid">
+          </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div id="video-modal" class="modal-overlay">
+  <div class="modal-content">
+    <button onclick="mClose('video-modal')" style="position:absolute; top:15px; right:15px; border:none; background:none; font-size:20px; cursor:pointer;">×</button>
+    <h3 style="font-family:'Syne'; margin-bottom:20px;">Ajouter une vidéo</h3>
+    <div id="vid-course-label" style="font-size:12px; color:var(--gold); margin-bottom:15px; font-weight:700;"></div>
+    <div class="form-group">
+      <label class="form-label">Titre de la leçon</label>
+      <input type="text" id="vid-title" class="form-input" placeholder="Ex: Introduction au Pitch">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Lien YouTube / Vimeo</label>
+      <input type="text" id="vid-url" class="form-input" placeholder="https://youtube.com/watch?v=...">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Durée (ex: 12 min)</label>
+      <input type="text" id="vid-dur" class="form-input">
+    </div>
+    <button class="form-btn" onclick="saveVideo()">Publier la vidéo</button>
+  </div>
+</div>
+
+<script>
+// ── CONFIGURATION & DONNÉES ──
+var APP_PAGES = ['dashboard','recherche','favoris','messages','rdv','academy'];
+var videoDB = JSON.parse(localStorage.getItem('pitchfield_videos')) || {};
+
+var COURSE_DATA = [
+    { id: 'c1', title: 'Préparer son entretien RH', cat: 'carriere', icon: '🎯', desc: 'Techniques, posture et éloquence.' },
+    { id: 'c2', title: 'Créer un CV ATS', cat: 'carriere', icon: '📄', desc: 'Passe les filtres des grandes entreprises.' },
+    { id: 'c3', title: 'Maîtriser l\'éloquence', cat: 'soft', icon: '🎤', desc: 'Prendre la parole avec confiance.' },
+    { id: 'c4', title: 'Optimiser son LinkedIn', cat: 'carriere', icon: '💼', desc: 'Deviens un aimant à recruteurs.' },
+    { id: 'c5', title: 'Introduction au Trading', cat: 'tech', icon: '📈', desc: 'Comprendre les marchés financiers.' },
+    { id: 'c6', title: 'Gestion du Stress', cat: 'soft', icon: '🧠', desc: 'Rester serein face au jury.' }
+];
+
+// ── NAVIGATION ──
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  if(APP_PAGES.includes(name)){
+    document.getElementById('page-app').classList.add('active');
+    showAppPage(name);
+  } else {
+    document.getElementById('page-'+name).classList.add('active');
+  }
+}
+
+function showAppPage(name){
+  document.querySelectorAll('[id^="app-"]').forEach(p=>p.style.display='none');
+  document.getElementById('app-'+name).style.display='block';
+  document.querySelectorAll('.sidebar-nav a').forEach(a=>a.classList.remove('active'));
+  document.getElementById('nav-'+name).classList.add('active');
+  if(name === 'academy') renderAcademy();
+}
+
+// ── AUTH SYSTEM ──
+function doLogin(){
+    var email = document.getElementById('login-email').value;
+    var pwd = document.getElementById('login-pwd').value;
+    if(email === 'admin@pitchfield.fr' && pwd === 'admin123'){
+        document.body.className = 'role-admin';
+        currentUser = { name: "Léo L.", role: "Administrateur" };
+    } else {
+        document.body.className = 'role-user';
+        currentUser = { name: "Thomas D.", role: "Étudiant" };
+    }
+    document.getElementById('sb-name').innerText = currentUser.name;
+    document.getElementById('sb-role').innerText = currentUser.role;
+    showPage('dashboard');
+}
+
+// ── ACADEMY LOGIC ──
+var currentAcademyCat = 'all';
+
+function renderAcademy(){
+    // Rendu des modules pour les étudiants
+    var grid = document.getElementById('courses-grid');
+    grid.innerHTML = '';
+    
+    COURSE_DATA.forEach(course => {
+        if(currentAcademyCat !== 'all' && course.cat !== currentAcademyCat) return;
+        
+        var vids = videoDB[course.id] || [];
+        var card = document.createElement('div');
+        card.className = 'course-card';
+        card.innerHTML = `
+            <div class="course-thumb">${course.icon}</div>
+            <div class="course-body">
+                <div class="course-title">${course.title}</div>
+                <p style="font-size:12px; color:var(--text-mid);">${course.desc}</p>
+                <div class="video-player-section ${vids.length > 0 ? 'has-videos' : ''}">
+                    <div style="font-size:10px; font-weight:700; margin-bottom:8px; text-transform:uppercase;">${vids.length} Vidéos disponibles</div>
+                    <div class="pills-container">
+                        ${vids.map((v, i) => `<span class="video-pill" onclick="playVideo('${course.id}', ${i}, this)">► ${v.title}</span>`).join('')}
                     </div>
+                    <div class="video-embed-area" id="embed-${course.id}"></div>
                 </div>
-            `).join('');
-        }
+            </div>
+        `;
+        grid.appendChild(card);
+    });
 
-        function filterPros() {
-            const q = document.getElementById('search-pro').value.toLowerCase();
-            const cards = document.querySelectorAll('#pro-grid .card');
-            cards.forEach((card, index) => {
-                const text = db.pros[index].name.toLowerCase() + db.pros[index].job.toLowerCase();
-                card.style.display = text.includes(q) ? 'block' : 'none';
-            });
-        }
+    // Rendu de la liste admin
+    var adminList = document.getElementById('admin-module-list');
+    if(adminList){
+        adminList.innerHTML = '';
+        COURSE_DATA.forEach(course => {
+            var count = (videoDB[course.id] || []).length;
+            var item = document.createElement('div');
+            item.className = 'admin-module-item';
+            item.innerHTML = `
+                <span style="color:white; flex:1; font-size:13px;">${course.title}</span>
+                <span style="color:var(--gold); font-size:11px;">${count} vidéos</span>
+                <button class="admin-add-btn" onclick="openAddVideo('${course.id}', '${course.title}')">+ Vidéo</button>
+            `;
+            adminList.appendChild(item);
+        });
+    }
+}
 
-        function toggleFav(id) {
-            const p = db.pros.find(x => x.id === id);
-            p.fav = !p.fav; save(); renderPros(); renderFavs();
-        }
+function setAcademyCat(cat, el){
+    currentAcademyCat = cat;
+    document.querySelectorAll('.academy-cat').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    renderAcademy();
+}
 
-        function renderFavs() {
-            const list = document.getElementById('fav-list');
-            const favs = db.pros.filter(p => p.fav);
-            list.innerHTML = favs.length ? favs.map(f => `
-                <div class="btn" style="background:var(--navy); color:white; font-size:12px; padding:8px 18px;">${f.name}</div>
-            `).join('') : "<p style='color:#999; font-size:13px;'>Clique sur le coeur sur un profil pour l'ajouter ici.</p>";
-        }
+function filterAcademy(){
+    var q = document.getElementById('academy-search-input').value.toLowerCase();
+    document.querySelectorAll('.course-card').forEach(card => {
+        var title = card.querySelector('.course-title').innerText.toLowerCase();
+        card.style.display = title.includes(q) ? 'flex' : 'none';
+    });
+}
 
-        // --- ACADEMY LOGIC ---
-        function renderAcademy() {
-            const grid = document.getElementById('academy-grid');
-            grid.innerHTML = db.fiches.map(f => `
-                <div class="card" style="border-left: 6px solid var(--gold);">
-                    <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
-                        <span class="tag">${f.cat}</span>
-                        <span style="font-size:11px; color:var(--text-light); font-weight:bold;">⏱️ ${f.dur}</span>
-                    </div>
-                    <h3 style="font-family: Syne; font-size: 18px; margin-bottom: 20px;">${f.title}</h3>
-                    <button class="btn btn-gold" style="width:100%; font-size:13px;" onclick="alert('Accès réservé aux membres Premium.')">Lire la fiche</button>
-                </div>
-            `).join('');
-        }
+// ── VIDÉO LOGIC ──
+var activeCourseId = '';
 
-        // --- CALENDAR LOGIC ---
-        let selectedDay = null;
-        function renderCalendar() {
-            const cal = document.getElementById('calendar'); cal.innerHTML = '';
-            for(let i=1; i<=31; i++) {
-                const isBlocked = db.blockedDays.includes(i);
-                const div = document.createElement('div');
-                div.className = `cal-day ${isBlocked ? 'blocked' : ''}`;
-                div.innerText = i;
-                div.onclick = () => {
-                    if(document.body.classList.contains('role-admin')) {
-                        if(isBlocked) db.blockedDays = db.blockedDays.filter(d => d !== i);
-                        else db.blockedDays.push(i);
-                        save(); renderCalendar();
-                    } else if(!isBlocked) {
-                        selectedDay = i;
-                        document.querySelectorAll('.cal-day').forEach(d => d.classList.remove('selected'));
-                        div.classList.add('selected');
-                        document.getElementById('rdv-box').style.display = 'block';
-                        document.getElementById('rdv-text').innerText = `Session confirmée pour le ${i} Mars 2026 à 14h00.`;
-                    }
-                };
-                cal.appendChild(div);
-            }
-        }
+function openAddVideo(id, title){
+    activeCourseId = id;
+    document.getElementById('vid-course-label').innerText = "Module : " + title;
+    mOpen('video-modal');
+}
 
-        function confirmBooking() {
-            alert(`Demande envoyée ! Le mentor a 24h pour confirmer.`);
-            showPage('dash');
-        }
+function saveVideo(){
+    var t = document.getElementById('vid-title').value;
+    var u = document.getElementById('vid-url').value;
+    var d = document.getElementById('vid-dur').value;
+    
+    if(!t || !u) return alert("Titre et URL requis");
+    
+    if(!videoDB[activeCourseId]) videoDB[activeCourseId] = [];
+    videoDB[activeCourseId].push({ title: t, url: u, dur: d });
+    
+    localStorage.setItem('pitchfield_videos', JSON.stringify(videoDB));
+    mClose('video-modal');
+    renderAcademy();
+}
 
-        // --- PITCHBOT IA ---
-        function askBot() {
-            const input = document.getElementById('chat-input');
-            const box = document.getElementById('chat-box');
-            if(!input.value) return;
+function playVideo(courseId, index, el){
+    var video = videoDB[courseId][index];
+    var area = document.getElementById('embed-'+courseId);
+    
+    // Toggle
+    if(area.style.display === 'block' && area.dataset.idx == index){
+        area.style.display = 'none';
+        return;
+    }
 
-            box.innerHTML += `<div class="msg msg-user">${input.value}</div>`;
-            const q = input.value.toLowerCase();
-            let r = "Je n'ai pas la réponse exacte, mais je peux demander à Léo de te recontacter. Autre chose ?";
+    var id = "";
+    if(video.url.includes('youtube.com') || video.url.includes('youtu.be')){
+        id = video.url.split('v=')[1] || video.url.split('/').pop();
+        area.innerHTML = `<iframe width="100%" height="200" src="https://www.youtube.com/embed/${id}?autoplay=1" frameborder="0" allowfullscreen></iframe>`;
+    } else {
+        area.innerHTML = `<div style="padding:20px; color:white; font-size:12px;"><a href="${video.url}" target="_blank" style="color:var(--gold);">Cliquez pour ouvrir la vidéo externe ↗</a></div>`;
+    }
+    
+    area.style.display = 'block';
+    area.dataset.idx = index;
+}
 
-            if(q.includes("pitch")) r = "Un bon pitch dure 2min : 30s d'accroche, 1min de parcours, 30s de projet. Regarde la fiche 'L'art du Pitch' !";
-            if(q.includes("cv")) r = "Pour ton CV, utilise une police sans empattement (comme DM Sans) et mets tes résultats en gras (ex: +20% de ventes).";
-            if(q.includes("thales")) r = "Thales recrute beaucoup d'alternants en Mars. Contacte Léo, il y travaille et peut te pistonner !";
+// ── UTILS ──
+function mOpen(id){ document.getElementById(id).style.display = 'flex'; }
+function mClose(id){ document.getElementById(id).style.display = 'none'; }
 
-            setTimeout(() => {
-                box.innerHTML += `<div class="msg msg-bot">${r}</div>`;
-                box.scrollTop = box.scrollHeight;
-            }, 600);
-            input.value = '';
-        }
+function toggleMobileMenu(){
+    var m = document.getElementById('mobile-menu');
+    m.style.display = (m.style.display === 'block') ? 'none' : 'block';
+}
 
-        // Admin Actions
-        function addProPrompt() {
-            const n = prompt("Nom complet :");
-            const j = prompt("Poste / Entreprise :");
-            if(n && j) { db.pros.push({id: Date.now(), name: n, job: j, tags: ["NOUVEAU"], verified: false, fav: false}); save(); renderPros(); }
-        }
+// ── CALENDRIER (BASIC) ──
+function buildCalendar(){
+    var cal = document.getElementById('cal-days');
+    if(!cal) return;
+    cal.innerHTML = '';
+    for(var i=1; i<=31; i++){
+        var d = document.createElement('div');
+        d.className = 'cal-day';
+        d.innerText = i;
+        if(i == 19) d.classList.add('today');
+        cal.appendChild(d);
+    }
+}
 
-        function deletePro(id) {
-            db.pros = db.pros.filter(p => p.id !== id);
-            save(); renderPros();
-        }
+window.onload = function(){
+    buildCalendar();
+};
 
-        // Init
-        showPage('dash');
-    </script>
+</script>
+
 </body>
 </html>

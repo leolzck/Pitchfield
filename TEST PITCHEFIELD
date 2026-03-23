@@ -3,15 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pitchfield — Plateforme Intégrée v4</title>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>Pitchfield — Plateforme Intégrée Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --navy: #0D1B2E; --navy-mid: #1A3A5C; --gold: #C9A84C; 
-            --cream: #F9F6F0; --white: #FFFFFF; --red: #E24B4A; --green: #1E7E34;
+            --navy: #0D1B2E; --navy-mid: #1A3A5C; --navy-light: #243F60;
+            --gold: #C9A84C; --gold-light: #E8C96A; --gold-pale: #FFF8E7;
+            --cream: #F9F6F0; --white: #FFFFFF;
+            --text-dark: #0D1B2E; --text-mid: #4A5568; --text-light: #8898A8;
+            --border: rgba(13,27,46,0.08); --green: #1E7E34; --red: #E24B4A;
+            --sidebar-w: 260px; --shadow: 0 10px 30px rgba(13,27,46,0.05);
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--navy); transition: 0.3s; }
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text-dark); overflow-x: hidden; scroll-behavior: smooth; }
         
         /* Visibilité par Rôles */
         .admin-only, .pro-only, .user-only { display: none; }
@@ -19,329 +24,369 @@
         body.role-pro .pro-only { display: block; }
         body.role-user .user-only { display: block; }
 
-        /* Layout Global */
-        .nav { background: var(--navy); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; color: white; position: fixed; width: 100%; z-index: 1000; border-bottom: 1px solid rgba(201,168,76,0.2); }
-        .app-layout { display: flex; padding-top: 60px; min-height: 100vh; }
-        .sidebar { width: 250px; background: var(--navy); color: white; padding: 2rem 1rem; position: fixed; height: 100vh; border-right: 1px solid rgba(255,255,255,0.05); }
-        .main-content { margin-left: 250px; padding: 2rem; width: calc(100% - 250px); }
+        /* --- NAVIGATION --- */
+        .nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: rgba(13,27,46,0.95); backdrop-filter: blur(15px);
+            height: 70px; display: flex; align-items: center; justify-content: space-between;
+            padding: 0 40px; border-bottom: 1px solid rgba(201,168,76,0.15);
+        }
+        .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 24px; color: var(--gold); cursor: pointer; letter-spacing: -1px; }
+        .nav-logo span { color: white; }
+        .role-badge { font-size: 10px; background: var(--gold); color: var(--navy); padding: 4px 12px; border-radius: 50px; font-weight: 800; text-transform: uppercase; }
 
-        /* Composants UI */
-        .card { background: white; padding: 1.5rem; border-radius: 15px; border: 1px solid rgba(0,0,0,0.1); margin-bottom: 1rem; position: relative; transition: 0.3s; }
-        .card:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-        .btn { padding: 0.6rem 1.2rem; border-radius: 50px; border: none; cursor: pointer; font-weight: 600; transition: 0.3s; font-family: 'DM Sans'; text-align: center; }
+        /* --- LAYOUT --- */
+        .app-layout { display: flex; padding-top: 70px; min-height: 100vh; }
+        .sidebar {
+            width: var(--sidebar-w); background: var(--navy); position: fixed;
+            top: 70px; bottom: 0; left: 0; padding: 30px 15px;
+            border-right: 1px solid rgba(255,255,255,0.05); z-index: 99;
+        }
+        .sidebar-nav { list-style: none; }
+        .sidebar-nav li { margin-bottom: 8px; }
+        .sidebar-nav li a {
+            display: flex; align-items: center; gap: 15px; padding: 14px 18px;
+            border-radius: 12px; color: rgba(255,255,255,0.5); text-decoration: none;
+            font-size: 15px; font-weight: 500; cursor: pointer; transition: 0.3s;
+        }
+        .sidebar-nav li a:hover, .sidebar-nav li a.active { background: rgba(201,168,76,0.1); color: var(--gold); }
+        .sidebar-nav li a.active { border-left: 3px solid var(--gold); border-radius: 4px 12px 12px 4px; }
+
+        .main-content { margin-left: var(--sidebar-w); flex: 1; padding: 40px; max-width: 1200px; }
+
+        /* --- DASHBOARD ELEMENTS --- */
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 40px; }
+        .kpi-card { background: white; padding: 25px; border-radius: 20px; border: 1px solid var(--border); text-align: center; box-shadow: var(--shadow); }
+        .kpi-card h3 { font-size: 32px; font-family: 'Syne'; color: var(--navy); }
+        .kpi-card p { font-size: 13px; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }
+
+        /* --- CARDS & UI --- */
+        .card { background: var(--white); border-radius: 24px; padding: 30px; border: 1px solid var(--border); margin-bottom: 25px; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; overflow: hidden; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(13,27,46,0.1); border-color: var(--gold); }
+        .btn { padding: 14px 28px; border-radius: 50px; border: none; cursor: pointer; font-weight: 700; font-family: 'DM Sans'; transition: 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 10px; }
         .btn-gold { background: var(--gold); color: var(--navy); }
+        .btn-gold:hover { background: var(--gold-light); box-shadow: 0 8px 20px rgba(201,168,76,0.3); }
         .btn-navy { background: var(--navy); color: white; }
-        
-        /* Badges & Tags */
-        .badge-verified { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; background: #0077B5; color: white; border-radius: 50%; font-size: 10px; margin-left: 5px; vertical-align: middle; font-weight: bold; }
-        .tag { background: var(--cream); padding: 3px 10px; border-radius: 50px; font-size: 0.7rem; font-weight: bold; color: var(--navy-mid); }
+        .tag { background: var(--cream); color: var(--navy-mid); padding: 5px 12px; border-radius: 50px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
 
-        /* Simulateur de Rôle Safari */
-        #test-panel { position: fixed; bottom: 20px; right: 20px; background: white; padding: 15px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 2000; border: 2px solid var(--gold); width: 200px; }
+        /* --- ACADEMY & EXPLORE --- */
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }
+        .search-bar { width: 100%; padding: 15px 25px; border-radius: 50px; border: 1px solid var(--border); background: white; margin-bottom: 30px; font-family: 'DM Sans'; outline: none; transition: 0.3s; }
+        .search-bar:focus { border-color: var(--gold); box-shadow: 0 0 0 4px var(--gold-pale); }
 
-        /* Messagerie & Bot */
-        .chat-box { height: 250px; overflow-y: auto; background: #f4f7f6; padding: 15px; border-radius: 10px; display: flex; flex-direction: column; gap: 10px; border: 1px solid #ddd; }
-        .msg { padding: 10px; border-radius: 10px; max-width: 80%; font-size: 0.85rem; line-height: 1.4; }
-        .msg-bot { background: var(--navy); color: white; align-self: flex-start; }
-        .msg-user { background: var(--gold); color: var(--navy); align-self: flex-end; }
+        /* --- CHATBOT --- */
+        .chat-container { height: 500px; display: flex; flex-direction: column; background: white; border-radius: 24px; overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow); }
+        .chat-messages { flex: 1; padding: 25px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; background: var(--cream); }
+        .msg { padding: 15px 20px; border-radius: 18px; max-width: 75%; font-size: 14px; line-height: 1.6; position: relative; }
+        .msg-bot { background: var(--navy); color: white; align-self: flex-start; border-bottom-left-radius: 4px; box-shadow: 0 4px 15px rgba(13,27,46,0.1); }
+        .msg-user { background: var(--gold); color: var(--navy); align-self: flex-end; border-bottom-right-radius: 4px; font-weight: 500; }
 
-        /* Calendrier */
-        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; background: white; padding: 10px; border-radius: 10px; border: 1px solid #ddd; }
-        .cal-day { aspect-ratio: 1; border: 1px solid #eee; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.8rem; border-radius: 5px; }
-        .cal-day.blocked { background: #ffebee; color: var(--red); cursor: not-allowed; text-decoration: line-through; }
-        .cal-day.selected { background: var(--gold); color: var(--navy); font-weight: bold; }
+        /* --- CALENDRIER --- */
+        .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-family: 'Syne'; }
+        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
+        .cal-day { aspect-ratio: 1; background: white; border: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; border-radius: 15px; font-weight: 700; transition: 0.3s; font-size: 16px; }
+        .cal-day:hover:not(.blocked) { background: var(--gold-pale); border-color: var(--gold); color: var(--gold); }
+        .cal-day.blocked { background: #FFE4E6; color: var(--red); cursor: not-allowed; opacity: 0.6; }
+        .cal-day.blocked::after { content: 'COMPLET'; font-size: 8px; margin-top: 4px; }
+        .cal-day.selected { background: var(--navy); color: white; border-color: var(--navy); transform: scale(1.1); box-shadow: 0 10px 20px rgba(13,27,46,0.2); }
+
+        /* --- SIMULATEUR --- */
+        #test-panel { 
+            position: fixed; bottom: 25px; right: 25px; background: var(--navy); 
+            padding: 20px; border-radius: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.4); 
+            z-index: 2000; border: 1px solid var(--gold); width: 240px; color: white;
+        }
+        .test-btn { width: 100%; padding: 12px; margin-top: 8px; font-size: 12px; border-radius: 12px; border: none; cursor: pointer; font-weight: 700; text-align: left; transition: 0.2s; }
+        .test-btn:hover { filter: brightness(1.1); transform: translateX(5px); }
+
+        @media (max-width: 900px) {
+            .sidebar { width: 80px; padding: 30px 10px; }
+            .sidebar span { display: none; }
+            .main-content { margin-left: 80px; padding: 25px; }
+            .nav { padding: 0 20px; }
+        }
     </style>
 </head>
 <body class="role-user">
 
-<div id="test-panel">
-    <strong style="font-size: 0.7rem; display: block; margin-bottom: 10px; text-transform: uppercase; color: #666;">🛠 Simulateur de Compte</strong>
-    <div style="display: grid; grid-template-columns: 1fr; gap: 5px;">
-        <button class="btn" style="font-size: 0.65rem; padding: 6px;" onclick="setRole('user')">📱 Compte Étudiant</button>
-        <button class="btn" style="font-size: 0.65rem; padding: 6px;" onclick="setRole('pro')">💼 Compte Pro</button>
-        <button class="btn" style="font-size: 0.65rem; padding: 6px;" onclick="setRole('admin')">👑 Compte Admin</button>
+    <div id="test-panel">
+        <strong style="font-size: 11px; opacity: 0.5; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 10px;">🛠 Switch de Session</strong>
+        <button class="test-btn" style="background: #3B82F6; color: white;" onclick="setRole('user')">📱 Session Étudiant</button>
+        <button class="test-btn" style="background: #F59E0B; color: var(--navy);" onclick="setRole('pro')">💼 Session Mentor Pro</button>
+        <button class="test-btn" style="background: #EF4444; color: white;" onclick="setRole('admin')">👑 Session Admin Master</button>
     </div>
-</div>
 
-<nav class="nav">
-    <div style="font-family: Syne; font-size: 1.4rem; font-weight: 800; cursor: pointer;" onclick="showPage('dash')">Pitch<span style="color:var(--gold)">field</span></div>
-    <div id="user-tag" style="font-size: 0.75rem; background: rgba(255,255,255,0.1); padding: 5px 15px; border-radius: 50px;">Mode : Étudiant</div>
-</nav>
+    <nav class="nav">
+        <div class="nav-logo" onclick="showPage('dash')">Pitch<span>field</span></div>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <div id="role-tag" class="role-badge">ÉTUDIANT</div>
+            <div style="width: 35px; height: 35px; border-radius: 50%; background: var(--gold); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px; color: var(--navy);">JD</div>
+        </div>
+    </nav>
 
-<div class="app-layout">
-    <aside class="sidebar">
-        <ul style="list-style: none;">
-            <li onclick="showPage('dash')" style="cursor:pointer; padding: 12px; border-radius: 8px;">🏠 Dashboard</li>
-            <li onclick="showPage('explore')" style="cursor:pointer; padding: 12px;">🔍 Explorer les Pros</li>
-            <li onclick="showPage('stages')" style="cursor:pointer; padding: 12px;">💼 Stages & Alternances</li>
-            <li onclick="showPage('rdv')" style="cursor:pointer; padding: 12px;">📅 Calendrier & RDV</li>
-            <li onclick="showPage('msg')" style="cursor:pointer; padding: 12px;">💬 PitchBot Assistant</li>
-            <li onclick="showPage('academy')" style="cursor:pointer; padding: 12px;">🎓 Académie & Fiches</li>
-            <hr style="opacity: 0.1; margin: 20px 0;">
-            <li onclick="openLegal('mentions')" style="font-size: 0.75rem; opacity: 0.6; cursor:pointer; padding: 5px 12px;">Mentions Légales</li>
-            <li onclick="openLegal('cgu')" style="font-size: 0.75rem; opacity: 0.6; cursor:pointer; padding: 5px 12px;">CGU / CGV / Confidentialité</li>
-        </ul>
-    </aside>
+    <div class="app-layout">
+        <aside class="sidebar">
+            <ul class="sidebar-nav">
+                <li><a onclick="showPage('dash')" id="nav-dash" class="active">🏠 <span>Dashboard</span></a></li>
+                <li><a onclick="showPage('explore')" id="nav-explore">🔍 <span>Explorer les Mentors</span></a></li>
+                <li><a onclick="showPage('rdv')" id="nav-rdv">📅 <span>Prendre RDV</span></a></li>
+                <li><a onclick="showPage('academy')" id="nav-academy">🎓 <span>Pitch Academy</span></a></li>
+                <li><a onclick="showPage('msg')" id="nav-msg">💬 <span>Assistant IA</span></a></li>
+                <li class="admin-only"><a onclick="alert('Accès aux logs systèmes...')" style="color: var(--red);">⚙️ <span>Admin Config</span></a></li>
+            </ul>
+            <div style="position: absolute; bottom: 30px; left: 15px; right: 15px; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 15px;" class="user-only">
+                <p style="color: white; font-size: 11px; font-weight: bold; margin-bottom: 8px;">OFFRE SOLO</p>
+                <div style="width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 10px;">
+                    <div style="width: 60%; height: 100%; background: var(--gold); border-radius: 10px;"></div>
+                </div>
+                <p style="color: rgba(255,255,255,0.4); font-size: 10px; margin-top: 8px;">60% de ton profil complété</p>
+            </div>
+        </aside>
 
-    <main class="main-content">
-        <div id="page-dash" class="page">
-            <h1 style="font-family: Syne; margin-bottom: 20px;">Bienvenue sur Pitchfield</h1>
+        <main class="main-content">
             
-            <div class="admin-only card" style="background: var(--navy); color: white; border: 2px solid var(--gold);">
-                <h3>Console d'Administration 👑</h3>
-                <p style="margin: 10px 0; font-size: 0.85rem; opacity: 0.8;">Utilisez les boutons ci-dessous pour peupler la plateforme.</p>
-                <div style="display: flex; gap: 10px;">
-                    <button class="btn btn-gold" style="font-size: 0.8rem;" onclick="addProPrompt()">+ Ajouter un Mentor Pro</button>
-                    <button class="btn btn-navy" style="border: 1px solid white; font-size: 0.8rem;" onclick="addFichePrompt()">+ Publier une Fiche</button>
+            <div id="page-dash" class="page">
+                <h1 style="font-family: Syne; font-size: 38px; margin-bottom: 10px;">Ravi de vous voir, <span id="user-display-name">Jean</span> !</h1>
+                <p style="color: var(--text-light); margin-bottom: 40px; font-size: 18px;">Voici l'état de ton futur aujourd'hui.</p>
+
+                <div class="kpi-grid">
+                    <div class="kpi-card"><h3>12</h3><p>Sessions faites</p></div>
+                    <div class="kpi-card"><h3>4</h3><p>Fiches lues</p></div>
+                    <div class="kpi-card"><h3>24/03</h3><p>Prochain RDV</p></div>
+                    <div class="kpi-card"><h3 style="color: var(--gold);">Pro</h3><p>Statut Compte</p></div>
+                </div>
+
+                <div class="admin-only card" style="background: var(--navy); color: white; border: 2px solid var(--gold);">
+                    <h3 style="font-family: Syne; color: var(--gold); margin-bottom: 15px;">Actions Administrateur 👑</h3>
+                    <div style="display: flex; gap: 15px;">
+                        <button class="btn btn-gold" onclick="addProPrompt()">+ Mentor</button>
+                        <button class="btn btn-navy" style="border: 1px solid white;" onclick="addFichePrompt()">+ Fiche de révision</button>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px;">
+                    <div class="card">
+                        <h4 style="font-family: Syne; margin-bottom: 20px;">⭐ Mes Mentors Favoris</h4>
+                        <div id="fav-list" style="display: flex; flex-wrap: wrap; gap: 10px;"></div>
+                    </div>
+                    <div class="card" style="background: var(--gold-pale); border-color: var(--gold);">
+                        <h4 style="font-family: Syne; margin-bottom: 15px;">🚀 Pitch Tip</h4>
+                        <p style="font-size: 14px; line-height: 1.6; color: var(--navy);">"N'oublie pas de mentionner tes projets associatifs lors de tes entretiens, Thales adore les profils engagés."</p>
+                    </div>
                 </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+            <div id="page-explore" class="page" style="display:none;">
+                <h2 style="font-family: Syne; font-size: 32px; margin-bottom: 10px;">Nos Mentors Certifiés</h2>
+                <input type="text" class="search-bar" placeholder="Rechercher par nom, entreprise ou métier (ex: Thales, Ingénieur...)" id="search-pro" oninput="filterPros()">
+                <div id="pro-grid" class="grid-3"></div>
+            </div>
+
+            <div id="page-academy" class="page" style="display:none;">
+                <h2 style="font-family: Syne; font-size: 32px; margin-bottom: 10px;">Pitchfield Academy</h2>
+                <p style="color: var(--text-light); margin-bottom: 30px;">Les meilleures fiches stratégiques rédigées par nos mentors.</p>
+                <div id="academy-grid" class="grid-3"></div>
+            </div>
+
+            <div id="page-rdv" class="page" style="display:none;">
+                <h2 style="font-family: Syne; margin-bottom: 10px;">Planifier une session</h2>
                 <div class="card">
-                    <h4>⭐ Mes Pros Favoris</h4>
-                    <div id="fav-list" style="margin-top: 15px; display: flex; flex-wrap: wrap; gap: 8px;"></div>
+                    <div class="cal-header">
+                        <h3>Mars 2026</h3>
+                        <div style="display: flex; gap: 10px;">
+                            <span style="font-size: 12px; display: flex; align-items: center; gap: 5px;"><div style="width: 10px; height: 10px; background: #FFE4E6; border-radius: 3px;"></div> Complet</span>
+                            <span style="font-size: 12px; display: flex; align-items: center; gap: 5px;"><div style="width: 10px; height: 10px; border: 1px solid var(--border); border-radius: 3px;"></div> Libre</span>
+                        </div>
+                    </div>
+                    <div class="cal-grid" id="calendar"></div>
                 </div>
-                <div class="card">
-                    <h4>📅 Prochain RDV</h4>
-                    <div id="next-rdv" style="margin-top: 15px; font-size: 0.9rem; font-weight: bold; color: var(--gold);">Aucune session planifiée.</div>
-                </div>
-            </div>
-        </div>
-
-        <div id="page-explore" class="page" style="display:none;">
-            <h1 style="font-family: Syne; margin-bottom: 20px;">Nos Mentors & Professionnels</h1>
-            <div id="pro-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px;"></div>
-        </div>
-
-        <div id="page-stages" class="page" style="display:none;">
-            <h1 style="font-family: Syne; margin-bottom: 10px;">Recherche de Stages</h1>
-            <p style="margin-bottom: 25px; color: #666;">Accédez aux raccourcis des portails officiels par domaine.</p>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                <div class="card" onclick="window.open('https://www.thalesgroup.com/fr/carrieres')">
-                    <span class="tag">DÉFENSE</span>
-                    <h3 style="margin-top:10px;">🛡️ Thales & Aéronautique</h3>
-                    <p style="font-size: 0.8rem; margin-top: 5px; opacity: 0.7;">Portails recrutement défense et hautes technologies.</p>
-                </div>
-                <div class="card" onclick="window.open('https://www.efinancialcareers.fr/')">
-                    <span class="tag">FINANCE</span>
-                    <h3 style="margin-top:10px;">💰 Finance & Audit</h3>
-                    <p style="font-size: 0.8rem; margin-top: 5px; opacity: 0.7;">Banques, cabinets de conseil et trading.</p>
-                </div>
-                <div class="card" onclick="window.open('https://www.welcometothejungle.com/')">
-                    <span class="tag">TECH</span>
-                    <h3 style="margin-top:10px;">💻 Tech & Startup</h3>
-                    <p style="font-size: 0.8rem; margin-top: 5px; opacity: 0.7;">Développement, IA et écosystème Startup.</p>
-                </div>
-                <div class="card" onclick="window.open('https://www.bourseduloisir.fr')">
-                    <span class="tag">IMMOBILIER</span>
-                    <h3 style="margin-top:10px;">🏠 Investissement</h3>
-                    <p style="font-size: 0.8rem; margin-top: 5px; opacity: 0.7;">Réseau immobilier et business en ligne.</p>
+                <div id="rdv-box" class="card" style="display:none; background: var(--gold-pale); border: 2px solid var(--gold);">
+                    <h4 style="font-family: Syne; color: var(--navy);">Confirmer votre demande</h4>
+                    <p id="rdv-text" style="margin: 10px 0; font-weight: 500;"></p>
+                    <button class="btn btn-gold" onclick="confirmBooking()">Envoyer la demande au mentor</button>
                 </div>
             </div>
-        </div>
 
-        <div id="page-academy" class="page" style="display:none;">
-            <h1 style="font-family: Syne; margin-bottom: 20px;">Fiches de Révision & Cours</h1>
-            <div id="fiches-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px;"></div>
-        </div>
-
-        <div id="page-rdv" class="page" style="display:none;">
-            <h1 style="font-family: Syne;">Prendre un Rendez-vous</h1>
-            <p style="margin-bottom: 20px; font-size: 0.9rem;">Sélectionnez une date libre (en blanc). Les dates en rouge sont bloquées par l'admin.</p>
-            <div class="cal-grid" id="calendar"></div>
-            <div id="rdv-box" class="card" style="margin-top:20px; display:none; border-color: var(--gold);">
-                <h4>Confirmer la session</h4>
-                <p id="rdv-text" style="font-size: 0.85rem; margin: 10px 0;"></p>
-                <button class="btn btn-gold" onclick="confirmBooking()">Confirmer le RDV</button>
-            </div>
-        </div>
-
-        <div id="page-msg" class="page" style="display:none;">
-            <h1 style="font-family: Syne;">PitchBot Assistant</h1>
-            <div class="card">
-                <div class="chat-box" id="chat-box">
-                    <div class="msg msg-bot">Bonjour ! Je suis PitchBot. Pose-moi une question sur ton CV, tes entretiens ou nos fiches.</div>
-                </div>
-                <div style="margin-top: 15px; display: flex; gap: 10px;">
-                    <input type="text" id="chat-input" placeholder="CV, Fiches, Stages..." style="flex:1; padding: 12px; border-radius: 10px; border: 1px solid #ccc;">
-                    <button class="btn btn-navy" onclick="askBot()">Envoyer</button>
+            <div id="page-msg" class="page" style="display:none;">
+                <div class="chat-container">
+                    <div style="padding: 20px; background: var(--navy); color: white; display: flex; align-items: center; gap: 15px;">
+                        <div style="width: 10px; height: 10px; background: var(--green); border-radius: 50%;"></div>
+                        <h4 style="font-family: Syne;">Assistant PitchBot</h4>
+                    </div>
+                    <div class="chat-messages" id="chat-box">
+                        <div class="msg msg-bot">Salut ! Je suis PitchBot, ton assistant IA. Je connais toutes les fiches de l'Academy et les secrets des mentors. Comment puis-je t'aider ?</div>
+                    </div>
+                    <div style="padding: 20px; background: white; display: flex; gap: 15px;">
+                        <input type="text" id="chat-input" placeholder="Demande-moi : 'Comment pitcher ?' ou 'Conseils Thales'..." style="flex:1; padding: 15px; border-radius: 12px; border: 1px solid var(--border); outline: none;">
+                        <button class="btn btn-navy" onclick="askBot()">Envoyer</button>
+                    </div>
                 </div>
             </div>
-        </div>
-    </main>
-</div>
 
-<div id="modal-legal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:2000; align-items:center; justify-content:center; padding:20px;">
-    <div class="card" style="max-width:600px; width:100%; max-height:85vh; overflow-y:auto;">
-        <div id="legal-body"></div>
-        <button class="btn btn-navy" onclick="closeLegal()" style="margin-top:20px; width:100%;">Fermer</button>
+        </main>
     </div>
-</div>
 
-<script>
-    // --- BASE DE DONNÉES SIMULÉE (LOCALSTORAGE) ---
-    let db = JSON.parse(localStorage.getItem('pitchfield_final_v1')) || {
-        pros: [
-            { id: 1, name: "Marie Andrieu", job: "RH @ Thales", verified: true, fav: false },
-            { id: 2, name: "Léo Leszczynski", job: "Ingénieur Systèmes", verified: true, fav: false },
-            { id: 3, name: "Julien Faure", job: "Consultant Finance", verified: false, fav: false }
-        ],
-        fiches: [
-            { id: 1, title: "Optimiser son CV pour l'IA", content: "Utilisez des mots-clés ATS, évitez les colonnes complexes." },
-            { id: 2, title: "L'art du Pitch en 2 minutes", content: "Structure : Accroche, Parcours, Objectif, Appel à l'action." }
-        ],
-        blockedDays: [1, 2, 8, 15, 22, 29] // Indisponibilités (ex: Dimanches)
-    };
-
-    function save() { localStorage.setItem('pitchfield_final_v1', JSON.stringify(db)); }
-
-    // --- SYSTÈME DE RÔLES & NAVIGATION ---
-    function setRole(role) {
-        document.body.className = 'role-' + role;
-        document.getElementById('user-tag').innerText = "Mode : " + role.toUpperCase();
-        renderPros(); 
-    }
-
-    function showPage(id) {
-        document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
-        document.getElementById('page-' + id).style.display = 'block';
-        if(id === 'explore') renderPros();
-        if(id === 'academy') renderFiches();
-        if(id === 'rdv') renderCalendar();
-        if(id === 'dash') renderFavs();
-        window.scrollTo(0,0);
-    }
-
-    // --- GESTION DES PROFESSIONNELS (PROS) ---
-    function renderPros() {
-        const grid = document.getElementById('pro-grid');
-        grid.innerHTML = db.pros.map(p => `
-            <div class="card">
-                <span style="float:right; cursor:pointer; color:${p.fav ? 'var(--red)' : '#ccc'}" onclick="toggleFav(${p.id})">❤</span>
-                <strong>${p.name} ${p.verified ? '<span class="badge-verified" title="Certifié Pitchfield">✓</span>' : ''}</strong><br>
-                <small style="color: #666;">${p.job}</small>
-                
-                <div class="admin-only" style="margin-top:12px; border-top:1px solid #eee; padding-top:10px;">
-                    <button class="btn" style="font-size:0.6rem; padding:5px 10px; background:${p.verified ? '#f0f0f0' : 'var(--green)'}; color:${p.verified ? '#333' : 'white'}" onclick="verifyPro(${p.id})">
-                        ${p.verified ? 'Retirer Certification' : 'Certifier le Pro'}
-                    </button>
-                </div>
-                
-                <button class="btn btn-navy" style="width:100%; margin-top:10px; font-size:0.75rem;" onclick="showPage('msg')">Contacter</button>
-            </div>
-        `).join('');
-    }
-
-    function verifyPro(id) {
-        const pro = db.pros.find(p => p.id === id);
-        pro.verified = !pro.verified;
-        save(); renderPros();
-    }
-
-    function addProPrompt() {
-        const n = prompt("Nom du professionnel :");
-        const j = prompt("Poste / Entreprise :");
-        if(n && j) { db.pros.push({id: Date.now(), name: n, job: j, verified: false, fav: false}); save(); renderPros(); }
-    }
-
-    // --- FAVORIS ---
-    function toggleFav(id) {
-        const pro = db.pros.find(p => p.id === id);
-        pro.fav = !pro.fav;
-        save(); renderPros(); renderFavs();
-    }
-
-    function renderFavs() {
-        const list = document.getElementById('fav-list');
-        const favs = db.pros.filter(p => p.fav);
-        list.innerHTML = favs.length ? favs.map(f => `<div class="btn" style="background:var(--navy); color:white; font-size:0.7rem; padding: 5px 12px;">${f.name}</div>`).join('') : "<span style='color:#999; font-size:0.8rem;'>Ajoutez des mentors en favoris via l'onglet Recherche.</span>";
-    }
-
-    // --- ACADÉMIE & FICHES ---
-    function renderFiches() {
-        const grid = document.getElementById('fiches-grid');
-        grid.innerHTML = db.fiches.map(f => `
-            <div class="card" style="border-left: 5px solid var(--gold);">
-                <strong>${f.title}</strong>
-                <p style="font-size:0.75rem; margin:10px 0; opacity:0.7;">Fiche stratégique Pitchfield Academy.</p>
-                <button class="btn btn-gold" style="width:100%; font-size:0.7rem;" onclick="alert('📥 TÉLÉCHARGEMENT SIMULÉ\\n\\nContenu de la fiche :\\n${f.content}')">Télécharger PDF</button>
-            </div>
-        `).join('');
-    }
-
-    function addFichePrompt() {
-        const t = prompt("Titre de la fiche :");
-        const c = prompt("Contenu résumé :");
-        if(t && c) { db.fiches.push({id: Date.now(), title: t, content: c}); save(); renderFiches(); }
-    }
-
-    // --- CALENDRIER & RDV ---
-    let selectedDay = null;
-    function renderCalendar() {
-        const cal = document.getElementById('calendar'); cal.innerHTML = '';
-        for(let i=1; i<=31; i++) {
-            const isBlocked = db.blockedDays.includes(i);
-            const div = document.createElement('div');
-            div.className = `cal-day ${isBlocked ? 'blocked' : ''}`;
-            div.innerText = i;
-            div.onclick = () => {
-                if(document.body.classList.contains('role-admin')) {
-                    if(isBlocked) db.blockedDays = db.blockedDays.filter(d => d !== i);
-                    else db.blockedDays.push(i);
-                    save(); renderCalendar();
-                } else if(!isBlocked) {
-                    selectedDay = i;
-                    document.querySelectorAll('.cal-day').forEach(d => d.classList.remove('selected'));
-                    div.classList.add('selected');
-                    document.getElementById('rdv-box').style.display = 'block';
-                    document.getElementById('rdv-text').innerText = "Session de mentorat prévue le " + i + " Mars 2026.";
-                }
-            };
-            cal.appendChild(div);
-        }
-    }
-
-    function confirmBooking() {
-        alert("Demande de rendez-vous envoyée pour le " + selectedDay + " Mars. L'admin recevra une notification.");
-        document.getElementById('next-rdv').innerText = selectedDay + " Mars 2026 à 14h00";
-        showPage('dash');
-    }
-
-    // --- PITCHBOT (IA SIMULÉE) ---
-    function askBot() {
-        const input = document.getElementById('chat-input');
-        const box = document.getElementById('chat-box');
-        if(!input.value) return;
-        
-        box.innerHTML += `<div class="msg msg-user">${input.value}</div>`;
-        const v = input.value.toLowerCase();
-        let r = "Un mentor humain vous répondra très bientôt ! En attendant, consultez l'Académie.";
-        
-        if(v.includes("cv")) r = "Pour ton CV, privilégie un format épuré. J'ai une fiche dédiée dans l'onglet Académie !";
-        if(v.includes("fiche") || v.includes("académie")) r = "Toutes les fiches de révision sont disponibles dans l'onglet Académie & Fiches.";
-        if(v.includes("stage")) r = "Regarde l'onglet 'Stages & Alternances', j'y ai mis des liens vers Thales et le secteur Finance.";
-        if(v.includes("bonjour") || v.includes("salut")) r = "Salut ! Je suis PitchBot. Prêt à décrocher ton futur job ?";
-
-        setTimeout(() => {
-            box.innerHTML += `<div class="msg msg-bot">${r}</div>`;
-            box.scrollTop = box.scrollHeight;
-        }, 600);
-        input.value = '';
-    }
-
-    // --- LÉGAL ---
-    function openLegal(type) {
-        const content = {
-            mentions: "<h2>Mentions Légales</h2><p><b>Propriétaire :</b> Léo Leszczynski (Pitchfield).<br><b>Hébergement :</b> LocalStorage Simulation.<br><b>Siège :</b> La Ferté-Saint-Aubin, France.</p>",
-            cgu: "<h2>CGU & Confidentialité</h2><p><b>Politique :</b> Vos données sont stockées localement sur votre appareil. Aucune donnée n'est envoyée à un serveur externe.<br><br><b>CGU :</b> L'utilisation de Pitchfield implique le respect de la charte de bienveillance.</p>"
+    <script>
+        // --- DATA ENGINE ---
+        let db = JSON.parse(localStorage.getItem('pitchfield_db_v4')) || {
+            pros: [
+                { id: 1, name: "Léo Leszczynski", job: "Ingénieur Systèmes @ Thales", tags: ["TECH", "DÉFENSE"], verified: true, fav: true },
+                { id: 2, name: "Marie Andrieu", job: "Responsable Recrutement RH", tags: ["RH", "COACHING"], verified: true, fav: false },
+                { id: 3, name: "Julien Faure", job: "Expert Finance & Audit @ Deloitte", tags: ["FINANCE", "AUDIT"], verified: true, fav: false },
+                { id: 4, name: "Sarah Ben", job: "Consultante Marketing Digital", tags: ["MARKETING", "COMM"], verified: false, fav: false }
+            ],
+            fiches: [
+                { id: 1, title: "L'art du Pitch en 2 minutes", cat: "SOFT SKILLS", dur: "5 min" },
+                { id: 2, title: "Optimiser son CV pour Thales", cat: "CARRIÈRE", dur: "8 min" },
+                { id: 3, title: "Les secrets du Networking LinkedIn", cat: "RÉSEAU", dur: "6 min" },
+                { id: 4, title: "Réussir son oral de Bac", cat: "SCOLAIRE", dur: "10 min" }
+            ],
+            blockedDays: [1, 2, 8, 15, 22, 29]
         };
-        document.getElementById('legal-body').innerHTML = content[type];
-        document.getElementById('modal-legal').style.display = 'flex';
-    }
-    function closeLegal() { document.getElementById('modal-legal').style.display = 'none'; }
 
-    // LANCEMENT INITIAL
-    showPage('dash');
-</script>
+        function save() { localStorage.setItem('pitchfield_db_v4', JSON.stringify(db)); }
+
+        // --- NAVIGATION ---
+        function setRole(role) {
+            document.body.className = 'role-' + role;
+            document.getElementById('role-tag').innerText = role.toUpperCase();
+            document.getElementById('user-display-name').innerText = role === 'admin' ? 'Master' : 'Jean';
+            renderPros();
+        }
+
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+            document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
+            document.getElementById('page-' + id).style.display = 'block';
+            document.getElementById('nav-' + id).classList.add('active');
+            
+            if(id === 'explore') renderPros();
+            if(id === 'academy') renderAcademy();
+            if(id === 'rdv') renderCalendar();
+            if(id === 'dash') renderFavs();
+            window.scrollTo(0,0);
+        }
+
+        // --- MENTORS LOGIC ---
+        function renderPros() {
+            const grid = document.getElementById('pro-grid');
+            grid.innerHTML = db.pros.map(p => `
+                <div class="card">
+                    <span style="float:right; cursor:pointer; font-size: 20px; color:${p.fav ? 'var(--red)' : '#DDD'}" onclick="toggleFav(${p.id})">${p.fav ? '❤️' : '🤍'}</span>
+                    <div style="display:flex; gap:5px; margin-bottom:12px;">${p.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+                    <h3 style="font-family: Syne; font-size: 20px; margin-bottom:5px;">${p.name} ${p.verified ? '🛡️' : ''}</h3>
+                    <p style="color: var(--text-mid); font-size: 14px; margin-bottom: 20px;">${p.job}</p>
+                    <button class="btn btn-navy" style="width:100%; font-size:13px;" onclick="showPage('msg')">Prendre contact</button>
+                    <div class="admin-only" style="margin-top:15px; border-top: 1px solid #EEE; padding-top:10px;">
+                        <button class="btn" style="width:100%; font-size:10px; background:#F8F8F8;" onclick="deletePro(${p.id})">Supprimer (Admin)</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterPros() {
+            const q = document.getElementById('search-pro').value.toLowerCase();
+            const cards = document.querySelectorAll('#pro-grid .card');
+            cards.forEach((card, index) => {
+                const text = db.pros[index].name.toLowerCase() + db.pros[index].job.toLowerCase();
+                card.style.display = text.includes(q) ? 'block' : 'none';
+            });
+        }
+
+        function toggleFav(id) {
+            const p = db.pros.find(x => x.id === id);
+            p.fav = !p.fav; save(); renderPros(); renderFavs();
+        }
+
+        function renderFavs() {
+            const list = document.getElementById('fav-list');
+            const favs = db.pros.filter(p => p.fav);
+            list.innerHTML = favs.length ? favs.map(f => `
+                <div class="btn" style="background:var(--navy); color:white; font-size:12px; padding:8px 18px;">${f.name}</div>
+            `).join('') : "<p style='color:#999; font-size:13px;'>Clique sur le coeur sur un profil pour l'ajouter ici.</p>";
+        }
+
+        // --- ACADEMY LOGIC ---
+        function renderAcademy() {
+            const grid = document.getElementById('academy-grid');
+            grid.innerHTML = db.fiches.map(f => `
+                <div class="card" style="border-left: 6px solid var(--gold);">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+                        <span class="tag">${f.cat}</span>
+                        <span style="font-size:11px; color:var(--text-light); font-weight:bold;">⏱️ ${f.dur}</span>
+                    </div>
+                    <h3 style="font-family: Syne; font-size: 18px; margin-bottom: 20px;">${f.title}</h3>
+                    <button class="btn btn-gold" style="width:100%; font-size:13px;" onclick="alert('Accès réservé aux membres Premium.')">Lire la fiche</button>
+                </div>
+            `).join('');
+        }
+
+        // --- CALENDAR LOGIC ---
+        let selectedDay = null;
+        function renderCalendar() {
+            const cal = document.getElementById('calendar'); cal.innerHTML = '';
+            for(let i=1; i<=31; i++) {
+                const isBlocked = db.blockedDays.includes(i);
+                const div = document.createElement('div');
+                div.className = `cal-day ${isBlocked ? 'blocked' : ''}`;
+                div.innerText = i;
+                div.onclick = () => {
+                    if(document.body.classList.contains('role-admin')) {
+                        if(isBlocked) db.blockedDays = db.blockedDays.filter(d => d !== i);
+                        else db.blockedDays.push(i);
+                        save(); renderCalendar();
+                    } else if(!isBlocked) {
+                        selectedDay = i;
+                        document.querySelectorAll('.cal-day').forEach(d => d.classList.remove('selected'));
+                        div.classList.add('selected');
+                        document.getElementById('rdv-box').style.display = 'block';
+                        document.getElementById('rdv-text').innerText = `Session confirmée pour le ${i} Mars 2026 à 14h00.`;
+                    }
+                };
+                cal.appendChild(div);
+            }
+        }
+
+        function confirmBooking() {
+            alert(`Demande envoyée ! Le mentor a 24h pour confirmer.`);
+            showPage('dash');
+        }
+
+        // --- PITCHBOT IA ---
+        function askBot() {
+            const input = document.getElementById('chat-input');
+            const box = document.getElementById('chat-box');
+            if(!input.value) return;
+
+            box.innerHTML += `<div class="msg msg-user">${input.value}</div>`;
+            const q = input.value.toLowerCase();
+            let r = "Je n'ai pas la réponse exacte, mais je peux demander à Léo de te recontacter. Autre chose ?";
+
+            if(q.includes("pitch")) r = "Un bon pitch dure 2min : 30s d'accroche, 1min de parcours, 30s de projet. Regarde la fiche 'L'art du Pitch' !";
+            if(q.includes("cv")) r = "Pour ton CV, utilise une police sans empattement (comme DM Sans) et mets tes résultats en gras (ex: +20% de ventes).";
+            if(q.includes("thales")) r = "Thales recrute beaucoup d'alternants en Mars. Contacte Léo, il y travaille et peut te pistonner !";
+
+            setTimeout(() => {
+                box.innerHTML += `<div class="msg msg-bot">${r}</div>`;
+                box.scrollTop = box.scrollHeight;
+            }, 600);
+            input.value = '';
+        }
+
+        // Admin Actions
+        function addProPrompt() {
+            const n = prompt("Nom complet :");
+            const j = prompt("Poste / Entreprise :");
+            if(n && j) { db.pros.push({id: Date.now(), name: n, job: j, tags: ["NOUVEAU"], verified: false, fav: false}); save(); renderPros(); }
+        }
+
+        function deletePro(id) {
+            db.pros = db.pros.filter(p => p.id !== id);
+            save(); renderPros();
+        }
+
+        // Init
+        showPage('dash');
+    </script>
 </body>
 </html>

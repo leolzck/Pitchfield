@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pitchfield — Plateforme Intégrée</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #0D1B2E; --navy-mid: #1A3A5C; --gold: #C9A84C; 
+            --cream: #F9F6F0; --white: #FFFFFF; --red: #E24B4A; --green: #1E7E34;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--navy); transition: 0.3s; }
+        
+        /* Visibilité selon les Rôles */
+        .admin-only, .pro-only, .user-only { display: none; }
+        body.role-admin .admin-only { display: block; }
+        body.role-pro .pro-only { display: block; }
+        body.role-user .user-only { display: block; }
+
+        /* Navigation & Layout */
+        .nav { background: var(--navy); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; color: white; position: fixed; width: 100%; z-index: 1000; border-bottom: 1px solid rgba(201,168,76,0.2); }
+        .app-layout { display: flex; padding-top: 60px; min-height: 100vh; }
+        .sidebar { width: 250px; background: var(--navy); color: white; padding: 2rem 1rem; position: fixed; height: 100vh; }
+        .main-content { margin-left: 250px; padding: 2rem; width: calc(100% - 250px); }
+
+        /* Composants */
+        .card { background: white; padding: 1.5rem; border-radius: 15px; border: 1px solid rgba(0,0,0,0.1); margin-bottom: 1rem; position: relative; }
+        .btn { padding: 0.6rem 1.2rem; border-radius: 50px; border: none; cursor: pointer; font-weight: 600; transition: 0.3s; font-family: 'DM Sans'; }
+        .btn-gold { background: var(--gold); color: var(--navy); }
+        .btn-navy { background: var(--navy); color: white; }
+        
+        /* Badge Certifié */
+        .badge-verified { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; background: #0077B5; color: white; border-radius: 50%; font-size: 10px; margin-left: 5px; vertical-align: middle; }
+
+        /* Panneau de Test (Safari) */
+        #test-panel { position: fixed; bottom: 20px; right: 20px; background: white; padding: 15px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 2000; border: 2px solid var(--gold); }
+
+        /* Fiches & Chatbot UI */
+        .fiche-card { border-left: 5px solid var(--gold); }
+        .chat-box { height: 250px; overflow-y: auto; background: #f4f7f6; padding: 15px; border-radius: 10px; display: flex; flex-direction: column; gap: 10px; }
+        .msg { padding: 10px; border-radius: 10px; max-width: 80%; font-size: 0.85rem; }
+        .msg-bot { background: var(--navy); color: white; align-self: flex-start; }
+        .msg-user { background: var(--gold); color: var(--navy); align-self: flex-end; }
+
+        /* Calendrier */
+        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; background: white; padding: 10px; border-radius: 10px; }
+        .cal-day { aspect-ratio: 1; border: 1px solid #eee; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.8rem; }
+        .cal-day.blocked { background: #ffebee; color: var(--red); cursor: not-allowed; text-decoration: line-through; }
+    </style>
+</head>
+<body class="role-user">
+
+<div id="test-panel">
+    <strong style="font-size: 0.75rem; display: block; margin-bottom: 8px; color: #666;">SIMULATEUR RÔLE (SAFARI)</strong>
+    <div style="display: flex; gap: 5px;">
+        <button class="btn" style="font-size: 0.65rem; padding: 5px 10px; background: #f0f0f0;" onclick="setRole('user')">Étudiant</button>
+        <button class="btn" style="font-size: 0.65rem; padding: 5px 10px; background: #f0f0f0;" onclick="setRole('pro')">Pro</button>
+        <button class="btn" style="font-size: 0.65rem; padding: 5px 10px; background: #f0f0f0;" onclick="setRole('admin')">Admin</button>
+    </div>
+</div>
+
+<nav class="nav">
+    <div style="font-family: Syne; font-size: 1.4rem; font-weight: 800;">Pitch<span style="color:var(--gold)">field</span></div>
+    <div id="user-tag" style="font-size: 0.75rem; font-weight: bold; padding: 5px 12px; background: rgba(255,255,255,0.1); border-radius: 50px;">Mode : Étudiant</div>
+</nav>
+
+<div class="app-layout">
+    <aside class="sidebar">
+        <ul style="list-style: none;">
+            <li onclick="showPage('dash')" style="cursor:pointer; padding: 12px;">🏠 Dashboard</li>
+            <li onclick="showPage('explore')" style="cursor:pointer; padding: 12px;">🔍 Explorer les Pros</li>
+            <li onclick="showPage('rdv')" style="cursor:pointer; padding: 12px;">📅 Prendre RDV</li>
+            <li onclick="showPage('msg')" style="cursor:pointer; padding: 12px;">💬 PitchBot</li>
+            <li onclick="showPage('academy')" style="cursor:pointer; padding: 12px;">🎓 Académie & Fiches</li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <div id="page-dash" class="page">
+            <h1 style="font-family: Syne; margin-bottom: 20px;">Tableau de bord</h1>
+            <div class="admin-only card" style="background: var(--navy); color: white; border: 2px solid var(--gold);">
+                <h3>Console Admin 👑</h3>
+                <p style="margin: 10px 0; font-size: 0.85rem;">Gérez la plateforme en temps réel.</p>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-gold" style="font-size: 0.8rem;" onclick="addProPrompt()">+ Ajouter un Pro</button>
+                    <button class="btn btn-navy" style="border: 1px solid white; font-size: 0.8rem;" onclick="addFichePrompt()">+ Créer une Fiche</button>
+                </div>
+            </div>
+            
+            <div id="fav-section" class="card">
+                <h4>Mes Pros Favoris</h4>
+                <div id="fav-list" style="margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap;"></div>
+            </div>
+        </div>
+
+        <div id="page-explore" class="page" style="display:none;">
+            <h1 style="font-family: Syne;">Trouver un Mentor</h1>
+            <div id="pro-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 15px; margin-top: 20px;"></div>
+        </div>
+
+        <div id="page-academy" class="page" style="display:none;">
+            <h1 style="font-family: Syne;">Fiches de Révision</h1>
+            <div id="fiches-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; margin-top: 20px;"></div>
+        </div>
+
+        <div id="page-rdv" class="page" style="display:none;">
+            <h1 style="font-family: Syne;">Calendrier</h1>
+            <p class="admin-only" style="color: var(--red); font-size: 0.8rem; margin-bottom: 10px;">En tant qu'Admin, cliquez sur un jour pour le bloquer.</p>
+            <div class="cal-grid" id="calendar"></div>
+        </div>
+
+        <div id="page-msg" class="page" style="display:none;">
+            <h1 style="font-family: Syne;">PitchBot</h1>
+            <div class="card">
+                <div class="chat-box" id="chat-box">
+                    <div class="msg msg-bot">Bonjour ! Comment puis-je t'aider aujourd'hui ?</div>
+                </div>
+                <div style="margin-top: 15px; display: flex; gap: 10px;">
+                    <input type="text" id="chat-input" placeholder="CV, Entretien, Fiches..." style="flex:1; padding: 10px; border-radius: 10px; border: 1px solid #ccc;">
+                    <button class="btn btn-navy" onclick="askBot()">Envoyer</button>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    // --- INITIALISATION BASE DE DONNÉES ---
+    let db = JSON.parse(localStorage.getItem('pitchfield_v3')) || {
+        pros: [
+            { id: 1, name: "Marie Andrieu", job: "RH @ Thales", verified: true, fav: false },
+            { id: 2, name: "Léo Lzck", job: "Ingénieur Systèmes", verified: true, fav: false },
+            { id: 3, name: "Julien Faure", job: "Freelance Dev", verified: false, fav: false }
+        ],
+        fiches: [
+            { id: 1, title: "Préparer son pitch", content: "L'art de se présenter en 2 minutes." },
+            { id: 2, title: "Optimiser LinkedIn", content: "Les 5 astuces pour attirer les recruteurs." }
+        ],
+        blockedDays: [1, 2, 15]
+    };
+
+    function save() { localStorage.setItem('pitchfield_v3', JSON.stringify(db)); }
+
+    // --- NAVIGATION & RÔLES ---
+    function setRole(role) {
+        document.body.className = 'role-' + role;
+        document.getElementById('user-tag').innerText = "Mode : " + role.toUpperCase();
+        renderPros(); // Refresh pour voir les boutons d'admin sur les profils
+    }
+
+    function showPage(id) {
+        document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+        document.getElementById('page-' + id).style.display = 'block';
+        if(id === 'explore') renderPros();
+        if(id === 'academy') renderFiches();
+        if(id === 'rdv') renderCalendar();
+        if(id === 'dash') renderFavs();
+    }
+
+    // --- PROS & BADGES ---
+    function renderPros() {
+        const grid = document.getElementById('pro-grid');
+        grid.innerHTML = db.pros.map(p => `
+            <div class="card">
+                <span style="float:right; cursor:pointer; color:${p.fav ? 'var(--red)' : '#ccc'}" onclick="toggleFav(${p.id})">❤</span>
+                <strong>${p.name} ${p.verified ? '<span class="badge-verified" title="Profil Certifié">✓</span>' : ''}</strong><br>
+                <small style="color: #666;">${p.job}</small>
+                <div class="admin-only" style="margin-top:10px; border-top:1px solid #eee; padding-top:10px;">
+                    <button class="btn" style="font-size:0.6rem; padding:4px 8px; background:${p.verified ? '#eee' : 'var(--green)'}; color:${p.verified ? '#333' : 'white'}" onclick="verifyPro(${p.id})">
+                        ${p.verified ? 'Retirer Badge' : 'Certifier'}
+                    </button>
+                </div>
+                <button class="btn btn-navy" style="width:100%; margin-top:10px; font-size:0.7rem;" onclick="showPage('msg')">Contacter</button>
+            </div>
+        `).join('');
+    }
+
+    function verifyPro(id) {
+        const pro = db.pros.find(p => p.id === id);
+        pro.verified = !pro.verified;
+        save(); renderPros();
+    }
+
+    function toggleFav(id) {
+        const pro = db.pros.find(p => p.id === id);
+        pro.fav = !pro.fav;
+        save(); renderPros(); renderFavs();
+    }
+
+    function renderFavs() {
+        const list = document.getElementById('fav-list');
+        const favs = db.pros.filter(p => p.fav);
+        list.innerHTML = favs.length ? favs.map(f => `<div class="btn" style="background:var(--navy); color:white; font-size:0.7rem;">${f.name}</div>`).join('') : "Aucun favori.";
+    }
+
+    // --- FICHES ---
+    function renderFiches() {
+        const grid = document.getElementById('fiches-grid');
+        grid.innerHTML = db.fiches.map(f => `
+            <div class="card fiche-card">
+                <strong>${f.title}</strong>
+                <p style="font-size:0.75rem; margin:8px 0;">Contenu stratégique pour ton futur.</p>
+                <button class="btn btn-gold" style="width:100%; font-size:0.7rem;" onclick="alert('Contenu : ' + '${f.content}')">⬇ Télécharger</button>
+            </div>
+        `).join('');
+    }
+
+    function addFichePrompt() {
+        const t = prompt("Titre de la fiche :");
+        const c = prompt("Contenu :");
+        if(t && c) { db.fiches.push({id: Date.now(), title: t, content: c}); save(); renderFiches(); }
+    }
+
+    // --- CALENDRIER ---
+    function renderCalendar() {
+        const cal = document.getElementById('calendar'); cal.innerHTML = '';
+        for(let i=1; i<=30; i++) {
+            const isBlocked = db.blockedDays.includes(i);
+            const div = document.createElement('div');
+            div.className = `cal-day ${isBlocked ? 'blocked' : ''}`;
+            div.innerText = i;
+            div.onclick = () => {
+                if(document.body.classList.contains('role-admin')) {
+                    if(isBlocked) db.blockedDays = db.blockedDays.filter(d => d !== i);
+                    else db.blockedDays.push(i);
+                    save(); renderCalendar();
+                } else if(!isBlocked) alert("Demande de RDV envoyée pour le " + i);
+            };
+            cal.appendChild(div);
+        }
+    }
+
+    // --- PITCHBOT ---
+    function askBot() {
+        const input = document.getElementById('chat-input');
+        const box = document.getElementById('chat-box');
+        if(!input.value) return;
+        box.innerHTML += `<div class="msg msg-user">${input.value}</div>`;
+        let r = "Je vais demander à un mentor de te répondre !";
+        const v = input.value.toLowerCase();
+        if(v.includes("cv")) r = "Consulte la fiche 'Optimiser LinkedIn' ou contacte Marie Andrieu !";
+        if(v.includes("fiche")) r = "Toutes les fiches sont dans l'onglet Académie.";
+        setTimeout(() => { box.innerHTML += `<div class="msg msg-bot">${r}</div>`; box.scrollTop = box.scrollHeight; }, 500);
+        input.value = '';
+    }
+
+    // Lancement
+    showPage('dash');
+</script>
+</body>
+</html>

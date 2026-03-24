@@ -2918,14 +2918,23 @@ function p14BotSend(){
 function p14BotQ(q){var inp=document.getElementById('bot-inp');if(inp){inp.value=q;p14BotSend();}}
 
 /* ── Init showAppPage hook ───────────────────────────────── */
-var _p14origSAP=showAppPage;
-function showAppPage(name){
+var _p14origSAP = showAppPage;
+function showAppPage(name) {
   _p14origSAP(name);
-  if(name==='profil'){p14LoadProfil();p14ToggleProfil(false);}
-  if(name==='avis'){p14LoadAvis();}
-  if(name==='stage'){p14RenderJobs();var btn=document.getElementById('stage-add-btn');if(btn)btn.style.display=currentUser&&currentUser.role==='admin'?'':'none';}
-  if(name==='admin-pros'){p14FPro('all',null);}
-  if(name==='admin-cal'){p14BuildWeek();}
+  
+  if(name === 'profil') { p14LoadProfil(); p14ToggleProfil(false); }
+  if(name === 'avis')   { p14LoadAvis(); }
+  
+  // AJOUT DE CETTE LIGNE POUR FIXER L'ACADÉMIE
+  if(name === 'academy'){ p14RenderAcademy(); } 
+  
+  if(name === 'stage') { 
+    p14RenderJobs(); 
+    var btn = document.getElementById('stage-add-btn');
+    if(btn) btn.style.display = currentUser && currentUser.role === 'admin' ? '' : 'none'; 
+  }
+  
+  if(name === 'admin-pros') { p14FPro(); }
 }
 
 /* ── DOMContentLoaded ────────────────────────────────────── */

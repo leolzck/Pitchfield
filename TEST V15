@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pitchfield V15 — Navigation Académique</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+/* --- ON GARDE TOUT VOTRE STYLE V14 --- */
+:root{
+  --navy:#0D1B2E;--navy-mid:#1A3A5C;--navy-light:#243F60;
+  --gold:#C9A84C;--gold-light:#E8C96A;--gold-pale:#FFF8E7;
+  --cream:#F9F6F0;--white:#FFFFFF;
+  --text-dark:#0D1B2E;--text-mid:#4A5568;--text-light:#8898A8;
+  --border:rgba(13,27,46,0.1);--green:#1E7E34;--green-light:#D4EDDA;
+  --red:#E24B4A;--sidebar-w:240px;
+}
+/* ... (Style identique à votre V14 pour la structure globale) ... */
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text-dark);overflow-x:hidden;}
+
+/* --- AJOUTS SPECIFIQUES NAVIGATION ACADEMIE V15 --- */
+.academy-layout { display: grid; grid-template-columns: 200px 1fr; gap: 20px; }
+.academy-sidebar { background: var(--white); border-radius: 16px; border: 1px solid var(--border); padding: 16px; height: fit-content; position: sticky; top: 20px; }
+.academy-sidebar h4 { font-family: 'Syne', sans-serif; font-size: 12px; text-transform: uppercase; color: var(--text-light); margin-bottom: 12px; letter-spacing: 1px; }
+.aca-nav-item { display: block; width: 100%; text-align: left; padding: 8px 12px; border-radius: 8px; font-size: 13px; color: var(--text-mid); cursor: pointer; border: none; background: none; transition: all 0.2s; margin-bottom: 2px; }
+.aca-nav-item:hover { background: var(--cream); color: var(--navy); }
+.aca-nav-item.active { background: var(--navy); color: var(--gold); font-weight: 600; }
+
+.guide-box { background: var(--gold-pale); border: 1px solid var(--gold); border-radius: 12px; padding: 15px; margin-bottom: 20px; font-size: 13px; line-height: 1.5; }
+/* ... (Le reste de votre CSS V14) ... */
+</style>
+</head>
+<body>
+
+<div id="page-app" class="page active">
+  <div class="app-layout">
+    <aside class="sidebar">
+        <div class="sidebar-user">
+            <div class="sidebar-avatar">LL</div>
+            <div class="sidebar-name">Léo Leszczynski</div>
+            <div class="sidebar-role">Mentor · V15</div>
+        </div>
+        <ul class="sidebar-nav">
+            <li><a onclick="showAppPage('dashboard')" id="nav-dashboard">Dashboard</a></li>
+            <li><a onclick="showAppPage('academy')" id="nav-academy" class="active">Académie</a></li>
+            </ul>
+    </aside>
+
+    <div class="main-content">
+        <div id="app-academy">
+            <div class="academy-hero">
+                <h2>Académie & Académies</h2>
+                <p>Naviguez par zone géographique ou par domaine pour trouver vos formations.</p>
+            </div>
+
+            <div class="guide-box">
+                <strong style="color:var(--navy)">📘 Guide de navigation :</strong>
+                <p>Utilisez la barre latérale "Secteurs Académiques" à gauche pour filtrer les modules. Cliquez sur <strong>"Toutes les zones"</strong> pour réinitialiser la vue. Chaque module affiche désormais son académie de rattachement.</p>
+            </div>
+
+            <div class="academy-layout">
+                <aside class="academy-sidebar">
+                    <h4>Académies</h4>
+                    <button class="aca-nav-item active" onclick="filterByRealAcademy('all', this)">Toutes les zones</button>
+                    <button class="aca-nav-item" onclick="filterByRealAcademy('Paris', this)">Paris</button>
+                    <button class="aca-nav-item" onclick="filterByRealAcademy('Lyon', this)">Lyon</button>
+                    <button class="aca-nav-item" onclick="filterByRealAcademy('Versailles', this)">Versailles</button>
+                    <button class="aca-nav-item" onclick="filterByRealAcademy('Aix-Marseille', this)">Aix-Marseille</button>
+                    <button class="aca-nav-item" onclick="filterByRealAcademy('Lille', this)">Lille</button>
+                </aside>
+
+                <div class="academy-main">
+                    <div class="academy-toolbar">
+                        <div class="academy-search">
+                            <input type="text" id="aca-search" placeholder="Rechercher dans cette académie..." oninput="filterAcademy()">
+                        </div>
+                    </div>
+
+                    <div class="courses-grid" id="courses-grid">
+                        <div class="course-card" data-academy="Paris" data-cat="carriere" data-level="Tous niveaux">
+                            <div class="course-thumb" style="background:var(--navy)">🗼<div class="course-duration">45 min</div></div>
+                            <div class="course-body">
+                                <div style="display:flex;justify-content:space-between">
+                                    <span class="course-tag">Paris</span>
+                                    <span style="font-size:10px; color:var(--gold)">Bac+5</span>
+                                </div>
+                                <div class="course-title">Préparer son entretien RH (Dauphine)</div>
+                                <p class="course-desc">Session spécifique pour les étudiants parisiens.</p>
+                            </div>
+                        </div>
+
+                        <div class="course-card" data-academy="Lyon" data-cat="tech" data-level="Intermédiaire">
+                            <div class="course-thumb" style="background:var(--navy-mid)">🦁<div class="course-duration">1h</div></div>
+                            <div class="course-body">
+                                <span class="course-tag">Lyon</span>
+                                <div class="course-title">Ingénierie & Industrie Lyon</div>
+                                <p class="course-desc">Focus sur le tissu industriel lyonnais.</p>
+                            </div>
+                        </div>
+
+                        <div class="course-card" data-academy="Versailles" data-cat="soft" data-level="Lycée">
+                            <div class="course-thumb" style="background:var(--gold)">🏰<div class="course-duration">30 min</div></div>
+                            <div class="course-body">
+                                <span class="course-tag">Versailles</span>
+                                <div class="course-title">Grand Oral - Lycées Versailles</div>
+                                <p class="course-desc">Préparation spécifique académique.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── LOGIQUE DE NAVIGATION ACADEMIQUE V15 ── */
+
+function filterByRealAcademy(acaName, btn) {
+    // 1. Mise à jour visuelle des boutons
+    document.querySelectorAll('.aca-nav-item').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    // 2. Filtrage des cartes
+    const cards = document.querySelectorAll('.course-card');
+    cards.forEach(card => {
+        const cardAca = card.getAttribute('data-academy');
+        if(acaName === 'all' || cardAca === acaName) {
+            card.style.display = 'flex';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+
+    // 3. Feedback utilisateur
+    if(typeof showToast === 'function') {
+        showToast("Navigation : Académie de " + (acaName === 'all' ? "Toutes les zones" : acaName));
+    }
+}
+
+// On garde vos fonctions de base
+function showAppPage(name){
+  document.querySelectorAll('[id^="app-"]').forEach(p=>p.style.display='none');
+  document.getElementById('app-'+name).style.display='block';
+  document.querySelectorAll('.sidebar-nav li a').forEach(a=>a.classList.remove('active'));
+  if(document.getElementById('nav-'+name)) document.getElementById('nav-'+name).classList.add('active');
+}
+
+function showToast(msg){
+  alert(msg); // Version simplifiée pour l'exemple
+}
+</script>
+
+</body>
+</html>

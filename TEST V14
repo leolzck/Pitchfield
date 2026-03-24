@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pitchfield — Académie & Progression</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0D1B2E;--navy-mid:#1A3A5C;--gold:#C9A84C;--gold-light:#E8C96A;
+  --cream:#F9F6F0;--white:#FFFFFF;--text-mid:#4A5568;--text-light:#8898A8;
+  --border:rgba(13,27,46,0.1);--green:#1E7E34;--sidebar-w:240px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);overflow-x:hidden;}
+
+/* ── LAYOUT ── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--navy);height:64px;display:flex;align-items:center;padding:0 40px;justify-content:space-between;border-bottom:1px solid rgba(201,168,76,0.2);}
+.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--gold);cursor:pointer;}
+.nav-logo span{color:var(--white);}
+.page{display:none;min-height:100vh;padding-top:64px;}
+.page.active{display:block;}
+.app-layout{display:flex;min-height:calc(100vh - 64px);}
+.sidebar{width:var(--sidebar-w);background:var(--navy);position:fixed;top:64px;bottom:0;left:0;padding:24px 0;border-right:1px solid rgba(255,255,255,0.06);}
+.sidebar-nav{list-style:none;padding:0 8px;}
+.sidebar-nav li a{display:flex;align-items:center;padding:12px;border-radius:10px;color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;cursor:pointer;margin-bottom:4px;}
+.sidebar-nav li a.active{background:rgba(201,168,76,0.15);color:var(--gold);}
+.main-content{margin-left:var(--sidebar-w);flex:1;padding:32px;background:var(--cream);}
+
+/* ── COMPONENTS ── */
+.dash-card{background:var(--white);border-radius:20px;padding:24px;border:1px solid var(--border);margin-bottom:20px;}
+.progress-container{background:var(--border);border-radius:50px;height:8px;margin:10px 0;overflow:hidden;}
+.progress-bar{height:100%;background:var(--gold);width:0%;transition:width 0.5s ease;}
+.courses-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));gap:20px;}
+.course-card{background:var(--white);border-radius:15px;overflow:hidden;border:1px solid var(--border);cursor:pointer;transition:transform 0.2s;}
+.course-card:hover{transform:translateY(-5px);}
+.course-body{padding:15px;}
+.video-pill, .fiche-pill{display:block;padding:10px;background:var(--cream);border-radius:8px;margin-bottom:8px;cursor:pointer;font-size:13px;transition:all 0.2s;}
+.video-pill:hover, .fiche-pill:hover{background:var(--gold-pale);border-left:4px solid var(--gold);}
+.video-pill.viewed{border-right:4px solid var(--green);}
+
+/* ── MODALS ── */
+.p14-mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;align-items:center;justify-content:center;}
+.p14-mb{background:var(--white);border-radius:22px;padding:28px;width:500px;position:relative;}
+.p14-mc{position:absolute;top:15px;right:15px;background:none;border:none;font-size:24px;cursor:pointer;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo" onclick="location.reload()">Pitch<span>field</span></div>
+</nav>
+
+<div id="page-app" class="page active">
+  <div class="app-layout">
+    <aside class="sidebar">
+      <ul class="sidebar-nav">
+        <li><a onclick="showAppPage('dashboard')" id="nav-dashboard" class="active">Dashboard</a></li>
+        <li><a onclick="showAppPage('academy')" id="nav-academy">Académie</a></li>
+        <li><a onclick="location.reload()">Déconnexion</a></li>
+      </ul>
+    </aside>
+
+    <div class="main-content">
+      <div id="app-dashboard">
+        <h1 style="font-family:Syne; margin-bottom:20px;">Mon Suivi de Progression</h1>
+        <div id="overall-progress-card" class="dash-card">
+            <h3>Progression Globale Académie</h3>
+            <div class="progress-container"><div id="global-bar" class="progress-bar"></div></div>
+            <p id="global-text" style="font-size:12px; color:var(--text-mid);">0% complété</p>
+        </div>
+        <div id="module-progress-list"></div>
+      </div>
+
+      <div id="app-academy" style="display:none;">
+        <div id="academy-grid-view">
+            <h1 style="font-family:Syne; margin-bottom:20px;">Cours & Formations</h1>
+            <div class="courses-grid" id="courses-container"></div>
+        </div>
+        <div id="academy-module-view" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="p14-mo-read-fiche" class="p14-mo">
+    <div class="p14-mb">
+        <button class="p14-mc" onclick="p14Mc('read-fiche')">×</button>
+        <div id="read-fiche-c"></div>
+    </div>
+</div>
+
+<script>
+/* ── DONNÉES ET ÉTAT ── */
+var modules = [
+    {
+        id: "m1", title: "Préparer son entretien RH", cat: "Carrière", thumb: "🎯",
+        vids: [
+            {id: "v1", title: "Introduction aux entretiens", url: "dQw4w9WgXcQ"},
+            {id: "v2", title: "La méthode STAR", url: "dQw4w9WgXcQ"}
+        ],
+        fiches: [
+            {id: "f1", ti: "Checklist Jour J", co: "Soyez ponctuel, souriant et préparez 3 questions."}
+        ]
+    },
+    {
+        id: "m2", title: "L'art du Pitch", cat: "Soft Skills", thumb: "🎤",
+        vids: [
+            {id: "v3", title: "Structure en 3 temps", url: "dQw4w9WgXcQ"}
+        ],
+        fiches: [
+            {id: "f2", ti: "Template de Pitch", co: "1. Accroche | 2. Problème | 3. Solution"}
+        ]
+    }
+];
+
+// Suivi de progression stocké localement
+var userProgress = JSON.parse(localStorage.getItem('pitchfield_progress')) || {
+    viewedItems: [], // IDs des vidéos ou fiches consultées
+    moduleStatus: {} // % par module
+};
+
+/* ── LOGIQUE D'AFFICHAGE ── */
+function showAppPage(name) {
+    document.querySelectorAll('.main-content > div').forEach(d => d.style.display = 'none');
+    document.getElementById('app-' + name).style.display = 'block';
+    document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
+    document.getElementById('nav-' + name).classList.add('active');
+    if(name === 'dashboard') updateDashboard();
+    if(name === 'academy') renderAcademyGrid();
+}
+
+/* ── ACADÉMIE ── */
+function renderAcademyGrid() {
+    const container = document.getElementById('courses-container');
+    document.getElementById('academy-grid-view').style.display = 'block';
+    document.getElementById('academy-module-view').style.display = 'none';
+    
+    container.innerHTML = modules.map(m => {
+        const percent = calculateModuleProgress(m);
+        return `
+        <div class="course-card" onclick="openModule('${m.id}')">
+            <div style="height:120px; background:var(--navy-mid); display:flex; align-items:center; justify-content:center; font-size:40px;">${m.thumb}</div>
+            <div class="course-body">
+                <div style="font-size:11px; color:var(--gold); font-weight:700;">${m.cat}</div>
+                <div style="font-weight:700; margin:5px 0;">${m.title}</div>
+                <div class="progress-container"><div class="progress-bar" style="width:${percent}%"></div></div>
+                <div style="font-size:11px; color:var(--text-light);">${percent}% complété</div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function openModule(moduleId) {
+    const m = modules.find(x => x.id === moduleId);
+    const view = document.getElementById('academy-module-view');
+    document.getElementById('academy-grid-view').style.display = 'none';
+    view.style.display = 'block';
+
+    view.innerHTML = `
+        <button onclick="renderAcademyGrid()" style="background:none; border:none; color:var(--gold); cursor:pointer; margin-bottom:20px;">← Retour</button>
+        <h1 style="font-family:Syne;">${m.title}</h1>
+        <div style="display:grid; grid-template-columns: 1fr 300px; gap:25px; margin-top:20px;">
+            <div>
+                <h3>Vidéos</h3>
+                ${m.vids.map(v => `
+                    <div class="video-pill ${isViewed(v.id)?'viewed':''}" onclick="playVideo('${m.id}','${v.id}','${v.url}')">
+                        ${isViewed(v.id)?'✅':'▶'} ${v.title}
+                    </div>`).join('')}
+                <div id="video-player" style="margin-top:20px;"></div>
+            </div>
+            <div>
+                <h3>Documents</h3>
+                ${m.fiches.map(f => `
+                    <div class="fiche-pill" onclick="readFiche('${m.id}','${f.id}')">
+                        ${isViewed(f.id)?'✅':'📄'} ${f.ti}
+                    </div>`).join('')}
+            </div>
+        </div>`;
+}
+
+/* ── SYSTÈME DE PROGRESSION ── */
+function playVideo(mId, vId, url) {
+    document.getElementById('video-player').innerHTML = `
+        <iframe width="100%" height="300" src="https://www.youtube.com/embed/${url}?autoplay=1" frameborder="0" allowfullscreen style="border-radius:15px;"></iframe>`;
+    markAsViewed(mId, vId);
+}
+
+function readFiche(mId, fId) {
+    const m = modules.find(x => x.id === mId);
+    const f = m.fiches.find(x => x.id === fId);
+    document.getElementById('read-fiche-c').innerHTML = `<h2>${f.ti}</h2><p style="margin-top:15px; line-height:1.6;">${f.co}</p>`;
+    document.getElementById('p14-mo-read-fiche').style.display = 'flex';
+    markAsViewed(mId, fId);
+}
+
+function markAsViewed(mId, itemId) {
+    if (!userProgress.viewedItems.includes(itemId)) {
+        userProgress.viewedItems.push(itemId);
+        saveProgress();
+        // Optionnel : Rafraîchir la vue actuelle pour montrer le ✅
+        openModule(mId);
+    }
+}
+
+function calculateModuleProgress(m) {
+    const total = m.vids.length + m.fiches.length;
+    const viewed = m.vids.filter(v => isViewed(v.id)).length + m.fiches.filter(f => isViewed(f.id)).length;
+    return Math.round((viewed / total) * 100);
+}
+
+function isViewed(id) { return userProgress.viewedItems.includes(id); }
+
+function saveProgress() {
+    localStorage.setItem('pitchfield_progress', JSON.stringify(userProgress));
+}
+
+function updateDashboard() {
+    const list = document.getElementById('module-progress-list');
+    let totalItems = 0;
+    let viewedItems = userProgress.viewedItems.length;
+    
+    list.innerHTML = '<h3>Progression par module</h3>';
+    modules.forEach(m => {
+        totalItems += (m.vids.length + m.fiches.length);
+        const p = calculateModuleProgress(m);
+        list.innerHTML += `
+            <div class="dash-card" style="margin-top:10px; padding:15px;">
+                <div style="display:flex; justify-content:space-between;"><span>${m.title}</span><span>${p}%</span></div>
+                <div class="progress-container"><div class="progress-bar" style="width:${p}%"></div></div>
+            </div>`;
+    });
+
+    const globalPercent = Math.round((viewedItems / totalItems) * 100) || 0;
+    document.getElementById('global-bar').style.width = globalPercent + '%';
+    document.getElementById('global-text').textContent = globalPercent + '% de l\'académie complété';
+}
+
+function p14Mc(id){ document.getElementById('p14-mo-'+id).style.display='none'; }
+
+// Initialisation
+updateDashboard();
+</script>
+</body>
+</html>

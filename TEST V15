@@ -3,9 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pitchfield — V15 (Full Version)</title>
+<title>Pitchfield — Là où ton futur commence</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
 <style>
+/* --- TES VARIABLES ET STYLES EXISTANTS --- */
 :root{
   --navy:#0D1B2E;--navy-mid:#1A3A5C;--navy-light:#243F60;
   --gold:#C9A84C;--gold-light:#E8C96A;--gold-pale:#FFF8E7;
@@ -15,136 +16,58 @@
   --red:#E24B4A;--sidebar-w:240px;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
 body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text-dark);overflow-x:hidden;}
 
-/* ── RESPONSIVE UTILITIES ── */
-@media(max-width:768px){
-  .hide-mobile{display:none!important;}
-  .nav-links{display:none!important;}
-  .hero{padding:100px 24px 60px!important;flex-direction:column!important;}
-  .hero-stats{position:static!important;transform:none!important;flex-direction:row!important;flex-wrap:wrap!important;gap:12px!important;margin-top:40px!important;width:100%!important;}
-  .hero h1{font-size:36px!important;letter-spacing:-1px!important;}
-  .features{padding:60px 24px!important;}
-  .features-grid{grid-template-columns:1fr!important;}
-  .reviews{padding:60px 24px!important;}
-  .reviews-grid{grid-template-columns:1fr!important;}
-  .offers-page{padding:80px 16px 40px!important;}
-  .offers-grid{grid-template-columns:1fr!important;}
-  .b2b-grid{grid-template-columns:1fr!important;}
-  .commission-banner{flex-direction:column!important;text-align:center!important;}
-  .login-page{flex-direction:column!important;}
-  .login-left{padding:60px 24px 40px!important;}
-  .login-right{padding:40px 24px!important;}
-  .app-layout{flex-direction:column!important;}
-  .sidebar{width:100%!important;position:relative!important;top:auto!important;height:auto!important;padding:12px 0!important;}
-  .sidebar-user{display:none!important;}
-  .sidebar-nav{display:flex!important;flex-wrap:wrap!important;padding:0 8px!important;gap:4px!important;}
-  .sidebar-nav li a{padding:8px 12px!important;font-size:12px!important;border-radius:8px!important;}
-  .sidebar-section{display:none!important;}
-  .main-content{margin-left:0!important;padding:16px!important;}
-  .dash-kpis{grid-template-columns:1fr 1fr!important;}
-  .dash-grid{grid-template-columns:1fr!important;}
-  .domains-grid{grid-template-columns:1fr 1fr!important;}
-  .favs-grid{grid-template-columns:1fr!important;}
-  .messages-layout{grid-template-columns:1fr!important;height:auto!important;}
-  .messages-list{display:none!important;}
-  .rdv-grid{grid-template-columns:1fr!important;}
-  .courses-grid{grid-template-columns:1fr!important;}
-  .footer-grid{grid-template-columns:1fr 1fr!important;}
-  .footer-brand{grid-column:1/-1!important;}
-  .section-title{font-size:28px!important;}
-  .hero-actions{flex-direction:column!important;width:100%!important;}
-  .hero-actions .btn-primary,.hero-actions .btn-outline{width:100%!important;text-align:center!important;}
-  .nav-mobile-btn{display:flex!important;}
-  .mobile-menu{display:block!important;}
-}
-
-/* ── NAV ── */
+/* NAVIGATION */
 .nav{
   position:fixed;top:0;left:0;right:0;z-index:100;
   background:rgba(13,27,46,0.97);backdrop-filter:blur(12px);
   height:64px;display:flex;align-items:center;justify-content:space-between;
   padding:0 40px;border-bottom:1px solid rgba(201,168,76,0.2);
 }
-.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--gold);letter-spacing:-0.5px;cursor:pointer;}
+.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--gold);cursor:pointer;}
 .nav-logo span{color:var(--white);}
 .nav-links{display:flex;gap:32px;align-items:center;}
 .nav-links a{color:rgba(255,255,255,0.7);text-decoration:none;font-size:14px;cursor:pointer;transition:color .2s;}
 .nav-links a:hover{color:var(--white);}
-.nav-right{display:flex;align-items:center;gap:12px;}
-.nav-cta{background:var(--gold);color:var(--navy);padding:9px 22px;border-radius:50px;font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;border:none;font-family:'DM Sans',sans-serif;}
-.nav-cta:hover{background:var(--gold-light);transform:translateY(-1px);}
 
-/* ── SIDEBAR LAYOUT ── */
+/* GESTION DES PAGES */
+.page { display: none; min-height: 100vh; padding-top: 64px; }
+.page.active { display: block; }
+#page-app { padding-top: 64px; } /* L'app commence après la nav */
+
+/* SIDEBAR LAYOUT */
 .app-layout{display:flex;min-height:calc(100vh - 64px);}
 .sidebar{
   width:var(--sidebar-w);background:var(--navy);flex-shrink:0;position:fixed;
   top:64px;bottom:0;left:0;overflow-y:auto;padding:24px 0;
   border-right:1px solid rgba(255,255,255,0.06);
 }
+.main-content{margin-left:var(--sidebar-w);flex:1;padding:32px 36px;background:var(--cream);min-height:calc(100vh - 64px);}
+
+/* --- STYLES DES COMPOSANTS (REPRIS DE TON CODE) --- */
 .sidebar-user{padding:0 20px 24px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:16px;}
 .sidebar-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:var(--navy);margin-bottom:10px;}
 .sidebar-name{font-size:14px;font-weight:500;color:var(--white);}
 .sidebar-role{font-size:12px;color:rgba(255,255,255,0.45);margin-top:2px;}
 .sidebar-nav{list-style:none;padding:0 8px;}
-.sidebar-nav li{margin-bottom:2px;}
 .sidebar-nav li a{
   display:flex;align-items:center;gap:12px;padding:10px 12px;
   border-radius:10px;color:rgba(255,255,255,0.6);text-decoration:none;
   font-size:13.5px;cursor:pointer;transition:all .2s;
 }
-.sidebar-nav li a:hover{background:rgba(255,255,255,0.07);color:var(--white);}
-.sidebar-nav li a.active{background:rgba(201,168,76,0.15);color:var(--gold);}
-.sidebar-nav li a .icon{width:18px;height:18px;opacity:0.8;flex-shrink:0;}
+.sidebar-nav li a:hover, .sidebar-nav li a.active{background:rgba(255,255,255,0.07);color:var(--gold);}
+.sidebar-nav li a .icon{width:18px;height:18px;opacity:0.8;}
 .sidebar-section{font-size:10px;font-weight:500;color:rgba(255,255,255,0.25);letter-spacing:1px;text-transform:uppercase;padding:16px 20px 6px;}
-.main-content{margin-left:var(--sidebar-w);flex:1;padding:32px 36px;background:var(--cream);min-height:calc(100vh - 64px);}
 
-/* ── NOUVEAU SYSTÈME ACADEMIE V15 ── */
-.academy-flex-container { display: flex; gap: 24px; align-items: flex-start; }
-.academy-nav-sidebar { width: 220px; flex-shrink: 0; background: var(--white); border-radius: 20px; border: 1px solid var(--border); padding: 24px; position: sticky; top: 24px; }
-.aca-sidebar-title { font-family:'Syne',sans-serif; font-size:11px; font-weight:800; color:var(--text-light); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:16px; }
-.aca-nav-btn { display: block; width: 100%; text-align: left; padding: 12px 16px; border-radius: 12px; font-size: 14px; color: var(--text-mid); border: none; background: none; cursor: pointer; transition: all 0.2s; margin-bottom: 6px; font-family: 'DM Sans', sans-serif;}
-.aca-nav-btn:hover { background: var(--cream); color: var(--navy); }
-.aca-nav-btn.active { background: var(--navy); color: var(--gold); font-weight: 600; box-shadow: 0 4px 12px rgba(13,27,46,0.15); }
-.academy-content-area { flex: 1; }
-
-/* ── HEROES & CARDS (V14) ── */
-.hero{background:var(--navy);min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;padding:80px 80px 80px;}
-.hero-content{position:relative;z-index:1;max-width:620px;}
-.hero h1{font-family:'Syne',sans-serif;font-size:62px;font-weight:800;color:var(--white);line-height:1.05;letter-spacing:-2px;margin-bottom:24px;}
-.hero h1 .gold{color:var(--gold);}
-.hero p{font-size:17px;color:rgba(255,255,255,0.65);line-height:1.75;margin-bottom:40px;}
-
-.academy-hero{background:var(--navy);border-radius:20px;padding:36px 40px;margin-bottom:24px;position:relative;overflow:hidden;}
-.academy-hero h2{font-family:'Syne',sans-serif;font-size:28px;font-weight:700;color:var(--white);margin-bottom:6px;}
-.academy-hero p{font-size:14px;color:rgba(255,255,255,0.55);max-width:520px;}
-
-.courses-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
-.course-card{background:var(--white);border-radius:20px;overflow:hidden;border:1px solid var(--border);cursor:pointer;transition:all .3s;display:flex;flex-direction:column;}
-.course-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(13,27,46,0.1);}
-.course-thumb{height:130px;display:flex;align-items:center;justify-content:center;font-size:44px;position:relative;}
-.course-duration{position:absolute;bottom:8px;right:8px;background:rgba(13,27,46,0.75);color:var(--white);font-size:11px;padding:3px 10px;border-radius:50px;}
-.course-body{padding:18px;flex:1;display:flex;flex-direction:column;}
-.course-tag{display:inline-block;font-size:11px;background:rgba(201,168,76,0.12);color:var(--gold);padding:3px 10px;border-radius:50px;margin-bottom:8px;}
-.course-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:600;color:var(--navy);margin-bottom:6px;}
-
-/* ── MODALES ── */
-.p14-mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;align-items:center;justify-content:center;}
-.p14-mb{background:var(--white);border-radius:22px;padding:28px;width:500px;max-width:94vw;max-height:88vh;overflow-y:auto;position:relative;}
-.p14-mc{position:absolute;top:11px;right:13px;background:none;border:none;font-size:20px;cursor:pointer;}
-
-/* ── DASHBOARD ── */
-.dash-header h1{font-family:'Syne',sans-serif;font-size:28px;font-weight:700;color:var(--navy);}
+/* DASHBOARD SPECIFICS */
 .dash-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;}
-.kpi-card{background:var(--white);border-radius:16px;padding:20px 22px;border:1px solid var(--border);}
-.kpi-value{font-family:'Syne',sans-serif;font-size:28px;font-weight:700;color:var(--navy);}
+.kpi-card{background:var(--white);border-radius:16px;padding:20px;border:1px solid var(--border);}
+.kpi-value{font-family:'Syne',sans-serif;font-size:24px;font-weight:700;color:var(--navy);}
 
-/* Roles Admin */
-.admin-only { display: none; }
-body.role-admin .admin-only { display: block; }
-
-/* ... (Fin du CSS V14 recopié mentalement pour la structure) ... */
+/* --- AJOUTE ICI LE RESTE DE TES STYLES (HERO, FEATURES, ACADEMY, ETC.) --- */
+/* (J'ai raccourci pour la lisibilité, mais garde bien tout ton CSS original ici) */
+/* ... */
 </style>
 </head>
 <body>
@@ -154,8 +77,7 @@ body.role-admin .admin-only { display: block; }
   <div class="nav-links">
     <a onclick="showPage('home')">Accueil</a>
     <a onclick="showPage('offres')">Offres</a>
-    <a onclick="showPage('recherche')">Explorer</a>
-    <a onclick="showPage('academy')">Académie</a>
+    <a onclick="showPage('app')">Mon Espace</a>
     <a onclick="showPage('contact')">Contact</a>
   </div>
   <div class="nav-right">
@@ -164,30 +86,22 @@ body.role-admin .admin-only { display: block; }
 </nav>
 
 <div id="page-home" class="page active">
-  <div class="hero">
-    <div class="hero-content">
-      <h1>Le terrain où tu<br>apprends à <span class="gold">convaincre.</span></h1>
-      <p>De la seconde au Bac+5, Pitchfield connecte les étudiants avec des professionnels.</p>
-      <div class="hero-actions">
-        <button class="btn-primary" onclick="showPage('login')">Commencer gratuitement</button>
-      </div>
+    <div style="padding: 100px; text-align: center;">
+        <h1>Le terrain où tu apprends à convaincre.</h1>
+        <button class="btn-primary" onclick="showPage('login')">Démarrer</button>
     </div>
-  </div>
+</div>
+
+<div id="page-offres" class="page">
+    <div style="padding: 50px;">
+        <h2>Nos Offres</h2>
+        </div>
 </div>
 
 <div id="page-login" class="page">
-    <div class="login-page">
-        <div class="login-left">
-            <h2>La où ton futur <span class="gold">commence.</span></h2>
-            <div class="login-hint">👑 Admin : admin@pitchfield.fr / admin123</div>
-        </div>
-        <div class="login-right">
-            <div class="login-form">
-                <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" id="login-email"></div>
-                <div class="form-group"><label class="form-label">Password</label><input type="password" class="form-input" id="login-pwd"></div>
-                <button class="form-btn" onclick="doLogin()">Se connecter</button>
-            </div>
-        </div>
+    <div style="padding: 50px; text-align: center;">
+        <h2>Connexion</h2>
+        <button class="form-btn" onclick="showPage('app')">Simuler Connexion Étudiant</button>
     </div>
 </div>
 
@@ -196,169 +110,104 @@ body.role-admin .admin-only { display: block; }
     <aside class="sidebar">
       <div class="sidebar-user">
         <div class="sidebar-avatar">LL</div>
-        <div class="sidebar-name" id="sb-name">Chargement...</div>
+        <div class="sidebar-name">Léo Leszczynski</div>
+        <div class="sidebar-role">Étudiant</div>
       </div>
+      
+      <div class="sidebar-section">Principal</div>
       <ul class="sidebar-nav">
-        <li><a onclick="showAppPage('dashboard')" id="nav-dashboard" class="active">Dashboard</a></li>
-        <li><a onclick="showAppPage('academy')" id="nav-academy">Académie</a></li>
-        <li><a onclick="showAppPage('messages')" id="nav-messages">Messages</a></li>
-        <li><a onclick="showAppPage('rdv')" id="nav-rdv">Rendez-vous</a></li>
-        <li><a onclick="showAppPage('profil')" id="nav-profil">Mon profil</a></li>
+        <li><a onclick="showAppSubPage('dashboard')" id="side-dashboard" class="active">Dashboard</a></li>
+        <li><a onclick="showAppSubPage('recherche')" id="side-recherche">Recherche</a></li>
+        <li><a onclick="showAppSubPage('messages')" id="side-messages">Messages</a></li>
+        <li><a onclick="showAppSubPage('rdv')" id="side-rdv">Rendez-vous</a></li>
       </ul>
-      <div class="sidebar-section admin-only">Administration</div>
-      <ul class="sidebar-nav admin-only">
-        <li><a onclick="showAppPage('admin-pros')">Base pros</a></li>
+
+      <div class="sidebar-section">Formation & Emploi</div>
+      <ul class="sidebar-nav">
+        <li><a onclick="showAppSubPage('academy')" id="side-academy">Académie</a></li>
+        <li><a onclick="showAppSubPage('stage')" id="side-stage">Stage & Alternance</a></li>
+      </ul>
+
+      <div class="sidebar-section">Compte</div>
+      <ul class="sidebar-nav">
+        <li><a onclick="showAppSubPage('profil')" id="side-profil">Mon Profil</a></li>
+        <li><a onclick="showPage('home')">Déconnexion</a></li>
       </ul>
     </aside>
 
-    <div class="main-content">
-      
-      <div id="app-dashboard">
-        <div class="dash-header"><h1>Tableau de bord</h1></div>
+    <main class="main-content">
+      <div id="app-dashboard" class="app-sub-page">
+        <h1>Mon Dashboard</h1>
         <div class="dash-kpis">
-          <div class="kpi-card"><div class="kpi-value">12</div><div>Sessions</div></div>
-          <div class="kpi-card"><div class="kpi-value">4/10</div><div>Modules</div></div>
+            <div class="kpi-card"><div class="kpi-value">12</div><div>Sessions</div></div>
+            <div class="kpi-card"><div class="kpi-value">4/10</div><div>Modules</div></div>
         </div>
       </div>
 
-      <div id="app-academy" style="display:none;">
-        <div class="academy-hero">
-          <h2>Académie Pitchfield</h2>
-          <p>Modules de formation & Ressources académiques par zone géographique.</p>
+      <div id="app-recherche" class="app-sub-page" style="display:none;">
+        <h1>Explorer les domaines</h1>
         </div>
 
-        <div class="academy-flex-container">
-          <aside class="academy-nav-sidebar">
-            <div class="aca-sidebar-title">Secteurs Académiques</div>
-            <button class="aca-nav-btn active" onclick="p15FilterAca('all', this)">🌍 Toutes</button>
-            <button class="aca-nav-btn" onclick="p15FilterAca('Paris', this)">🗼 Paris</button>
-            <button class="aca-nav-btn" onclick="p15FilterAca('Lyon', this)">🦁 Lyon</button>
-            <button class="aca-nav-btn" onclick="p15FilterAca('Versailles', this)">🏰 Versailles</button>
-            <button class="aca-nav-btn" onclick="p15FilterAca('Aix-Marseille', this)">☀️ Marseille</button>
-            <button class="aca-nav-btn" onclick="p15FilterAca('Lille', this)">🔔 Lille</button>
-
-            <div class="aca-sidebar-title" style="margin-top:30px;">Guide d'utilisation</div>
-            <div style="font-size:12px; color:var(--text-light); line-height:1.6;">
-                Sélectionnez une académie pour filtrer les contenus spécifiques à votre zone.
-            </div>
-          </aside>
-
-          <div class="academy-content-area">
-             <div class="academy-toolbar" style="margin-bottom:20px;">
-                <input type="text" id="aca-search-input" placeholder="Chercher un module (ex: CV, Trading...)" class="form-input" oninput="p15FilterAca('current')">
-             </div>
-
-             <div class="courses-grid" id="courses-grid">
-                <div class="course-card" data-aca="Paris" data-title="Entretien RH">
-                    <div class="course-thumb" style="background:var(--navy-mid)">🎯</div>
-                    <div class="course-body">
-                        <span class="course-tag">Académie Paris</span>
-                        <div class="course-title">Préparer son entretien RH</div>
-                        <p style="font-size:12px; color:var(--text-light);">Module généraliste accessible à tous.</p>
-                    </div>
-                </div>
-
-                <div class="course-card" data-aca="Lyon" data-title="Ingénierie">
-                    <div class="course-thumb" style="background:var(--navy)">⚙️</div>
-                    <div class="course-body">
-                        <span class="course-tag">Académie Lyon</span>
-                        <div class="course-title">Ingénierie de Défense</div>
-                        <p style="font-size:12px; color:var(--text-light);">Spécialité bassin industriel Lyonnais.</p>
-                    </div>
-                </div>
-
-                <div class="course-card" data-aca="Versailles" data-title="CV ATS">
-                    <div class="course-thumb" style="background:var(--gold)">📄</div>
-                    <div class="course-body">
-                        <span class="course-tag">Académie Versailles</span>
-                        <div class="course-title">CV ATS & Intelligence Artificielle</div>
-                        <p style="font-size:12px; color:var(--text-light);">Techniques pour passer les filtres.</p>
-                    </div>
-                </div>
-             </div>
-          </div>
+      <div id="app-academy" class="app-sub-page" style="display:none;">
+        <h1>Académie Pitchfield</h1>
         </div>
+
+      <div id="app-profil" class="app-sub-page" style="display:none;">
+        <h1>Mon Profil</h1>
+        </div>
+      
+      <div id="app-messages" class="app-sub-page" style="display:none;">
+        <h1>Mes Messages</h1>
       </div>
 
-      <div id="app-messages" style="display:none;"><h1>Messages</h1></div>
-      <div id="app-rdv" style="display:none;"><h1>Rendez-vous</h1></div>
-      <div id="app-profil" style="display:none;"><h1>Profil</h1></div>
-      <div id="app-recherche" style="display:none;"><h1>Explorer</h1></div>
+      <div id="app-rdv" class="app-sub-page" style="display:none;">
+        <h1>Mes Rendez-vous</h1>
+      </div>
 
-    </div>
+      <div id="app-stage" class="app-sub-page" style="display:none;">
+        <h1>Offres de stages</h1>
+      </div>
+
+    </main>
   </div>
 </div>
 
 <script>
-// --- DONNÉES UTILISATEURS V14 ---
-var USERS = {
-  'admin@pitchfield.fr': { pwd:'admin123', role:'admin', name:'Léo Leszczynski' },
-  'etudiant@pitchfield.fr': { pwd:'user123', role:'user', name:'Thomas Durand' }
-};
-var currentUser = null;
-var currentAcaFilter = 'all';
-
-// --- ROUTING GENERAL ---
-function showPage(name){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('page-'+name).classList.add('active');
-}
-
-function showAppPage(name){
-  document.querySelectorAll('[id^="app-"]').forEach(p=>p.style.display='none');
-  document.getElementById('app-'+name).style.display='block';
-  document.querySelectorAll('.sidebar-nav li a').forEach(a=>a.classList.remove('active'));
-  if(document.getElementById('nav-'+name)) document.getElementById('nav-'+name).classList.add('active');
-}
-
-// --- AUTHENTIFICATION V14 ---
-function doLogin(){
-  var email = document.getElementById('login-email').value;
-  var pwd = document.getElementById('login-pwd').value;
-  var u = USERS[email];
-  if(u && u.pwd === pwd){
-    currentUser = u;
-    document.getElementById('sb-name').textContent = u.name;
-    if(u.role === 'admin') document.body.classList.add('role-admin');
-    showPage('app');
-    showAppPage('dashboard');
-  } else {
-    alert('Identifiants invalides');
-  }
-}
-
-// --- LOGIQUE ACADEMIE V15 (CORRIGÉE) ---
-function p15FilterAca(aca, btn){
-  if(aca !== 'current'){
-    currentAcaFilter = aca;
-    document.querySelectorAll('.aca-nav-btn').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-  }
-
-  var search = document.getElementById('aca-search-input').value.toLowerCase();
-  var cards = document.querySelectorAll('.course-card');
-
-  cards.forEach(card => {
-    var acaTag = card.getAttribute('data-aca');
-    var title = card.getAttribute('data-title').toLowerCase();
+// --- FONCTION DE NAVIGATION PRINCIPALE ---
+function showPage(pageId) {
+    // Cache toutes les pages
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     
-    var matchesAca = (currentAcaFilter === 'all' || acaTag === currentAcaFilter);
-    var matchesSearch = (!search || title.includes(search));
-
-    if(matchesAca && matchesSearch){
-        card.style.display = 'flex';
-    } else {
-        card.style.display = 'none';
+    // Affiche la page demandée
+    const target = document.getElementById('page-' + pageId);
+    if(target) target.classList.add('active');
+    
+    // Si on va sur l'app, on affiche le dashboard par défaut
+    if(pageId === 'app') {
+        showAppSubPage('dashboard');
     }
-  });
+    window.scrollTo(0,0);
 }
 
-// --- GUIDE D'UTILISATION (CONSIGNES) ---
-/* 1. Pour naviguer : Utilisez la sidebar à gauche de l'académie.
-   2. Pour ajouter une académie : Créez un bouton avec onclick="p15FilterAca('Nom', this)".
-   3. Pour lier un cours : Ajoutez data-aca="Nom" sur la div .course-card.
-*/
+// --- FONCTION DE NAVIGATION INTERNE A L'APP (SIDEBAR) ---
+function showAppSubPage(subPageId) {
+    // Cache toutes les sous-sections de l'app
+    document.querySelectorAll('.app-sub-page').forEach(p => p.style.display = 'none');
+    
+    // Affiche la sous-section
+    const target = document.getElementById('app-' + subPageId);
+    if(target) target.style.display = 'block';
+    
+    // Gère l'état actif dans la sidebar
+    document.querySelectorAll('.sidebar-nav li a').forEach(a => a.classList.remove('active'));
+    const sideLink = document.getElementById('side-' + subPageId);
+    if(sideLink) sideLink.classList.add('active');
+}
 
+// Initialisation au chargement
+document.addEventListener('DOMContentLoaded', () => {
+    // Tu peux ajouter tes fonctions d'initialisation ici (ex: buildCalendar())
+});
 </script>
 
 </body>

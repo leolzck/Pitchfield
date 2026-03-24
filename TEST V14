@@ -3,81 +3,258 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pitchfield — Académie & Progression</title>
+<title>Pitchfield — Là où ton futur commence</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
 <style>
 :root{
-  --navy:#0D1B2E;--navy-mid:#1A3A5C;--gold:#C9A84C;--gold-light:#E8C96A;
-  --cream:#F9F6F0;--white:#FFFFFF;--text-mid:#4A5568;--text-light:#8898A8;
-  --border:rgba(13,27,46,0.1);--green:#1E7E34;--sidebar-w:240px;
+  --navy:#0D1B2E;--navy-mid:#1A3A5C;--navy-light:#243F60;
+  --gold:#C9A84C;--gold-light:#E8C96A;--gold-pale:#FFF8E7;
+  --cream:#F9F6F0;--white:#FFFFFF;
+  --text-dark:#0D1B2E;--text-mid:#4A5568;--text-light:#8898A8;
+  --border:rgba(13,27,46,0.1);--green:#1E7E34;--green-light:#D4EDDA;
+  --red:#E24B4A;--sidebar-w:240px;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);overflow-x:hidden;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text-dark);overflow-x:hidden;}
 
-/* ── LAYOUT ── */
-.nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--navy);height:64px;display:flex;align-items:center;padding:0 40px;justify-content:space-between;border-bottom:1px solid rgba(201,168,76,0.2);}
-.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--gold);cursor:pointer;}
+/* ── RESPONSIVE UTILITIES ── */
+@media(max-width:768px){
+  .hide-mobile{display:none!important;}
+  .nav-links{display:none!important;}
+  .hero{padding:100px 24px 60px!important;flex-direction:column!important;}
+  .hero-stats{position:static!important;transform:none!important;flex-direction:row!important;flex-wrap:wrap!important;gap:12px!important;margin-top:40px!important;width:100%!important;}
+  .hero h1{font-size:36px!important;letter-spacing:-1px!important;}
+  .features{padding:60px 24px!important;}
+  .features-grid{grid-template-columns:1fr!important;}
+  .reviews{padding:60px 24px!important;}
+  .reviews-grid{grid-template-columns:1fr!important;}
+  .offers-page{padding:80px 16px 40px!important;}
+  .offers-grid{grid-template-columns:1fr!important;}
+  .b2b-grid{grid-template-columns:1fr!important;}
+  .commission-banner{flex-direction:column!important;text-align:center!important;}
+  .login-page{flex-direction:column!important;}
+  .login-left{padding:60px 24px 40px!important;}
+  .login-right{padding:40px 24px!important;}
+  .app-layout{flex-direction:column!important;}
+  .sidebar{width:100%!important;position:relative!important;top:auto!important;height:auto!important;padding:12px 0!important;}
+  .sidebar-user{display:none!important;}
+  .sidebar-nav{display:flex!important;flex-wrap:wrap!important;padding:0 8px!important;gap:4px!important;}
+  .sidebar-nav li a{padding:8px 12px!important;font-size:12px!important;border-radius:8px!important;}
+  .sidebar-section{display:none!important;}
+  .main-content{margin-left:0!important;padding:16px!important;}
+  .dash-kpis{grid-template-columns:1fr 1fr!important;}
+  .dash-grid{grid-template-columns:1fr!important;}
+  .domains-grid{grid-template-columns:1fr 1fr!important;}
+  .favs-grid{grid-template-columns:1fr!important;}
+  .messages-layout{grid-template-columns:1fr!important;height:auto!important;}
+  .messages-list{display:none!important;}
+  .rdv-grid{grid-template-columns:1fr!important;}
+  .courses-grid{grid-template-columns:1fr!important;}
+  .footer-grid{grid-template-columns:1fr 1fr!important;}
+  .footer-brand{grid-column:1/-1!important;}
+  .section-title{font-size:28px!important;}
+  .hero-actions{flex-direction:column!important;width:100%!important;}
+  .hero-actions .btn-primary,.hero-actions .btn-outline{width:100%!important;text-align:center!important;}
+  .nav-mobile-btn{display:flex!important;}
+  .mobile-menu{display:block!important;}
+}
+@media(max-width:480px){
+  .dash-kpis{grid-template-columns:1fr!important;}
+  .domains-grid{grid-template-columns:1fr!important;}
+  .admin-dash-kpis{grid-template-columns:1fr 1fr!important;}
+}
+@media(min-width:769px) and (max-width:1024px){
+  .hero{padding:100px 40px 80px!important;}
+  .hero h1{font-size:48px!important;}
+  .hero-stats{right:40px!important;}
+  .features{padding:60px 40px!important;}
+  .features-grid{grid-template-columns:1fr 1fr!important;}
+  .reviews-grid{grid-template-columns:1fr 1fr!important;}
+  .courses-grid{grid-template-columns:1fr 1fr!important;}
+  .offers-page{padding:80px 32px 40px!important;}
+  .offers-grid{grid-template-columns:1fr 1fr!important;}
+}
+
+/* ── NAV ── */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(13,27,46,0.97);backdrop-filter:blur(12px);
+  height:64px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 40px;border-bottom:1px solid rgba(201,168,76,0.2);
+}
+@media(max-width:768px){.nav{padding:0 16px;}}
+.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--gold);letter-spacing:-0.5px;cursor:pointer;}
 .nav-logo span{color:var(--white);}
+.nav-links{display:flex;gap:32px;align-items:center;}
+.nav-links a{color:rgba(255,255,255,0.7);text-decoration:none;font-size:14px;cursor:pointer;transition:color .2s;}
+.nav-links a:hover{color:var(--white);}
+.nav-right{display:flex;align-items:center;gap:12px;}
+.nav-cta{background:var(--gold);color:var(--navy);padding:9px 22px;border-radius:50px;font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;border:none;font-family:'DM Sans',sans-serif;}
+.nav-cta:hover{background:var(--gold-light);transform:translateY(-1px);}
+.nav-mobile-btn{display:none;background:none;border:none;cursor:pointer;flex-direction:column;gap:5px;padding:4px;}
+.nav-mobile-btn span{display:block;width:22px;height:2px;background:var(--white);border-radius:2px;transition:all .3s;}
+.mobile-menu{display:none;position:fixed;top:64px;left:0;right:0;background:var(--navy);z-index:99;padding:16px;border-bottom:1px solid rgba(255,255,255,0.08);}
+.mobile-menu a{display:block;padding:12px 16px;color:rgba(255,255,255,0.8);text-decoration:none;font-size:15px;border-radius:10px;cursor:pointer;}
+.mobile-menu a:hover{background:rgba(255,255,255,0.07);color:var(--white);}
+.mobile-menu .mob-cta{background:var(--gold);color:var(--navy);text-align:center;margin-top:8px;font-weight:500;}
+
+/* ── PAGES ── */
 .page{display:none;min-height:100vh;padding-top:64px;}
 .page.active{display:block;}
+
+/* ── SIDEBAR LAYOUT ── */
 .app-layout{display:flex;min-height:calc(100vh - 64px);}
-.sidebar{width:var(--sidebar-w);background:var(--navy);position:fixed;top:64px;bottom:0;left:0;padding:24px 0;border-right:1px solid rgba(255,255,255,0.06);}
+.sidebar{
+  width:var(--sidebar-w);background:var(--navy);flex-shrink:0;position:fixed;
+  top:64px;bottom:0;left:0;overflow-y:auto;padding:24px 0;
+  border-right:1px solid rgba(255,255,255,0.06);
+}
+.sidebar-user{padding:0 20px 24px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:16px;}
+.sidebar-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:var(--navy);margin-bottom:10px;}
+.sidebar-name{font-size:14px;font-weight:500;color:var(--white);}
+.sidebar-role{font-size:12px;color:rgba(255,255,255,0.45);margin-top:2px;}
 .sidebar-nav{list-style:none;padding:0 8px;}
-.sidebar-nav li a{display:flex;align-items:center;padding:12px;border-radius:10px;color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;cursor:pointer;margin-bottom:4px;}
+.sidebar-nav li{margin-bottom:2px;}
+.sidebar-nav li a{
+  display:flex;align-items:center;gap:12px;padding:10px 12px;
+  border-radius:10px;color:rgba(255,255,255,0.6);text-decoration:none;
+  font-size:13.5px;cursor:pointer;transition:all .2s;
+}
+.sidebar-nav li a:hover{background:rgba(255,255,255,0.07);color:var(--white);}
 .sidebar-nav li a.active{background:rgba(201,168,76,0.15);color:var(--gold);}
-.main-content{margin-left:var(--sidebar-w);flex:1;padding:32px;background:var(--cream);}
+.sidebar-nav li a .icon{width:18px;height:18px;opacity:0.8;flex-shrink:0;}
+.sidebar-nav li a.active .icon{opacity:1;}
+.sidebar-section{font-size:10px;font-weight:500;color:rgba(255,255,255,0.25);letter-spacing:1px;text-transform:uppercase;padding:16px 20px 6px;}
+.main-content{margin-left:var(--sidebar-w);flex:1;padding:32px 36px;background:var(--cream);min-height:calc(100vh - 64px);}
 
-/* ── COMPONENTS ── */
-.dash-card{background:var(--white);border-radius:20px;padding:24px;border:1px solid var(--border);margin-bottom:20px;}
-.progress-container{background:var(--border);border-radius:50px;height:8px;margin:10px 0;overflow:hidden;}
-.progress-bar{height:100%;background:var(--gold);width:0%;transition:width 0.5s ease;}
-.courses-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));gap:20px;}
-.course-card{background:var(--white);border-radius:15px;overflow:hidden;border:1px solid var(--border);cursor:pointer;transition:transform 0.2s;}
-.course-card:hover{transform:translateY(-5px);}
-.course-body{padding:15px;}
-.video-pill, .fiche-pill{display:block;padding:10px;background:var(--cream);border-radius:8px;margin-bottom:8px;cursor:pointer;font-size:13px;transition:all 0.2s;}
-.video-pill:hover, .fiche-pill:hover{background:var(--gold-pale);border-left:4px solid var(--gold);}
-.video-pill.viewed{border-right:4px solid var(--green);}
+/* ── HOME ── */
+.hero{
+  background:var(--navy);min-height:100vh;display:flex;align-items:center;
+  position:relative;overflow:hidden;padding:80px 80px 80px;
+}
+.hero-bg{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 70% at 70% 50%,rgba(201,168,76,0.08) 0%,transparent 70%),radial-gradient(ellipse 40% 50% at 20% 80%,rgba(46,117,182,0.1) 0%,transparent 60%);}
+.hero-grid{position:absolute;inset:0;pointer-events:none;opacity:0.03;background-image:linear-gradient(var(--white) 1px,transparent 1px),linear-gradient(90deg,var(--white) 1px,transparent 1px);background-size:60px 60px;}
+.hero-content{position:relative;z-index:1;max-width:620px;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(201,168,76,0.12);border:1px solid rgba(201,168,76,0.25);border-radius:50px;padding:6px 16px;margin-bottom:28px;}
+.hero-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 2s infinite;}
+.hero-badge-text{font-size:12px;color:var(--gold);font-weight:500;letter-spacing:0.3px;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.3)}}
+.hero h1{font-family:'Syne',sans-serif;font-size:62px;font-weight:800;color:var(--white);line-height:1.05;letter-spacing:-2px;margin-bottom:24px;}
+.hero h1 .gold{color:var(--gold);}
+.hero p{font-size:17px;color:rgba(255,255,255,0.65);line-height:1.75;margin-bottom:40px;max-width:520px;}
+.hero-actions{display:flex;gap:16px;flex-wrap:wrap;}
+.btn-primary{background:var(--gold);color:var(--navy);padding:14px 32px;border-radius:50px;font-size:15px;font-weight:500;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all .25s;}
+.btn-primary:hover{background:var(--gold-light);transform:translateY(-2px);box-shadow:0 8px 24px rgba(201,168,76,0.3);}
+.btn-outline{background:transparent;color:var(--white);padding:14px 32px;border-radius:50px;font-size:15px;font-weight:400;cursor:pointer;border:1px solid rgba(255,255,255,0.25);font-family:'DM Sans',sans-serif;transition:all .25s;}
+.btn-outline:hover{background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.5);}
+.hero-stats{position:absolute;right:80px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:20px;z-index:1;}
+.stat-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:20px 28px;backdrop-filter:blur(8px);}
+.stat-num{font-family:'Syne',sans-serif;font-size:36px;font-weight:800;color:var(--gold);line-height:1;}
+.stat-label{font-size:12px;color:rgba(255,255,255,0.45);margin-top:6px;}
 
-/* ── MODALS ── */
+/* ── ACADEMY ── */
+.courses-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+.course-card{background:var(--white);border-radius:20px;overflow:hidden;border:1px solid var(--border);cursor:pointer;transition:all .3s;display:flex;flex-direction:column;}
+.course-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(13,27,46,0.1);}
+.course-thumb{height:130px;display:flex;align-items:center;justify-content:center;font-size:44px;position:relative;}
+.course-duration{position:absolute;bottom:8px;right:8px;background:rgba(13,27,46,0.75);color:var(--white);font-size:11px;padding:3px 10px;border-radius:50px;backdrop-filter:blur(4px);}
+.course-body{padding:18px;flex:1;display:flex;flex-direction:column;}
+.course-tag{display:inline-block;font-size:11px;background:rgba(201,168,76,0.12);color:var(--gold);padding:3px 10px;border-radius:50px;margin-bottom:8px;}
+.course-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:600;color:var(--navy);margin-bottom:6px;line-height:1.3;}
+.course-desc{font-size:12px;color:var(--text-light);line-height:1.6;margin-bottom:12px;flex:1;}
+
+/* Progression section */
+.progress-bar-wrap{background:var(--border);border-radius:50px;height:5px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:var(--gold);border-radius:50px;}
+
+/* ── MODALES ── */
 .p14-mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;align-items:center;justify-content:center;}
-.p14-mb{background:var(--white);border-radius:22px;padding:28px;width:500px;position:relative;}
-.p14-mc{position:absolute;top:15px;right:15px;background:none;border:none;font-size:24px;cursor:pointer;}
+.p14-mb{background:var(--white);border-radius:22px;padding:28px;width:500px;max-width:94vw;max-height:88vh;overflow-y:auto;position:relative;}
+.p14-mc{position:absolute;top:11px;right:13px;background:none;border:none;font-size:20px;cursor:pointer;color:var(--text-light);}
+
+/* ── FOOTER ── */
+footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:48px;}
+.footer-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:var(--gold);margin-bottom:14px;}
+.footer-logo span{color:var(--white);}
+
+/* ── ROLES ── */
+.admin-only { display: none; }
+body.role-admin .admin-only { display: block; }
+
+.video-pill { display:inline-flex; align-items:center; gap:6px; background:var(--green-light); color:var(--green); font-size:11px; padding:4px 12px; border-radius:50px; cursor:pointer; margin:3px 3px 0 0; font-weight:500; transition:all .2s; border:1px solid transparent; }
+.video-pill:hover { background:var(--green); color:white; }
+.fiche-pill{display:inline-block;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.25);border-radius:7px;padding:5px 9px;margin:2px 2px 0 0;cursor:pointer;font-size:11px;color:var(--navy);transition:all .15s;}
 </style>
 </head>
 <body>
 
 <nav class="nav">
-  <div class="nav-logo" onclick="location.reload()">Pitch<span>field</span></div>
+  <div class="nav-logo" onclick="showPage('home')">Pitch<span>field</span></div>
+  <div class="nav-links">
+    <a onclick="showPage('home')">Accueil</a>
+    <a onclick="showPage('offres')">Offres</a>
+    <a onclick="showPage('recherche')">Explorer</a>
+    <a onclick="showPage('academy')">Académie</a>
+    <a onclick="showPage('contact')">Contact</a>
+  </div>
+  <div class="nav-right">
+    <button class="nav-cta" onclick="showPage('login')">Connexion</button>
+  </div>
 </nav>
 
-<div id="page-app" class="page active">
+<div id="page-home" class="page active">
+  <div class="hero">
+    <div class="hero-content">
+      <h1>Le terrain où tu<br>apprends à <span class="gold">convaincre.</span></h1>
+      <p>Pitchfield connecte les étudiants avec des professionnels expérimentés.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="showPage('login')">Commencer gratuitement</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="page-app" class="page">
   <div class="app-layout">
     <aside class="sidebar">
       <ul class="sidebar-nav">
-        <li><a onclick="showAppPage('dashboard')" id="nav-dashboard" class="active">Dashboard</a></li>
-        <li><a onclick="showAppPage('academy')" id="nav-academy">Académie</a></li>
-        <li><a onclick="location.reload()">Déconnexion</a></li>
+        <li><a onclick="showAppPage('dashboard')" class="active">Dashboard</a></li>
+        <li><a onclick="showAppPage('academy')">Académie</a></li>
+        <li><a onclick="showPage('home')">Déconnexion</a></li>
       </ul>
     </aside>
 
     <div class="main-content">
-      <div id="app-dashboard">
-        <h1 style="font-family:Syne; margin-bottom:20px;">Mon Suivi de Progression</h1>
-        <div id="overall-progress-card" class="dash-card">
-            <h3>Progression Globale Académie</h3>
-            <div class="progress-container"><div id="global-bar" class="progress-bar"></div></div>
-            <p id="global-text" style="font-size:12px; color:var(--text-mid);">0% complété</p>
+      <div id="app-academy" style="display:none;">
+        <div class="dash-header">
+            <h1>Académie Pitchfield</h1>
+            <p>Apprenez à convaincre avec nos modules experts.</p>
         </div>
-        <div id="module-progress-list"></div>
+        <div class="courses-grid" id="courses-grid">
+          <div class="course-card" data-cat="carriere" data-level="Tous niveaux" data-title="Préparer son entretien RH" onclick="p14OpenCourse(this)">
+            <div class="course-thumb" style="background:linear-gradient(135deg,#0D1B2E,#1A3A5C);">🎯<div class="course-duration">45 min</div></div>
+            <div class="course-body">
+                <div class="course-tag">Carrière</div>
+                <div class="course-title">Préparer son entretien RH comme un pro</div>
+                <div class="course-desc">Techniques et réponses aux questions pièges.</div>
+            </div>
+          </div>
+          <div class="course-card" data-cat="soft" data-level="Débutant" data-title="L'art du Pitch" onclick="p14OpenCourse(this)">
+            <div class="course-thumb" style="background:linear-gradient(135deg,#C9A84C,#E8C96A);">🎤<div class="course-duration">30 min</div></div>
+            <div class="course-body">
+                <div class="course-tag">Soft Skills</div>
+                <div class="course-title">L'art du Pitch en 2 minutes</div>
+                <div class="course-desc">Comment captiver son auditoire rapidement.</div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div id="app-academy" style="display:none;">
-        <div id="academy-grid-view">
-            <h1 style="font-family:Syne; margin-bottom:20px;">Cours & Formations</h1>
-            <div class="courses-grid" id="courses-container"></div>
-        </div>
-        <div id="academy-module-view" style="display:none;"></div>
+      <div id="app-dashboard">
+          <h1>Bienvenue dans votre espace</h1>
+          <p>Choisissez un module dans l'Académie pour commencer.</p>
       </div>
     </div>
   </div>
@@ -91,155 +268,101 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);
 </div>
 
 <script>
-/* ── DONNÉES ET ÉTAT ── */
-var modules = [
-    {
-        id: "m1", title: "Préparer son entretien RH", cat: "Carrière", thumb: "🎯",
-        vids: [
-            {id: "v1", title: "Introduction aux entretiens", url: "dQw4w9WgXcQ"},
-            {id: "v2", title: "La méthode STAR", url: "dQw4w9WgXcQ"}
-        ],
-        fiches: [
-            {id: "f1", ti: "Checklist Jour J", co: "Soyez ponctuel, souriant et préparez 3 questions."}
-        ]
-    },
-    {
-        id: "m2", title: "L'art du Pitch", cat: "Soft Skills", thumb: "🎤",
-        vids: [
-            {id: "v3", title: "Structure en 3 temps", url: "dQw4w9WgXcQ"}
-        ],
-        fiches: [
-            {id: "f2", ti: "Template de Pitch", co: "1. Accroche | 2. Problème | 3. Solution"}
-        ]
-    }
-];
-
-// Suivi de progression stocké localement
-var userProgress = JSON.parse(localStorage.getItem('pitchfield_progress')) || {
-    viewedItems: [], // IDs des vidéos ou fiches consultées
-    moduleStatus: {} // % par module
+/* ── BASE DATA ── */
+var videoDB = {
+    'Préparer son entretien RH': [
+        {title: 'Introduction aux entretiens', url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', dur: '10 min'},
+        {title: 'La méthode STAR', url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', dur: '15 min'}
+    ],
+    "L'art du Pitch": [
+        {title: 'Structure du pitch', url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', dur: '12 min'}
+    ]
 };
 
-/* ── LOGIQUE D'AFFICHAGE ── */
+var P14_FICHES = {
+    'Préparer son entretien RH': [
+        {ti: 'Checklist Entretien', co: '- Être ponctuel\n- Soigner sa tenue\n- Préparer ses questions', lv: 'Tous niveaux'}
+    ]
+};
+
+/* ── ROUTING ── */
+function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + (id === 'login' ? 'app' : id)).classList.add('active');
+    if(id === 'login') showAppPage('dashboard');
+}
+
 function showAppPage(name) {
-    document.querySelectorAll('.main-content > div').forEach(d => d.style.display = 'none');
+    document.querySelectorAll('.main-content > div').forEach(div => div.style.display = 'none');
     document.getElementById('app-' + name).style.display = 'block';
-    document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
-    document.getElementById('nav-' + name).classList.add('active');
-    if(name === 'dashboard') updateDashboard();
-    if(name === 'academy') renderAcademyGrid();
+    if(name === 'academy') p14BackToAcademy(); // Reset view
 }
 
-/* ── ACADÉMIE ── */
-function renderAcademyGrid() {
-    const container = document.getElementById('courses-container');
-    document.getElementById('academy-grid-view').style.display = 'block';
-    document.getElementById('academy-module-view').style.display = 'none';
+/* ── ACADEMY NAVIGATION ── */
+function p14OpenCourse(card) {
+    const title = card.dataset.title || card.querySelector('.course-title').textContent;
+    const category = card.querySelector('.course-tag').textContent;
+    const academyContent = document.getElementById('app-academy');
     
-    container.innerHTML = modules.map(m => {
-        const percent = calculateModuleProgress(m);
-        return `
-        <div class="course-card" onclick="openModule('${m.id}')">
-            <div style="height:120px; background:var(--navy-mid); display:flex; align-items:center; justify-content:center; font-size:40px;">${m.thumb}</div>
-            <div class="course-body">
-                <div style="font-size:11px; color:var(--gold); font-weight:700;">${m.cat}</div>
-                <div style="font-weight:700; margin:5px 0;">${m.title}</div>
-                <div class="progress-container"><div class="progress-bar" style="width:${percent}%"></div></div>
-                <div style="font-size:11px; color:var(--text-light);">${percent}% complété</div>
+    if (!window._academyHomeHTML) window._academyHomeHTML = academyContent.innerHTML;
+
+    const vids = videoDB[title] || [];
+    const fiches = P14_FICHES[title] || [];
+
+    academyContent.innerHTML = `
+        <div class="dash-header">
+            <button onclick="p14BackToAcademy()" style="background:none; border:none; color:var(--gold); cursor:pointer; font-weight:600; margin-bottom:15px; font-size:14px;">← Retour à l'Académie</button>
+            <h1 style="font-family:Syne; font-size:28px;">${title}</h1>
+            <p style="margin-bottom:20px;">Secteur : ${category}</p>
+        </div>
+        
+        <div style="display:grid; grid-template-columns: 1fr 300px; gap:25px;">
+            <div style="background:white; padding:20px; border-radius:15px; border:1px solid var(--border);">
+                <h3 style="margin-bottom:15px;">Vidéos de formation</h3>
+                ${vids.length > 0 ? 
+                    vids.map((v, i) => `<div class="video-pill" onclick="p14PlayDirect('${title}', ${i}, this)">► ${v.dur} · ${v.title}</div>`).join('') 
+                    : '<p>Bientôt disponible...</p>'}
+                <div id="course-player-area" style="margin-top:20px; display:none;"></div>
             </div>
-        </div>`;
-    }).join('');
+            
+            <div style="background:white; padding:20px; border-radius:15px; border:1px solid var(--border);">
+                <h3 style="margin-bottom:15px;">Ressources</h3>
+                ${fiches.map((f, i) => `<div class="fiche-pill" style="display:block; margin-bottom:8px;" onclick="p14ReadFicheDirect('${title}', ${i})">📄 ${f.ti}</div>`).join('')}
+            </div>
+        </div>
+    `;
 }
 
-function openModule(moduleId) {
-    const m = modules.find(x => x.id === moduleId);
-    const view = document.getElementById('academy-module-view');
-    document.getElementById('academy-grid-view').style.display = 'none';
-    view.style.display = 'block';
-
-    view.innerHTML = `
-        <button onclick="renderAcademyGrid()" style="background:none; border:none; color:var(--gold); cursor:pointer; margin-bottom:20px;">← Retour</button>
-        <h1 style="font-family:Syne;">${m.title}</h1>
-        <div style="display:grid; grid-template-columns: 1fr 300px; gap:25px; margin-top:20px;">
-            <div>
-                <h3>Vidéos</h3>
-                ${m.vids.map(v => `
-                    <div class="video-pill ${isViewed(v.id)?'viewed':''}" onclick="playVideo('${m.id}','${v.id}','${v.url}')">
-                        ${isViewed(v.id)?'✅':'▶'} ${v.title}
-                    </div>`).join('')}
-                <div id="video-player" style="margin-top:20px;"></div>
-            </div>
-            <div>
-                <h3>Documents</h3>
-                ${m.fiches.map(f => `
-                    <div class="fiche-pill" onclick="readFiche('${m.id}','${f.id}')">
-                        ${isViewed(f.id)?'✅':'📄'} ${f.ti}
-                    </div>`).join('')}
-            </div>
-        </div>`;
+function p14BackToAcademy() {
+    if (window._academyHomeHTML) document.getElementById('app-academy').innerHTML = window._academyHomeHTML;
 }
 
-/* ── SYSTÈME DE PROGRESSION ── */
-function playVideo(mId, vId, url) {
-    document.getElementById('video-player').innerHTML = `
-        <iframe width="100%" height="300" src="https://www.youtube.com/embed/${url}?autoplay=1" frameborder="0" allowfullscreen style="border-radius:15px;"></iframe>`;
-    markAsViewed(mId, vId);
+function p14PlayDirect(title, idx, pill) {
+    const v = videoDB[title][idx];
+    const area = document.getElementById('course-player-area');
+    area.style.display = 'block';
+    
+    pill.parentElement.querySelectorAll('.video-pill').forEach(p => { p.style.background=''; p.style.color=''; });
+    pill.style.background = 'var(--navy)'; pill.style.color = 'white';
+
+    const ytM = v.url.match(/(?:v=|youtu\.be\/)([\w-]{11})/);
+    area.innerHTML = ytM ? 
+        `<iframe width="100%" height="300" src="https://www.youtube.com/embed/${ytM[1]}?autoplay=1" frameborder="0" allowfullscreen style="border-radius:10px;"></iframe>` 
+        : `<p>Lien : <a href="${v.url}" target="_blank">Voir la vidéo</a></p>`;
 }
 
-function readFiche(mId, fId) {
-    const m = modules.find(x => x.id === mId);
-    const f = m.fiches.find(x => x.id === fId);
-    document.getElementById('read-fiche-c').innerHTML = `<h2>${f.ti}</h2><p style="margin-top:15px; line-height:1.6;">${f.co}</p>`;
+/* ── MODALS ── */
+function p14ReadFicheDirect(title, idx) {
+    const f = P14_FICHES[title][idx];
+    document.getElementById('read-fiche-c').innerHTML = `
+        <h2 style="font-family:Syne; margin-bottom:10px;">${f.ti}</h2>
+        <div style="white-space:pre-wrap; line-height:1.6; color:var(--text-mid);">${f.co}</div>
+    `;
     document.getElementById('p14-mo-read-fiche').style.display = 'flex';
-    markAsViewed(mId, fId);
-}
-
-function markAsViewed(mId, itemId) {
-    if (!userProgress.viewedItems.includes(itemId)) {
-        userProgress.viewedItems.push(itemId);
-        saveProgress();
-        // Optionnel : Rafraîchir la vue actuelle pour montrer le ✅
-        openModule(mId);
-    }
-}
-
-function calculateModuleProgress(m) {
-    const total = m.vids.length + m.fiches.length;
-    const viewed = m.vids.filter(v => isViewed(v.id)).length + m.fiches.filter(f => isViewed(f.id)).length;
-    return Math.round((viewed / total) * 100);
-}
-
-function isViewed(id) { return userProgress.viewedItems.includes(id); }
-
-function saveProgress() {
-    localStorage.setItem('pitchfield_progress', JSON.stringify(userProgress));
-}
-
-function updateDashboard() {
-    const list = document.getElementById('module-progress-list');
-    let totalItems = 0;
-    let viewedItems = userProgress.viewedItems.length;
-    
-    list.innerHTML = '<h3>Progression par module</h3>';
-    modules.forEach(m => {
-        totalItems += (m.vids.length + m.fiches.length);
-        const p = calculateModuleProgress(m);
-        list.innerHTML += `
-            <div class="dash-card" style="margin-top:10px; padding:15px;">
-                <div style="display:flex; justify-content:space-between;"><span>${m.title}</span><span>${p}%</span></div>
-                <div class="progress-container"><div class="progress-bar" style="width:${p}%"></div></div>
-            </div>`;
-    });
-
-    const globalPercent = Math.round((viewedItems / totalItems) * 100) || 0;
-    document.getElementById('global-bar').style.width = globalPercent + '%';
-    document.getElementById('global-text').textContent = globalPercent + '% de l\'académie complété';
 }
 
 function p14Mc(id){ document.getElementById('p14-mo-'+id).style.display='none'; }
-
-// Initialisation
-updateDashboard();
 </script>
+
 </body>
 </html>

@@ -3157,7 +3157,343 @@ function p14ModuleAddFiche() {
   fakeBtn.setAttribute('data-idx', idx);
   p14OpenFicheAdmin(fakeBtn);
 }
-</script>
+<script>
+// ── NAV & ROUTING ────────────────────────────────────────────
+var mobileMenuOpen = false;
+function toggleMobileMenu(){
+  mobileMenuOpen = !mobileMenuOpen;
+  document.getElementById('mobile-menu').style.display = mobileMenuOpen ? 'block' : 'none';
+}
+function closeMobileMenu(){
+  mobileMenuOpen = false;
+  document.getElementById('mobile-menu').style.display = 'none';
+}
 
+var APP_PAGES = ['dashboard','recherche','favoris','messages','rdv','academy','stage','profil','avis','admin-pros','admin-cal','pitchbot'];
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  closeMobileMenu();
+  if(APP_PAGES.indexOf(name) !== -1){
+    document.getElementById('page-app').classList.add('active');
+    showAppPage(name);
+  } else {
+    var pg = document.getElementById('page-'+name);
+    if(pg) pg.classList.add('active');
+  }
+  window.scrollTo(0,0);
+}
+function showApp(){ showPage('dashboard'); }
+function showAppPage(name){
+  document.querySelectorAll('[id^="app-"]').forEach(p=>p.style.display='none');
+  var el = document.getElementById('app-'+name);
+  if(el) el.style.display='block';
+  document.querySelectorAll('.sidebar-nav li a').forEach(a=>a.classList.remove('active'));
+  var nav = document.getElementById('nav-'+name);
+  if(nav) nav.classList.add('active');
+
+  // Hooks spécifiques au chargement des pages
+  if(name==='profil'){p14LoadProfil();p14ToggleProfil(false);}
+  if(name==='avis'){p14LoadAvis();}
+  if(name==='stage'){p14RenderJobs();var btn=document.getElementById('stage-add-btn');if(btn)btn.style.display=currentUser&&currentUser.role==='admin'?'':'none';}
+  if(name==='admin-pros'){p14FPro('all',null);}
+  if(name==='admin-cal'){p14BuildWeek();}
+}
+
+function switchTab(tab){
+  document.querySelectorAll('.login-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  document.getElementById('login-fields').style.display   = tab==='login'    ? 'block' : 'none';
+  document.getElementById('register-fields').style.display = tab==='register' ? 'block' : 'none';
+}
+
+// ── AUTH SYSTEM ──────────────────────────────────────────────
+var USERS = {
+  'admin@pitchfield.fr':    { pwd:'admin123',  role:'admin',  name:'Léo Leszczynski', roleLabel:'Fondateur · Pitchfield', initials:'LL' },
+  'etudiant@pitchfield.fr': { pwd:'user123',   role:'user',   name:'Thomas Durand',   roleLabel:'Étudiant · Bac+2', initials:'TD' },
+  'leo@pitchfield.fr':      { pwd:'pro123',    role:'pro',    name:'Léo Leszczynski', roleLabel:'Ingénieur Thales', initials:'LL' }
+};
+var currentUser = null;
+
+function doLogin(provider){
+  if(provider==='google'||provider==='linkedin'){
+    currentUser = { role:'user', name:'Utilisateur', roleLabel:'Étudiant · Social login', initials:'UT' };
+    applyRole(); showApp(); return;
+  }
+  var email = (document.getElementById('login-email')||{}).value||'';
+  var pwd   = (document.getElementById('login-pwd')||{}).value||'';
+  email = email.trim().toLowerCase();
+  var errEl = document.getElementById('login-err');
+  var u = USERS[email];
+  if(!u||u.pwd!==pwd){
+    if(errEl){ errEl.textContent='Email ou mot de passe incorrect.'; errEl.style.display='block'; }
+    return;
+  }
+  if(errEl) errEl.style.display='none';
+  currentUser = u;
+  applyRole();
+  showApp();
+}
+
+function applyRole(){
+  if(!currentUser) return;
+  var isAdmin = (currentUser.role==='admin');
+  var isPro   = (currentUser.role==='pro');
+  document.body.classList.toggle('role-admin', isAdmin);
+  document.body.classList.toggle('role-pro',   isPro);
+  var sbA=document.getElementById('sb-admin-sec');
+  var sbAN=document.getElementById('sb-admin-nav');
+  if(sbA)  sbA.style.display  = isAdmin ? '' : 'none';
+  if(sbAN) sbAN.style.display = isAdmin ? '' : 'none';
+  
+  var sbName = document.getElementById('sb-name');
+  var sbRole = document.getElementById('sb-role');
+  if(sbName) sbName.textContent = currentUser.name;
+  if(sbRole) sbRole.textContent = currentUser.roleLabel;
+  
+  var dashH = document.querySelector('#app-dashboard .dash-header h1');
+  if(dashH) dashH.textContent = isAdmin ? 'Tableau de bord Admin 👑' : 'Bonjour, '+currentUser.name.split(' ')[0]+' 👋';
+  
+  if(isAdmin && typeof buildAdminPanel === 'function') buildAdminPanel();
+}
+
+// ── UTILS & MODALES ──────────────────────────────────────────
+function mOpen(id){ var el=document.getElementById(id); if(el){el.style.display='flex';document.body.style.overflow='hidden';} }
+function mClose(id){ var el=document.getElementById(id); if(el){el.style.display='none';document.body.style.overflow='';} }
+function p14Mo(id){ mOpen('p14-mo-'+id); }
+function p14Mc(id){ mClose('p14-mo-'+id); }
+document.addEventListener('keydown',function(e){ 
+  if(e.key==='Escape'){
+    ['booking-modal','rdvinfo-modal','video-modal','module-modal'].forEach(mClose);
+    ['add-pro','view-pro','add-job','add-fiche','read-fiche','new-conv'].forEach(p14Mc);
+  } 
+});
+
+function showToast(msg){
+  var t = document.getElementById('toast-notif');
+  if(!t){
+    t = document.createElement('div');
+    t.id = 'toast-notif';
+    t.style.cssText='position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:var(--navy);color:var(--white);padding:12px 24px;border-radius:50px;font-size:14px;z-index:9999;border:1px solid var(--gold);box-shadow:0 4px 20px rgba(0,0,0,0.3);transition:opacity .3s;';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function(){ t.style.opacity='0'; }, 3000);
+}
+
+// ── ACADEMY & MODULES ────────────────────────────────────────
+var currentAcademyCat = 'all';
+function setAcademyCat(cat,el){
+  currentAcademyCat = cat;
+  document.querySelectorAll('.academy-cat').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  filterAcademy();
+}
+function filterAcademy(){
+  var q    = (document.getElementById('academy-search-input').value||'').toLowerCase();
+  var level = document.getElementById('level-filter').value;
+  var cards = document.querySelectorAll('.course-card');
+  var visible = 0;
+  cards.forEach(c=>{
+    var matchCat   = currentAcademyCat==='all' || c.dataset.cat===currentAcademyCat;
+    var matchLevel = !level || c.dataset.level===level;
+    var matchQ     = !q || c.dataset.title.toLowerCase().includes(q) || c.textContent.toLowerCase().includes(q);
+    var show = matchCat && matchLevel && matchQ;
+    c.style.display = show ? 'flex' : 'none';
+    if(show) visible++;
+  });
+  document.getElementById('academy-no-result').style.display = visible===0 ? 'block' : 'none';
+}
+function gotoAcademy(cat,search){
+  showAppPage('academy');
+  setTimeout(function(){
+    var catEl=document.querySelector('.academy-cat[data-cat="'+cat+'"]');
+    if(catEl){ setAcademyCat(cat,catEl); }
+    if(search&&document.getElementById('academy-search-input')){
+      document.getElementById('academy-search-input').value=search;
+      filterAcademy();
+    }
+  },50);
+}
+
+var P14_MODULES = {
+  'Préparer son entretien RH comme un pro': {desc:"Techniques, posture, et réponses aux questions pièges.",cat:'Carrière',thumb:'🎯',bg:'linear-gradient(135deg,#0D1B2E,#1A3A5C)',proDomains:['carriere']},
+  'Créer un CV qui passe les filtres IA (ATS)': {desc:"Apprenez à rédiger un CV visible, lisible et percutant pour les IA.",cat:'Carrière',thumb:'📄',bg:'linear-gradient(135deg,#1E7E34,#2E8B3A)',proDomains:['carriere']},
+  'Optimiser son LinkedIn pour être recruté': {desc:"Transformez votre profil en aimant à opportunités.",cat:'Carrière',thumb:'💼',bg:'linear-gradient(135deg,#0077B5,#1A95D0)',proDomains:['carriere','business']},
+  "Maîtriser l'éloquence et l'art oratoire": {desc:"Devenez l'orateur que vous voulez être.",cat:'Soft Skills',thumb:'🎤',bg:'linear-gradient(135deg,#C9A84C,#E8C96A)',proDomains:['soft']},
+  'Monter son business en ligne de zéro': {desc:"De l'idée à la première vente.",cat:'Business',thumb:'🚀',bg:'linear-gradient(135deg,#D85A30,#F07040)',proDomains:['business']},
+  'Introduction au trading et à l\'investissement': {desc:"Comprendre les marchés financiers et investir.",cat:'Finance',thumb:'📈',bg:'linear-gradient(135deg,#1A5FA5,#2A7FD5)',proDomains:['finance']},
+  'Créer son site internet sans coder': {desc:"Construire un site professionnel en une journée sans coder.",cat:'Tech',thumb:'💻',bg:'linear-gradient(135deg,#5B2C8C,#7B4CAC)',proDomains:['tech']},
+  'Préparer son oral de bac de français': {desc:"Structure, introduction, analyse des œuvres.",cat:'Lycée',thumb:'🎓',bg:'linear-gradient(135deg,#A32D2D,#E24B4A)',proDomains:['soft','carriere']},
+  'Bases de l\'investissement immobilier': {desc:"Comprendre le marché et investir dès 20 ans.",cat:'Finance',thumb:'🏠',bg:'linear-gradient(135deg,#085041,#1D9E75)',proDomains:['finance']},
+  'Gestion du stress avant un oral ou entretien': {desc:"Techniques de respiration et préparation mentale.",cat:'Soft Skills',thumb:'🧠',bg:'linear-gradient(135deg,#1A3A5C,#2E75B6)',proDomains:['soft','business']}
+};
+
+var videoDB = {};
+var P14_FICHES = {};
+var p14CurrentModule = null;
+
+function p14OpenModule(card) {
+  var title = card.dataset.title || card.querySelector('.course-title').textContent;
+  p14CurrentModule = title;
+  var info = P14_MODULES[title] || {desc:'Description à venir.',cat:'Module',thumb:'📚',bg:'#0D1B2E',proDomains:[]};
+
+  var hd = document.getElementById('module-thumb-hd');
+  if(hd) { hd.style.background = info.bg; hd.childNodes[0].textContent = info.thumb; }
+
+  var tagEl = document.getElementById('module-tag'); if(tagEl) tagEl.textContent = info.cat;
+  var titleEl = document.getElementById('module-title'); if(titleEl) titleEl.textContent = title;
+  var descEl = document.getElementById('module-desc'); if(descEl) descEl.textContent = info.desc;
+
+  var vids = videoDB[title] || [];
+  var vidsSec = document.getElementById('module-vids-sec');
+  var vidsList = document.getElementById('module-vids-list');
+  var vidEmbed = document.getElementById('module-vid-embed');
+  if(vidEmbed) { vidEmbed.style.display='none'; vidEmbed.innerHTML=''; }
+
+  if(vids.length > 0 && vidsSec && vidsList) {
+    vidsSec.style.display = 'block';
+    vidsList.innerHTML = vids.map((v, i) => {
+      return `<span onclick="p14PlayVid(event, '${encodeURIComponent(title)}', ${i})" class="video-pill">► ${v.title}</span>`;
+    }).join('');
+  } else if(vidsSec) {
+    vidsSec.style.display = 'none';
+  }
+
+  var fiches = P14_FICHES[title] || [];
+  var fichesSec = document.getElementById('module-fiches-sec');
+  var fichesList = document.getElementById('module-fiches-list');
+  var ficheContent = document.getElementById('module-fiche-content');
+  if(ficheContent) ficheContent.style.display = 'none';
+  
+  if(fiches.length > 0 && fichesSec && fichesList) {
+    fichesSec.style.display = 'block';
+    fichesList.innerHTML = fiches.map((f, i) => {
+      return `<span onclick="p14ShowFicheInModule(event, '${encodeURIComponent(title)}', ${i})" class="fiche-pill">📄 ${f.ti}</span>`;
+    }).join('');
+  } else if(fichesSec) {
+    fichesSec.style.display = 'none';
+  }
+
+  var adminBtns = document.getElementById('module-admin-btns');
+  if(adminBtns) adminBtns.style.display = (currentUser && currentUser.role==='admin') ? 'flex' : 'none';
+
+  mOpen('module-modal');
+}
+
+function p14CloseModule() { mClose('module-modal'); p14CurrentModule = null; }
+
+function p14PlayVid(e, encTitle, idx) {
+  e.stopPropagation();
+  var title = decodeURIComponent(encTitle);
+  var vids = videoDB[title] || [];
+  var v = vids[idx];
+  if(!v) return;
+  var embed = document.getElementById('module-vid-embed');
+  if(!embed) return;
+
+  embed.style.display = 'block';
+  if(v.isLocal) {
+    embed.innerHTML = '<video controls autoplay style="width:100%;border-radius:12px;"><source src="'+v.url+'" type="video/mp4">Non supporté.</video>';
+  } else {
+    var ytMatch = v.url.match(/(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+    if(ytMatch) {
+      embed.innerHTML = '<iframe src="https://www.youtube.com/embed/'+ytMatch[1]+'?autoplay=1" allowfullscreen style="width:100%; height:300px; border-radius:12px; border:none;"></iframe>';
+    } else {
+      embed.innerHTML = '<div style="padding:20px;text-align:center;"><a href="'+v.url+'" target="_blank" style="color:var(--navy);">Ouvrir la vidéo</a></div>';
+    }
+  }
+}
+
+function p14ShowFicheInModule(e, encTitle, idx) {
+  e.stopPropagation();
+  var title = decodeURIComponent(encTitle);
+  var fiches = P14_FICHES[title] || [];
+  var f = fiches[idx];
+  if(!f) return;
+  var fc = document.getElementById('module-fiche-content');
+  if(!fc) return;
+  
+  if(fc.dataset.activeIdx == idx && fc.style.display === 'block') {
+    fc.style.display = 'none'; return;
+  }
+  fc.dataset.activeIdx = idx;
+  
+  var lines = f.co.split('\n').map(l => l.startsWith('-') ? `<li>${l.slice(1).trim()}</li>` : `<p>${l}</p>`).join('');
+  fc.innerHTML = `<div style="font-weight:700;color:var(--navy);margin-bottom:5px;">${f.ti}</div><div>${lines}</div>`;
+  fc.style.display = 'block';
+}
+
+// ── CALENDRIER ET RDV ────────────────────────────────────────
+var calYear=2026, calMonth=2;
+var RDV_EVENTS=[6,12,19,24,31];
+var FREE_SLOTS=[23,26,27];
+var rdvDB = [];
+
+function buildCalendar(){
+  var cal=document.getElementById('cal-days');
+  if(!cal) return;
+  var firstDay = new Date(calYear, calMonth, 1).getDay();
+  firstDay = firstDay===0 ? 6 : firstDay-1;
+  var daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
+  var today = new Date();
+  var isCurrentMonth = (today.getFullYear()===calYear && today.getMonth()===calMonth);
+  var todayDate = today.getDate();
+
+  var months=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+  var titleEl = document.querySelector('.cal-title');
+  if(titleEl) titleEl.textContent = months[calMonth] + ' ' + calYear;
+
+  cal.innerHTML='';
+  for(var i=0;i<firstDay;i++) cal.appendChild(Object.assign(document.createElement('div'), {className:'cal-day other-month'}));
+  
+  for(var d=1;d<=daysInMonth;d++){
+    let div=document.createElement('div');
+    div.className='cal-day';
+    div.textContent=d;
+    if(isCurrentMonth && d===todayDate) div.classList.add('today');
+    if(RDV_EVENTS.includes(d)) div.classList.add('has-event');
+    if(FREE_SLOTS.includes(d)){
+      div.style.cssText = 'background:rgba(30,126,52,0.12);color:var(--green);font-weight:700;border-radius:8px;outline:2px solid rgba(30,126,52,0.4);';
+    }
+    div.onclick = () => {
+      document.querySelectorAll('.cal-day.selected').forEach(el=>el.classList.remove('selected'));
+      div.classList.add('selected');
+      if(RDV_EVENTS.includes(d)) showRdvInfo(d);
+      else if(FREE_SLOTS.includes(d)) openBooking(d);
+    };
+    cal.appendChild(div);
+  }
+}
+
+function changeMonth(dir){
+  calMonth += dir;
+  if(calMonth>11){calMonth=0;calYear++;}
+  if(calMonth<0){calMonth=11;calYear--;}
+  buildCalendar();
+}
+
+// ── CHAT ─────────────────────────────────────────────────────
+function sendMsg(){
+  var input = document.getElementById('chat-input');
+  var txt = input.value.trim();
+  if(!txt) return;
+  var msgs = document.querySelector('.chat-messages');
+  msgs.innerHTML += `<div class="msg msg-out"><div class="msg-bubble">${txt}</div><div class="msg-time">maintenant</div></div>`;
+  input.value='';
+  msgs.scrollTop=msgs.scrollHeight;
+  setTimeout(()=>{
+    msgs.innerHTML += `<div class="msg msg-in"><div class="msg-bubble">Merci pour votre message ! Je vous réponds très prochainement.</div><div class="msg-time">maintenant</div></div>`;
+    msgs.scrollTop=msgs.scrollHeight;
+  },1200);
+}
+
+// ── INITIALISATION ───────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function(){
+  buildCalendar();
+  if(typeof p14RenderJobs === 'function') p14RenderJobs();
+});
+</script>
 </body>
 </html>

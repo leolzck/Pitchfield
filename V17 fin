@@ -579,11 +579,28 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
   .p14-mc{position:absolute;top:11px;right:13px;background:none;border:none;font-size:20px;cursor:pointer;color:var(--text-light);}
   .p14-mt{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--navy);margin-bottom:16px;}
 
+
+  /* ── MODALE MODULE ACADÉMIE ── */
+  .module-mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:600;align-items:center;justify-content:center;}
+  .module-mb{background:var(--white);border-radius:24px;width:640px;max-width:95vw;max-height:90vh;overflow-y:auto;position:relative;}
+  .module-thumb-hd{height:140px;display:flex;align-items:center;justify-content:center;font-size:56px;border-radius:24px 24px 0 0;position:relative;flex-shrink:0;}
+  .module-close{position:absolute;top:12px;right:14px;background:rgba(255,255,255,.2);border:none;color:white;font-size:20px;cursor:pointer;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+  .module-body{padding:28px;}
+  .module-tag{display:inline-block;font-size:11px;background:rgba(201,168,76,.12);color:var(--gold);padding:3px 10px;border-radius:50px;margin-bottom:10px;}
+  .module-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;color:var(--navy);margin-bottom:6px;}
+  .module-desc{font-size:13.5px;color:var(--text-mid);line-height:1.7;margin-bottom:20px;}
+  .module-sec-title{font-size:12px;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;padding-top:16px;border-top:1px solid var(--border);}
+  .module-sec-title:first-of-type{border-top:none;padding-top:0;}
+  .video-embed-wrap{border-radius:12px;overflow:hidden;margin-top:10px;display:none;}
+  .video-embed-wrap iframe{width:100%;height:300px;border:none;display:block;}
+  .video-embed-wrap video{width:100%;border-radius:12px;}
+  .module-pro-row{display:flex;align-items:center;gap:10px;padding:10px;background:var(--cream);border-radius:10px;margin-bottom:7px;}
+  .module-pro-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;flex-shrink:0;}
+
 </style>
 </head>
 <body>
 
-<!-- ── NAV ── -->
 <nav class="nav">
   <div class="nav-logo" onclick="showPage('home')">Pitch<span>field</span></div>
   <div class="nav-links">
@@ -601,7 +618,6 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
   </div>
 </nav>
 
-<!-- Mobile menu -->
 <div class="mobile-menu" id="mobile-menu">
   <a onclick="showPage('home');closeMobileMenu()">Accueil</a>
   <a onclick="showPage('offres');closeMobileMenu()">Offres</a>
@@ -611,7 +627,6 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
   <a onclick="showPage('login');closeMobileMenu()" class="mob-cta">Connexion</a>
 </div>
 
-<!-- ══════════════════ PAGE : ACCUEIL ══════════════════ -->
 <div id="page-home" class="page active">
   <div class="hero">
     <div class="hero-bg"></div>
@@ -690,9 +705,9 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
         <h4>Services</h4>
         <ul>
           <li><a onclick="showPage('recherche')" style='cursor:pointer'>Orientation scolaire</a></li>
-          <li><a onclick="showPage('recherche')" style='cursor:pointer'>Stage &amp; Alternance</a></li>
+          <li><a onclick="showPage('recherche')" style='cursor:pointer'>Stage & Alternance</a></li>
           <li><a onclick="showPage('recherche')" style='cursor:pointer'>Préparation entretien</a></li>
-          <li><a onclick="showPage('recherche')" style='cursor:pointer'>CV ATS &amp; LinkedIn</a></li>
+          <li><a onclick="showPage('recherche')" style='cursor:pointer'>CV ATS & LinkedIn</a></li>
           <li><a onclick="showPage('recherche')" style='cursor:pointer'>Coaching business</a></li>
         </ul>
       </div>
@@ -726,7 +741,6 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
   </footer>
 </div>
 
-<!-- ══════════════════ PAGE : OFFRES ══════════════════ -->
 <div id="page-offres" class="page">
   <div class="offers-page">
     <div class="offers-header">
@@ -735,7 +749,6 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
       <p style="color:var(--text-mid);font-size:16px;max-width:500px;margin:0 auto;">De la découverte gratuite au partenariat école annuel, Pitchfield s'adapte à votre situation.</p>
     </div>
 
-    <!-- 3 offres principales — hauteur égale grâce à flex-direction:column + margin-top:auto sur le bouton -->
     <div class="offers-grid">
       <div class="offer-card">
         <div class="offer-icon">🎯</div>
@@ -758,7 +771,7 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
         <div class="offer-name">Étudiant Solo</div>
         <div class="offer-target">Hors écoles partenaires</div>
         <div class="offer-price"><span class="offer-price-currency">€</span>29</div>
-        <div class="offer-period">par mois &nbsp;·&nbsp; <strong style="color:var(--gold)">249€/an</strong></div>
+        <div class="offer-period">par mois  ·  <strong style="color:var(--gold)">249€/an</strong></div>
         <hr class="offer-divider">
         <ul class="offer-features">
           <li><div class="offer-check"><svg viewBox="0 0 10 8"><path d="M1 4l3 3 5-6" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round"/></svg></div>Groupe privé avec Léo & collaborateurs</li>
@@ -776,7 +789,7 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
         <div class="offer-name">Session à la carte</div>
         <div class="offer-target">Accompagnement ponctuel</div>
         <div class="offer-price"><span class="offer-price-currency">€</span>49</div>
-        <div class="offer-period">par session &nbsp;·&nbsp; <strong style="color:var(--navy-mid)">79€ premium</strong></div>
+        <div class="offer-period">par session  ·  <strong style="color:var(--navy-mid)">79€ premium</strong></div>
         <hr class="offer-divider">
         <ul class="offer-features">
           <li><div class="offer-check"><svg viewBox="0 0 10 8"><path d="M1 4l3 3 5-6" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round"/></svg></div>Session individuelle 45-60 min</li>
@@ -787,7 +800,6 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
       </div>
     </div>
 
-    <!-- Offres B2B -->
     <div class="b2b-grid">
       <div class="offer-card" style="border-color:var(--gold);border-width:2px;">
         <div class="offer-icon">🏫</div>
@@ -847,7 +859,6 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
   </footer>
 </div>
 
-<!-- ══════════════════ PAGE : LOGIN ══════════════════ -->
 <div id="page-login" class="page" style="padding-top:0">
   <div class="login-page">
     <div class="login-left">
@@ -870,7 +881,6 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
           <div class="login-tab" id="tab-register" onclick="switchTab('register')">Inscription</div>
         </div>
 
-        <!-- Connexion -->
         <div id="login-fields">
           <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" id="login-email" placeholder="votre@email.com" onkeydown="if(event.key==='Enter')doLogin()"></div>
           <div class="form-group"><label class="form-label">Mot de passe</label><input type="password" class="form-input" id="login-pwd" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
@@ -879,7 +889,6 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
           <button class="form-btn" onclick="doLogin()">Se connecter</button>
         </div>
 
-        <!-- Inscription -->
         <div id="register-fields">
           <div class="form-row">
             <div class="form-group"><label class="form-label">Prénom *</label><input class="form-input" id="rg-prenom" placeholder="Marie"></div>
@@ -930,7 +939,6 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
   </div>
 </div>
 
-<!-- ══════════════════ APP (dashboard, sidebar) ══════════════════ -->
 <div id="page-app" class="page">
   <div class="app-layout">
     <aside class="sidebar">
@@ -958,16 +966,16 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
         <li><a onclick="showAppPage('rdv')" id="nav-rdv">
           <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/></svg>Rendez-vous</a></li>
       </ul>
-      <div class="sidebar-section">Formation &amp; Emploi</div>
+      <div class="sidebar-section">Formation & Emploi</div>
       <ul class="sidebar-nav">
         <li><a onclick="showAppPage('academy')" id="nav-academy">
           <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg>Académie</a></li>
         <li><a onclick="showAppPage('stage')" id="nav-stage">
-          <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6 0h-4V4h4v2z"/></svg>Stage &amp; Alternance</a></li>
+          <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6 0h-4V4h4v2z"/></svg>Stage & Alternance</a></li>
         <li><a onclick="showAppPage('pitchbot')" id="nav-pitchbot">
           <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>Assistant PitchBot</a></li>
         <li><a onclick="showAppPage('avis')" id="nav-avis">
-          <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>Avis &amp; Notations<span id="nav-avis-badge" style="display:none;background:var(--red);color:white;border-radius:50%;width:16px;height:16px;font-size:10px;font-weight:700;align-items:center;justify-content:center;margin-left:auto;flex-shrink:0;">1</span></a></li>
+          <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>Avis & Notations<span id="nav-avis-badge" style="display:none;background:var(--red);color:white;border-radius:50%;width:16px;height:16px;font-size:10px;font-weight:700;align-items:center;justify-content:center;margin-left:auto;flex-shrink:0;">1</span></a></li>
       </ul>
       <div class="sidebar-section admin-only" id="sb-admin-sec" style="display:none;">Administration</div>
       <ul class="sidebar-nav admin-only" id="sb-admin-nav" style="display:none;">
@@ -990,7 +998,6 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
 
     <div class="main-content">
 
-      <!-- DASHBOARD -->
       <div id="app-dashboard">
         <div class="dash-header">
           <h1>Bonjour, étudiant 👋</h1>
@@ -1031,7 +1038,6 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
         </div>
       </div>
 
-      <!-- RECHERCHE (sans sidebar doublon, avec progression) -->
       <div id="app-recherche" style="display:none;">
         <div class="search-hero">
           <h2>Explore les domaines</h2>
@@ -1042,7 +1048,6 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
           </div>
         </div>
 
-        <!-- Progression des domaines -->
         <div class="progression-section">
           <div class="prog-title">Ma progression</div>
           <div class="prog-grid">
@@ -1054,14 +1059,14 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
               <div style="font-size:12px;color:var(--navy-mid);margin-top:10px;">Continuer →</div>
             </div>
             <div class="prog-card" onclick="gotoAcademy('carriere','CV ATS')">
-              <div class="prog-card-name">CV ATS &amp; IA</div>
+              <div class="prog-card-name">CV ATS & IA</div>
               <div class="prog-card-sub">Complété · 4 leçons</div>
               <div class="prog-pct" style="color:var(--green);">100%</div>
               <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:100%;background:var(--green);"></div></div>
               <div style="font-size:12px;color:var(--green);margin-top:10px;">✓ Terminé</div>
             </div>
             <div class="prog-card" onclick="gotoAcademy('soft','Éloquence')">
-              <div class="prog-card-name">Éloquence &amp; Oral</div>
+              <div class="prog-card-name">Éloquence & Oral</div>
               <div class="prog-card-sub">Non commencé · 7 leçons</div>
               <div class="prog-pct" style="color:var(--text-light);">0%</div>
               <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:0%"></div></div>
@@ -1088,7 +1093,6 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
         </div>
       </div>
 
-      <!-- FAVORIS -->
       <div id="app-favoris" style="display:none;">
         <div class="dash-header"><h1>Mes favoris</h1><p>Mentors et formations sauvegardés</p></div>
         <div class="favs-grid">
@@ -1103,7 +1107,6 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
         </div>
       </div>
 
-      <!-- MESSAGES -->
       <div id="app-messages" style="display:none;">
         <div class="dash-header"><h1>Messages</h1><p>3 messages non lus</p></div>
         <div class="messages-layout">
@@ -1134,7 +1137,6 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
         </div>
       </div>
 
-      <!-- RDV -->
       <div id="app-rdv" style="display:none;">
         <div class="dash-header" style="display:flex;justify-content:space-between;align-items:center;">
           <div><h1>Rendez-vous</h1><p>Gérez et réservez vos sessions de mentorat</p></div>
@@ -1156,7 +1158,6 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
               <div class="cal-day-name">Dim</div>
             </div>
             <div class="cal-days" id="cal-days"></div>
-            <!-- Légende -->
             <div style="display:flex;gap:20px;margin-top:14px;padding-top:14px;border-top:1px solid var(--border);">
               <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-light);"><div style="width:10px;height:10px;border-radius:50%;background:var(--navy);"></div>Aujourd'hui</div>
               <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-light);"><div style="width:10px;height:10px;border-radius:50%;background:var(--gold);"></div>RDV planifié</div>
@@ -1180,15 +1181,12 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
         </div>
       </div>
 
-      <!-- ACADEMY -->
       <div id="app-academy" style="display:none;">
-        <!-- PANEL ADMIN - visible seulement pour l'admin -->
         <div class="academy-admin-panel admin-only" id="admin-panel">
           <div class="academy-admin-title">🎬 Gestion des vidéos <span>ADMIN</span></div>
           <p style="font-size:13px;color:rgba(255,255,255,0.55);margin-bottom:16px;line-height:1.6;">Cliquez sur "Ajouter" à côté d'un module pour y insérer une vidéo YouTube ou Vimeo. Les étudiants verront les vidéos publiées directement sur leur carte.</p>
           <div class="admin-module-list" id="admin-module-list">
-            <!-- Rempli dynamiquement par JS -->
-          </div>
+            </div>
         </div>
         <div class="academy-hero">
           <h2>Académie Pitchfield</h2>
@@ -1200,7 +1198,6 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
           </div>
         </div>
 
-        <!-- Toolbar : recherche + catégories + niveau -->
         <div class="academy-toolbar">
           <div class="academy-search">
             <input type="text" id="academy-search-input" placeholder="Rechercher un module..." oninput="filterAcademy()">
@@ -1224,43 +1221,43 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
         </div>
         <div id="academy-no-result" style="display:none;text-align:center;padding:40px;color:var(--text-light);font-size:15px;">Aucun module trouvé pour cette recherche.</div>
         <div class="courses-grid" id="courses-grid">
-          <div class="course-card" data-cat="carriere" data-level="Tous niveaux" data-title="Préparer son entretien RH">
+          <div class="course-card" onclick="p14OpenModule(this)" data-cat="carriere" data-level="Tous niveaux" data-title="Préparer son entretien RH">
             <div class="course-thumb" style="background:linear-gradient(135deg,#0D1B2E,#1A3A5C);">🎯<div class="course-duration">45 min</div></div>
             <div class="course-body"><div class="course-tag">Carrière</div><div class="course-title">Préparer son entretien RH comme un pro</div><div class="course-desc">Techniques, posture, éloquence et réponses aux questions pièges.</div><div class="course-footer"><span class="course-modules">6 leçons</span><span class="course-level level-tous">Tous niveaux</span></div></div>
           </div>
-          <div class="course-card" data-cat="carriere" data-level="Débutant" data-title="Créer un CV ATS">
+          <div class="course-card" onclick="p14OpenModule(this)" data-cat="carriere" data-level="Débutant" data-title="Créer un CV ATS">
             <div class="course-thumb" style="background:linear-gradient(135deg,#1E7E34,#2E8B3A);">📄<div class="course-duration">30 min</div></div>
             <div class="course-body"><div class="course-tag">Carrière</div><div class="course-title">Créer un CV qui passe les filtres IA (ATS)</div><div class="course-desc">75% des grandes entreprises filtrent les CV avec une IA. Rendez-vous visible.</div><div class="course-footer"><span class="course-modules">4 leçons</span><span class="course-level level-debutant">Débutant</span></div></div>
           </div>
-          <div class="course-card" data-cat="carriere" data-level="Intermédiaire" data-title="Optimiser son LinkedIn">
+          <div class="course-card" onclick="p14OpenModule(this)" data-cat="carriere" data-level="Intermédiaire" data-title="Optimiser son LinkedIn">
             <div class="course-thumb" style="background:linear-gradient(135deg,#0077B5,#1A95D0);">💼<div class="course-duration">35 min</div></div>
             <div class="course-body"><div class="course-tag">Carrière</div><div class="course-title">Optimiser son LinkedIn pour être recruté</div><div class="course-desc">Photo, titre, résumé, mots-clés. Transformez votre profil en aimant à recruteurs.</div><div class="course-footer"><span class="course-modules">5 leçons</span><span class="course-level level-intermediaire">Intermédiaire</span></div></div>
           </div>
-          <div class="course-card" data-cat="soft" data-level="Tous niveaux" data-title="Maîtriser l'éloquence">
+          <div class="course-card" onclick="p14OpenModule(this)" data-cat="soft" data-level="Tous niveaux" data-title="Maîtriser l'éloquence">
             <div class="course-thumb" style="background:linear-gradient(135deg,#5B2C8C,#7B4DB0);">🎤<div class="course-duration">50 min</div></div>
             <div class="course-body"><div class="course-tag">Soft Skills</div><div class="course-title">Maîtriser l'éloquence et l'art oratoire</div><div class="course-desc">Prendre la parole avec confiance, structurer son discours, convaincre.</div><div class="course-footer"><span class="course-modules">7 leçons</span><span class="course-level level-tous">Tous niveaux</span></div></div>
           </div>
-          <div class="course-card" data-cat="business" data-level="Débutant" data-title="Monter son business">
+          <div class="course-card" onclick="p14OpenModule(this)" data-cat="business" data-level="Débutant" data-title="Monter son business">
             <div class="course-thumb" style="background:linear-gradient(135deg,#C9A84C,#E8C96A);">🚀<div class="course-duration">60 min</div></div>
             <div class="course-body"><div class="course-tag">Business</div><div class="course-title">Monter son business en ligne de zéro</div><div class="course-desc">De l'idée à la première vente. E-commerce, dropshipping, services en ligne.</div><div class="course-footer"><span class="course-modules">8 leçons</span><span class="course-level level-debutant">Débutant</span></div></div>
           </div>
-          <div class="course-card" data-cat="finance" data-level="Débutant" data-title="Introduction au trading">
+          <div class="course-card" onclick="p14OpenModule(this)" data-cat="finance" data-level="Débutant" data-title="Introduction au trading">
             <div class="course-thumb" style="background:linear-gradient(135deg,#D4700A,#EF9F27);">📈<div class="course-duration">55 min</div></div>
             <div class="course-body"><div class="course-tag">Finance</div><div class="course-title">Introduction au trading et à l'investissement</div><div class="course-desc">Comprendre les marchés financiers, les crypto-actifs et commencer à investir.</div><div class="course-footer"><span class="course-modules">6 leçons</span><span class="course-level level-debutant">Débutant</span></div></div>
           </div>
-          <div class="course-card" data-cat="soft" data-level="Tous niveaux" data-title="Gestion du stress">
+          <div class="course-card" onclick="p14OpenModule(this)" data-cat="soft" data-level="Tous niveaux" data-title="Gestion du stress">
             <div class="course-thumb" style="background:linear-gradient(135deg,#1A3A5C,#2E75B6);">🧠<div class="course-duration">40 min</div></div>
             <div class="course-body"><div class="course-tag">Soft Skills</div><div class="course-title">Gestion du stress avant un oral ou entretien</div><div class="course-desc">Techniques de respiration, préparation mentale et routines pour performer.</div><div class="course-footer"><span class="course-modules">5 leçons</span><span class="course-level level-tous">Tous niveaux</span></div></div>
           </div>
-          <div class="course-card" data-cat="tech" data-level="Débutant" data-title="Créer son site internet">
+          <div class="course-card" onclick="p14OpenModule(this)" data-cat="tech" data-level="Débutant" data-title="Créer son site internet">
             <div class="course-thumb" style="background:linear-gradient(135deg,#2C2C2A,#444441);">💻<div class="course-duration">70 min</div></div>
             <div class="course-body"><div class="course-tag">Tech</div><div class="course-title">Créer son site internet sans coder</div><div class="course-desc">V0.dev, Webflow, Framer. Construire un site professionnel en une journée.</div><div class="course-footer"><span class="course-modules">6 leçons</span><span class="course-level level-debutant">Débutant</span></div></div>
           </div>
-          <div class="course-card" data-cat="finance" data-level="Intermédiaire" data-title="Investissement immobilier">
+          <div class="course-card" onclick="p14OpenModule(this)" data-cat="finance" data-level="Intermédiaire" data-title="Investissement immobilier">
             <div class="course-thumb" style="background:linear-gradient(135deg,#085041,#1D9E75);">🏠<div class="course-duration">45 min</div></div>
             <div class="course-body"><div class="course-tag">Finance</div><div class="course-title">Bases de l'investissement immobilier</div><div class="course-desc">Comprendre le marché, les mécanismes de financement, investir dès 20 ans.</div><div class="course-footer"><span class="course-modules">5 leçons</span><span class="course-level level-intermediaire">Intermédiaire</span></div></div>
           </div>
-          <div class="course-card" data-cat="carriere" data-level="Lycée" data-title="Oral de bac de français">
+          <div class="course-card" onclick="p14OpenModule(this)" data-cat="carriere" data-level="Lycée" data-title="Oral de bac de français">
             <div class="course-thumb" style="background:linear-gradient(135deg,#A32D2D,#E24B4A);">🎓<div class="course-duration">35 min</div></div>
             <div class="course-body"><div class="course-tag">Carrière</div><div class="course-title">Préparer son oral de bac de français</div><div class="course-desc">Structure, introduction, analyse des œuvres et gestion du temps. Vise le 20/20.</div><div class="course-footer"><span class="course-modules">4 leçons</span><span class="course-level level-lycee">Lycée</span></div></div>
           </div>
@@ -1268,7 +1265,6 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
       </div>
 
 
-      <!-- ══ PROFIL ══ -->
       <div id="app-profil" style="display:none;">
         <div class="dash-header"><h1>Mon profil</h1><p>Modifiez vos informations personnelles et votre présentation</p></div>
 
@@ -1283,14 +1279,12 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
             <button onclick="p14ToggleProfil(true)" id="pf-edit-btn" style="margin-left:auto;background:var(--navy);color:white;border:none;padding:9px 20px;border-radius:50px;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;">✏️ Modifier</button>
           </div>
 
-          <!-- Vue lecture -->
           <div id="pf-view">
             <div style="font-size:12px;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;">Résumé de profil</div>
             <div class="pf-bio" id="pf-bio-display"><span style="color:var(--text-light);font-style:italic;">Aucun résumé — cliquez sur Modifier pour en ajouter un.</span></div>
             <div class="pf-grid" id="pf-fields-display"></div>
           </div>
 
-          <!-- Formulaire édition ÉTUDIANT -->
           <div id="pf-form-user" style="display:none;">
             <div class="pf-section">Informations personnelles — Votre identité</div>
             <div class="pf-grid">
@@ -1327,7 +1321,8 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
             <div class="pf-section">Vos diplômes</div>
             <div class="pf-grid">
               <div class="pf-field pf-field-full"><label>Diplômes obtenus (1 par ligne)</label>
-                <textarea id="pf-diplomes" rows="2" placeholder="Bac STI2D (2022)&#10;BTS SN option ER (en cours)"></textarea>
+                <textarea id="pf-diplomes" rows="2" placeholder="Bac STI2D (2022)
+BTS SN option ER (en cours)"></textarea>
               </div>
             </div>
             <div class="pf-section">Indiquez vos coordonnées</div>
@@ -1340,7 +1335,9 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
             <div class="pf-section">Langues</div>
             <div class="pf-grid">
               <div class="pf-field pf-field-full"><label>Langues parlées (ex : Français — natif, Anglais — courant)</label>
-                <textarea id="pf-langues" rows="2" placeholder="Français — natif&#10;Anglais — courant&#10;Espagnol — intermédiaire"></textarea>
+                <textarea id="pf-langues" rows="2" placeholder="Français — natif
+Anglais — courant
+Espagnol — intermédiaire"></textarea>
               </div>
             </div>
             <div class="pf-section">Sécurité</div>
@@ -1349,7 +1346,6 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
             </div>
           </div>
 
-          <!-- Formulaire édition PRO -->
           <div id="pf-form-pro" style="display:none;">
             <div class="pf-section">Informations personnelles — Votre identité</div>
             <div class="pf-grid">
@@ -1362,7 +1358,7 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
             <div class="pf-grid">
               <div class="pf-field"><label>Secteur d'expertise</label><input id="pf-pro-sector" placeholder="Ingénierie, Finance..."></div>
               <div class="pf-field"><label>Domaine principal</label>
-                <select id="pf-pro-domaine"><option value="">—</option><option value="carriere">Carrière &amp; RH</option><option value="tech">Tech &amp; Ingénierie</option><option value="finance">Finance</option><option value="business">Business</option><option value="soft">Soft Skills</option></select>
+                <select id="pf-pro-domaine"><option value="">—</option><option value="carriere">Carrière & RH</option><option value="tech">Tech & Ingénierie</option><option value="finance">Finance</option><option value="business">Business</option><option value="soft">Soft Skills</option></select>
               </div>
             </div>
             <div class="pf-section">Situation de handicap</div>
@@ -1393,7 +1389,8 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
             <div class="pf-section">Langues</div>
             <div class="pf-grid">
               <div class="pf-field pf-field-full"><label>Langues parlées</label>
-                <textarea id="pf-pro-langues" rows="2" placeholder="Français — natif&#10;Anglais — courant"></textarea>
+                <textarea id="pf-pro-langues" rows="2" placeholder="Français — natif
+Anglais — courant"></textarea>
               </div>
             </div>
             <div class="pf-section">Paramètres de rencontres</div>
@@ -1405,13 +1402,14 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
                 <select id="pf-pro-dispo-type"><option value="">—</option><option>1 session / semaine</option><option>2 sessions / semaine</option><option>Sur demande</option></select>
               </div>
             </div>
-            <div class="pf-section">Galerie photo &amp; Orientation</div>
+            <div class="pf-section">Galerie photo & Orientation</div>
             <div class="pf-grid">
               <div class="pf-field pf-field-full"><label>Spécialités (séparées par virgule)</label>
                 <input id="pf-pro-specs" placeholder="Ingénierie, Trading, Éloquence, Business...">
               </div>
               <div class="pf-field pf-field-full"><label>Expériences (1 par ligne)</label>
-                <textarea id="pf-pro-exp" rows="3" placeholder="Ingénieur Thales (2022-présent)&#10;Fondateur Pitchfield (2026)"></textarea>
+                <textarea id="pf-pro-exp" rows="3" placeholder="Ingénieur Thales (2022-présent)
+Fondateur Pitchfield (2026)"></textarea>
               </div>
               <div class="pf-field"><label>Profil Ambassadeur Pitchfield</label>
                 <select id="pf-pro-ambassador"><option value="non">Non</option><option value="oui">Oui — je recommande activement</option></select>
@@ -1430,14 +1428,11 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
         </div>
       </div>
 
-      <!-- ══ AVIS & NOTATIONS ══ -->
       <div id="app-avis" style="display:none;">
-        <div class="dash-header"><h1>Avis &amp; Notations</h1><p>Les avis sont obligatoires dans les 48h suivant chaque session</p></div>
+        <div class="dash-header"><h1>Avis & Notations</h1><p>Les avis sont obligatoires dans les 48h suivant chaque session</p></div>
 
-        <!-- Avis urgents -->
         <div id="avis-urgents"></div>
 
-        <!-- Laisser un avis -->
         <div class="dash-card" style="margin-bottom:18px;">
           <div class="dash-card-title">Laisser un avis sur une session</div>
           <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px;" id="avis-rdv-list"></div>
@@ -1453,17 +1448,15 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
           </div>
         </div>
 
-        <!-- Avis publiés -->
         <div class="dash-card">
           <div class="dash-card-title">Avis publiés</div>
           <div id="avis-publies"></div>
         </div>
       </div>
 
-      <!-- ══ STAGE & ALTERNANCE ══ -->
       <div id="app-stage" style="display:none;">
         <div class="dash-header" style="display:flex;justify-content:space-between;align-items:center;">
-          <div><h1>Stage &amp; Alternance</h1><p>Trouvez votre opportunité via le réseau Pitchfield</p></div>
+          <div><h1>Stage & Alternance</h1><p>Trouvez votre opportunité via le réseau Pitchfield</p></div>
           <button id="stage-add-btn" style="display:none;background:var(--gold);color:var(--navy);border:none;padding:9px 18px;border-radius:50px;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;" onclick="p14Mo('add-job')">+ Ajouter</button>
         </div>
         <div class="dash-card" style="margin-bottom:16px;">
@@ -1472,7 +1465,7 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
             <div class="sec-card on" onclick="p14FSec('all',this)"><div style="font-size:18px;margin-bottom:4px;">🔍</div><div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:600;color:var(--navy);">Toutes</div></div>
             <div class="sec-card" onclick="p14FSec('defense',this)"><div style="font-size:18px;margin-bottom:4px;">🛡️</div><div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:600;color:var(--navy);">Défense</div></div>
             <div class="sec-card" onclick="p14FSec('finance',this)"><div style="font-size:18px;margin-bottom:4px;">📈</div><div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:600;color:var(--navy);">Finance</div></div>
-            <div class="sec-card" onclick="p14FSec('tech',this)"><div style="font-size:18px;margin-bottom:4px;">💻</div><div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:600;color:var(--navy);">Tech &amp; IT</div></div>
+            <div class="sec-card" onclick="p14FSec('tech',this)"><div style="font-size:18px;margin-bottom:4px;">💻</div><div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:600;color:var(--navy);">Tech & IT</div></div>
             <div class="sec-card" onclick="p14FSec('ingenierie',this)"><div style="font-size:18px;margin-bottom:4px;">⚙️</div><div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:600;color:var(--navy);">Ingénierie</div></div>
             <div class="sec-card" onclick="p14FSec('marketing',this)"><div style="font-size:18px;margin-bottom:4px;">📣</div><div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:600;color:var(--navy);">Marketing</div></div>
             <div class="sec-card" onclick="p14FSec('rh',this)"><div style="font-size:18px;margin-bottom:4px;">🤝</div><div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:600;color:var(--navy);">RH</div></div>
@@ -1494,7 +1487,6 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
         </div>
       </div>
 
-      <!-- ══ ADMIN PROS ══ -->
       <div id="app-admin-pros" style="display:none;">
         <div class="dash-header" style="display:flex;justify-content:space-between;align-items:center;">
           <div><h1>Base des professionnels</h1><p>Gérez les profils rattachés aux modules</p></div>
@@ -1502,7 +1494,7 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
         </div>
         <div class="filters" style="margin-bottom:14px;">
           <div class="filter-tag active" onclick="p14FPro('all',this)">Tous</div>
-          <div class="filter-tag" onclick="p14FPro('carriere',this)">Carrière &amp; RH</div>
+          <div class="filter-tag" onclick="p14FPro('carriere',this)">Carrière & RH</div>
           <div class="filter-tag" onclick="p14FPro('tech',this)">Tech</div>
           <div class="filter-tag" onclick="p14FPro('finance',this)">Finance</div>
           <div class="filter-tag" onclick="p14FPro('business',this)">Business</div>
@@ -1511,14 +1503,13 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
         <div class="pro-grid" id="pros-grid"></div>
       </div>
 
-      <!-- ══ ADMIN CALENDRIER ══ -->
       <div id="app-admin-cal" style="display:none;">
         <div class="dash-header"><h1>Calendrier admin</h1><p>Cliquez sur un créneau pour le bloquer ou libérer</p></div>
         <div style="display:grid;grid-template-columns:1fr 240px;gap:16px;">
           <div class="dash-card">
             <div class="dash-card-title">
               <span id="wg-lbl">Semaine du 23 Mars 2026</span>
-              <div style="display:flex;gap:5px;"><button class="cal-nav-btn" onclick="p14ChWeek(-1)">&#8249;</button><button class="cal-nav-btn" onclick="p14ChWeek(1)">&#8250;</button></div>
+              <div style="display:flex;gap:5px;"><button class="cal-nav-btn" onclick="p14ChWeek(-1)">‹</button><button class="cal-nav-btn" onclick="p14ChWeek(1)">›</button></div>
             </div>
             <div class="wg" id="wg-grid"></div>
             <div style="display:flex;gap:12px;margin-top:8px;font-size:11px;color:var(--text-light);">
@@ -1544,7 +1535,6 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
         </div>
       </div>
 
-      <!-- ══ PITCHBOT ══ -->
       <div id="app-pitchbot" style="display:none;">
         <div class="dash-header"><h1>Assistant PitchBot</h1><p>Ton assistant IA alimenté par les fiches de l'Académie</p></div>
         <div style="background:white;border-radius:20px;border:1px solid var(--border);overflow:hidden;height:520px;display:flex;flex-direction:column;">
@@ -1568,11 +1558,7 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
           <button onclick="p14BotQ('Conseils pour LinkedIn ?')" style="background:white;border:1px solid var(--border);border-radius:50px;padding:6px 13px;font-size:12px;cursor:pointer;color:var(--navy);font-family:'DM Sans',sans-serif;">🔗 LinkedIn</button>
         </div>
       </div>
-    </div><!-- end main-content -->
-  </div><!-- end app-layout -->
-</div><!-- end page-app -->
-
-<script>
+    </div></div></div><script>
 // ── NAV ──────────────────────────────────────────────────────
 var mobileMenuOpen = false;
 function toggleMobileMenu(){
@@ -1641,7 +1627,7 @@ function setAcademyCat(cat,el){
   filterAcademy();
 }
 function filterAcademy(){
-  var q     = (document.getElementById('academy-search-input').value||'').toLowerCase();
+  var q    = (document.getElementById('academy-search-input').value||'').toLowerCase();
   var level = document.getElementById('level-filter').value;
   var cards = document.querySelectorAll('.course-card');
   var visible = 0;
@@ -1804,7 +1790,8 @@ function showRdvInfo(day){
     html += '<div style="display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:center;">';
     html += '<span style="font-size:11px;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;">Date</span><span style="font-size:14px;font-weight:500;color:var(--navy)">'+rdv.label+'</span>';
     html += '<span style="font-size:11px;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;">Heure</span><span style="font-size:14px;color:var(--navy)">'+rdv.heure+'</span>';
-    html += '<span style="font-size:11px;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;">Type</span><span style="font-size:14px;color:var(--navy)">'+rdv.type+'</span>';
+    html += '<span style="font-size:11px;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;">Type</span>
+span style="font-size:14px;color:var(--navy)">'+rdv.type+'</span>';
     html += '<span style="font-size:11px;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;">Format</span><span style="font-size:14px;color:var(--gold);font-weight:500;">'+rdv.format+'</span>';
     if(rdv.note){ html += '<span style="font-size:11px;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;">Note</span><span style="font-size:13px;color:var(--text-mid);font-style:italic;">'+rdv.note+'</span>'; }
     html += '</div>';
@@ -2045,7 +2032,7 @@ function updateCourseCard(courseTitle){
     var cIdx = allCards.findIndex(function(c){ return (c.dataset.title||c.querySelector('.course-title').textContent)===courseTitle; });
     window._buildCourseIdx = cIdx;
     var pillsHtml = vids.map(function(v,i){
-      return '<span class="video-pill" data-course-idx="' + window._buildCourseIdx + '" data-vid-idx="' + i + '" onclick="playVideoByAttr(this)">&#9658; ' + (v.dur ? v.dur + ' · ' : '') + v.title + '</span>';
+      return '<span class="video-pill" data-course-idx="' + window._buildCourseIdx + '" data-vid-idx="' + i + '" onclick="playVideoByAttr(this)">► ' + (v.dur ? v.dur + ' · ' : '') + v.title + '</span>';
     }).join('');
     section.innerHTML =
       '<div style="font-size:11px;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px;">'+vids.length+' vidéo'+(vids.length>1?'s':'')+' disponible'+(vids.length>1?'s':'')+'</div>'+
@@ -2123,12 +2110,11 @@ function showToast(msg){
 
 </script>
 
-<!-- ══════════════════ PAGE : CONTACT ══════════════════ -->
 <div id="page-contact" class="page">
   <div style="max-width:860px;margin:0 auto;padding:80px 32px 60px;">
     <div style="text-align:center;margin-bottom:52px;">
       <div class="section-label">Nous écrire</div>
-      <div class="section-title">Prenez contact avec nous&nbsp;!</div>
+      <div class="section-title">Prenez contact avec nous !</div>
       <p style="font-size:16px;color:var(--text-mid);max-width:560px;margin:16px auto 0;line-height:1.7;">Vous souhaitez rejoindre une délégation, nous proposer un partenariat ou poser une question ? Le formulaire ci-dessous vous permettra de contacter directement le bon interlocuteur.</p>
     </div>
     <div style="display:grid;grid-template-columns:1fr 320px;gap:28px;align-items:start;">
@@ -2138,11 +2124,11 @@ function showToast(msg){
         <div class="form-group"><label class="form-label">Destinataire <span style="color:#E24B4A">*</span></label>
           <select class="form-select" id="c-dest">
             <option value="">Sélectionner un destinataire</option>
-            <option>Léo Leszczynski – Fondateur &amp; Mentor</option>
+            <option>Léo Leszczynski – Fondateur & Mentor</option>
             <option>Partenariats Écoles</option>
-            <option>Support &amp; Questions techniques</option>
-            <option>Relations presse &amp; médias</option>
-            <option>Investisseurs &amp; Business Angels</option>
+            <option>Support & Questions techniques</option>
+            <option>Relations presse & médias</option>
+            <option>Investisseurs & Business Angels</option>
           </select>
         </div>
         <div class="form-group"><label class="form-label">Objet <span style="color:#E24B4A">*</span></label>
@@ -2214,14 +2200,13 @@ function showToast(msg){
   </footer>
 </div>
 
-<!-- ── MODALES ── -->
 <div id="booking-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:300;align-items:center;justify-content:center;">
   <div style="background:var(--white);border-radius:24px;padding:36px;width:440px;max-width:92vw;position:relative;">
     <button onclick="mClose('booking-modal')" style="position:absolute;top:14px;right:16px;background:none;border:none;font-size:22px;cursor:pointer;color:var(--text-light);">×</button>
     <div style="font-family:'Syne',sans-serif;font-size:19px;font-weight:700;color:var(--navy);margin-bottom:4px;">Réserver un créneau</div>
     <div id="booking-label" style="font-size:14px;color:var(--gold);margin-bottom:22px;"></div>
     <div class="form-group"><label class="form-label">Type de session</label>
-      <select class="form-select"><option>Coaching entretien (45 min)</option><option>Bilan orientation (60 min)</option><option>Session business (45 min)</option><option>CV &amp; LinkedIn (30 min)</option><option>Recherche stage/alternance (60 min)</option></select>
+      <select class="form-select"><option>Coaching entretien (45 min)</option><option>Bilan orientation (60 min)</option><option>Session business (45 min)</option><option>CV & LinkedIn (30 min)</option><option>Recherche stage/alternance (60 min)</option></select>
     </div>
     <div class="form-group"><label class="form-label">Heure</label>
       <select class="form-select"><option>09h00</option><option>10h00</option><option>11h00</option><option>14h00</option><option>15h00</option><option>16h00</option><option>17h00</option></select>
@@ -2278,7 +2263,6 @@ function showToast(msg){
   </div>
 </div>
 
-<!-- ══ PAGES LÉGALES ══ -->
 <div id="page-mentions" class="page"><div style="max-width:680px;margin:0 auto;padding:80px 28px;">
   <button onclick="showPage('home')" style="background:none;border:none;cursor:pointer;font-size:13px;color:var(--navy-mid);font-family:'DM Sans',sans-serif;margin-bottom:22px;">← Accueil</button>
   <h1 style="font-family:'Syne',sans-serif;font-size:26px;color:var(--navy);margin-bottom:5px;">Mentions légales</h1><p style="font-size:12px;color:var(--text-light);margin-bottom:26px;">En vigueur au 22 mars 2026</p>
@@ -2305,7 +2289,6 @@ function showToast(msg){
   <div style="margin-bottom:20px;"><h3 style="font-family:'Syne',sans-serif;font-size:14px;color:var(--navy);margin-bottom:7px;">Commissions recrutement</h3><p style="font-size:13px;color:var(--text-mid);line-height:1.8;">CDI/CDD : 800–1500 EUR · Alternance : 300–500 EUR · Stage : 200 EUR. Facturées à l'entreprise recruteuse.</p></div>
 </div></div>
 
-<!-- ══ MODALES ══ -->
 <div id="p14-mo-add-pro" class="p14-mo" onclick="if(event.target===this)p14Mc('add-pro')">
   <div class="p14-mb"><button class="p14-mc" onclick="p14Mc('add-pro')">×</button>
     <div class="p14-mt">Ajouter un professionnel</div>
@@ -2316,7 +2299,7 @@ function showToast(msg){
     <div style="margin-bottom:10px;"><label style="font-size:12px;font-weight:500;color:var(--text-mid);display:block;margin-bottom:4px;">Titre / Poste *</label><input id="ap-ti" class="form-input" placeholder="DRH chez TotalEnergies" style="width:100%;"></div>
     <div style="margin-bottom:10px;"><label style="font-size:12px;font-weight:500;color:var(--text-mid);display:block;margin-bottom:4px;">Entreprise</label><input id="ap-co" class="form-input" placeholder="TotalEnergies" style="width:100%;"></div>
     <div style="margin-bottom:10px;"><label style="font-size:12px;font-weight:500;color:var(--text-mid);display:block;margin-bottom:4px;">Domaine</label>
-      <select id="ap-do" class="form-select" style="width:100%;"><option value="carriere">Carrière &amp; RH</option><option value="tech">Tech &amp; Ingénierie</option><option value="finance">Finance</option><option value="business">Business</option><option value="soft">Soft Skills</option></select>
+      <select id="ap-do" class="form-select" style="width:100%;"><option value="carriere">Carrière & RH</option><option value="tech">Tech & Ingénierie</option><option value="finance">Finance</option><option value="business">Business</option><option value="soft">Soft Skills</option></select>
     </div>
     <div style="margin-bottom:10px;"><label style="font-size:12px;font-weight:500;color:var(--text-mid);display:block;margin-bottom:4px;">Spécialités (virgule)</label><input id="ap-sp" class="form-input" placeholder="CV, Entretien RH, LinkedIn" style="width:100%;"></div>
     <div style="margin-bottom:10px;"><label style="font-size:12px;font-weight:500;color:var(--text-mid);display:block;margin-bottom:4px;">Expériences (1 par ligne)</label><textarea id="ap-ex" class="form-input" rows="3" style="width:100%;height:70px;" placeholder="DRH TotalEnergies (2020)"></textarea></div>
@@ -2355,7 +2338,10 @@ function showToast(msg){
       <button id="mf-tab-txt" style="flex:1;padding:6px;border-radius:6px;border:none;background:var(--white);font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;color:var(--navy);">Saisir le contenu</button>
       <button id="mf-tab-file" style="flex:1;padding:6px;border-radius:6px;border:none;background:transparent;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;color:var(--text-light);" onclick="p14FicheTab('file')">Importer depuis PC</button>
     </div>
-    <div id="mf-txt-sec"><textarea id="mf-co" class="form-input" rows="5" placeholder="- Point 1&#10;- Point 2&#10;&#10;Paragraphe..." style="width:100%;height:130px;resize:vertical;"></textarea></div>
+    <div id="mf-txt-sec"><textarea id="mf-co" class="form-input" rows="5" placeholder="- Point 1
+- Point 2
+
+Paragraphe..." style="width:100%;height:130px;resize:vertical;"></textarea></div>
     <div id="mf-file-sec" style="display:none;">
       <div onclick="document.getElementById('mf-file-inp').click()" style="border:2px dashed var(--border);border-radius:10px;padding:16px;text-align:center;cursor:pointer;"><div style="font-size:22px;margin-bottom:4px;">📎</div><div style="font-size:12.5px;color:var(--text-mid);">PDF, TXT, Image — cliquez pour sélectionner</div></div>
       <input type="file" id="mf-file-inp" accept=".pdf,.txt,image/*" style="display:none;" onchange="p14HandleFicheFile(this)">
@@ -2378,7 +2364,6 @@ function showToast(msg){
   </div>
 </div>
 
-<!-- Email toast simulation -->
 <div id="email-toast" class="email-toast">
   <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
     <div style="width:34px;height:34px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;font-size:15px;">✉️</div>
@@ -2687,7 +2672,7 @@ function p14RenderJobs(){
       '<div><div style="font-size:13.5px;font-weight:500;color:var(--navy);">'+j.ti+'</div><div style="font-size:12px;color:var(--text-mid);">'+j.co+'</div></div>'+
       '<span class="job-type-pill jp-'+j.ty+'">'+(j.ty==='stage'?'Stage':j.ty==='alternance'?'Alternance':'CDI')+'</span></div>'+
       '<div style="font-size:12px;color:var(--text-light);">'+j.de+'</div>'+
-      '<div style="display:flex;gap:10px;font-size:11px;color:var(--text-light);margin-top:6px;"><span>&#8987; '+j.du+'</span><span>&#128205; '+j.lo+'</span></div>'+
+      '<div style="display:flex;gap:10px;font-size:11px;color:var(--text-light);margin-top:6px;"><span>⌛ '+j.du+'</span><span>📍 '+j.lo+'</span></div>'+
       '<button onclick="p14ContactJob('+j.id+')" style="margin-top:8px;padding:6px 14px;background:var(--gold);color:var(--navy);border:none;border-radius:50px;font-size:12px;cursor:pointer;font-family:DM Sans,sans-serif;font-weight:500;">Postuler via Pitchfield</button>'+
     '</div>';
   }).join('');
@@ -2727,7 +2712,7 @@ function p14BuildWeek(){
       var k=P14_WO+'_'+d+'_'+hr;var bl=!!P14_BL[k];
       var bk=typeof rdvDB!=='undefined'&&rdvDB.some(function(r){return r.heure&&r.heure.startsWith(hr.replace('h',''));});
       var cls=bl?'bl':bk?'bk':'av';
-      h+='<div class="wg-c '+cls+'" data-k="'+k+'" onclick="p14TogSlot(this)" title="'+d+' '+hr+(bl?' — Bloqué':bk?' — RDV':' — Disponible')+'">'+(bl?'&#x2715;':bk?'RDV':'')+'</div>';
+      h+='<div class="wg-c '+cls+'" data-k="'+k+'" onclick="p14TogSlot(this)" title="'+d+' '+hr+(bl?' — Bloqué':bk?' — RDV':' — Disponible')+'">'+(bl?'✕':bk?'RDV':'')+'</div>';
     });
   });
   grid.innerHTML=h;
@@ -2787,7 +2772,7 @@ function p14UpdateCard(course){
     var sec=card.querySelector('.p14-fiche-sec');
     if(!sec){sec=document.createElement('div');sec.className='p14-fiche-sec';sec.style.cssText='margin-top:8px;border-top:1px solid var(--border);padding-top:8px;';card.querySelector('.course-body').appendChild(sec);}
     sec.innerHTML='<div style="font-size:10px;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px;">'+fiches.length+' fiche'+(fiches.length>1?'s':'')+'</div>'+
-      fiches.map(function(f,i){return '<span class="fiche-pill" data-c="'+encodeURIComponent(course)+'" data-i="'+i+'" onclick="p14ReadFiche(this)">&#128196; '+f.ti+'</span>';}).join('');
+      fiches.map(function(f,i){return '<span class="fiche-pill" data-c="'+encodeURIComponent(course)+'" data-i="'+i+'" onclick="p14ReadFiche(this)">📄 '+f.ti+'</span>';}).join('');
   });
 }
 function p14ReadFiche(el){
@@ -2798,7 +2783,7 @@ function p14ReadFiche(el){
   var body='';
   if(f.fileData){
     if(f.fileData.type==='image')body='<img src="'+f.fileData.url+'" style="width:100%;border-radius:10px;">';
-    else body='<div style="text-align:center;padding:18px;"><a href="'+f.fileData.url+'" download="'+f.fileData.name+'" style="background:var(--navy);color:white;padding:11px 22px;border-radius:50px;text-decoration:none;font-size:14px;font-weight:500;">&#11015; Télécharger</a></div>';
+    else body='<div style="text-align:center;padding:18px;"><a href="'+f.fileData.url+'" download="'+f.fileData.name+'" style="background:var(--navy);color:white;padding:11px 22px;border-radius:50px;text-decoration:none;font-size:14px;font-weight:500;">⬇ Télécharger</a></div>';
   } else {
     var lines=f.co.split('\n').map(function(l){return l.startsWith('-')?'<li style="margin-bottom:3px;">'+l.slice(1).trim()+'</li>':'<p style="margin-bottom:6px;">'+l+'</p>';});
     body='<div style="font-size:13px;color:var(--text-mid);line-height:1.8;">'+lines.join('')+'</div>';
@@ -2818,7 +2803,7 @@ function p14VidTab(tab){
 function p14HandleVid(input){
   var f=input.files[0];if(!f)return;
   var el=document.getElementById('vt-file-name');
-  if(el){el.textContent='&#10003; '+f.name;el.style.display='block';}
+  if(el){el.textContent='✓ '+f.name;el.style.display='block';}
   input._objUrl=URL.createObjectURL(f);
 }
 function p14SaveVideo(){
@@ -2846,13 +2831,13 @@ function p14LoadAvis(){
   var rdvs=document.getElementById('avis-rdv-list');
   if(urg){
     var urgList=P14_RDVS.filter(function(r){return !r.done;});
-    urg.innerHTML=urgList.map(function(r){return '<div style="background:rgba(226,75,74,.06);border:1px solid rgba(226,75,74,.2);border-radius:10px;padding:12px 16px;font-size:13px;color:var(--red);margin-bottom:10px;display:flex;align-items:center;gap:10px;">&#9888; <strong>Avis obligatoire</strong> — Session avec '+r.proName+' le '+r.date+' · Deadline : <strong>'+r.deadline+'</strong><button onclick="p14SelectRdv('+r.id+')" style="margin-left:auto;background:var(--red);color:white;border:none;padding:6px 14px;border-radius:50px;font-size:12px;cursor:pointer;font-family:DM Sans,sans-serif;">Donner un avis</button></div>';}).join('');
+    urg.innerHTML=urgList.map(function(r){return '<div style="background:rgba(226,75,74,.06);border:1px solid rgba(226,75,74,.2);border-radius:10px;padding:12px 16px;font-size:13px;color:var(--red);margin-bottom:10px;display:flex;align-items:center;gap:10px;">⚠ <strong>Avis obligatoire</strong> — Session avec '+r.proName+' le '+r.date+' · Deadline : <strong>'+r.deadline+'</strong><button onclick="p14SelectRdv('+r.id+')" style="margin-left:auto;background:var(--red);color:white;border:none;padding:6px 14px;border-radius:50px;font-size:12px;cursor:pointer;font-family:DM Sans,sans-serif;">Donner un avis</button></div>';}).join('');
   }
   if(rdvs){
     rdvs.innerHTML=P14_RDVS.map(function(r){return '<div style="background:var(--cream);border-radius:10px;padding:11px 15px;display:flex;align-items:center;gap:11px;cursor:pointer;" onclick="p14SelectRdv('+r.id+')">'+
       '<div style="width:34px;height:34px;border-radius:50%;background:'+r.proBg+';color:'+r.proColor+';display:flex;align-items:center;justify-content:center;font-family:Syne,sans-serif;font-size:11px;font-weight:700;">'+r.proAv+'</div>'+
       '<div><div style="font-size:13px;font-weight:500;color:var(--navy);">'+r.proName+'</div><div style="font-size:11px;color:var(--text-light);">'+r.date+'</div></div>'+
-      '<div style="margin-left:auto;font-size:12px;padding:3px 11px;border-radius:50px;background:'+(r.done?'rgba(30,126,52,.1)':'rgba(226,75,74,.08)')+';color:'+(r.done?'var(--green)':'var(--red)')+';">'+(r.done?'&#10003; Avis déposé':'À noter')+'</div>'+
+      '<div style="margin-left:auto;font-size:12px;padding:3px 11px;border-radius:50px;background:'+(r.done?'rgba(30,126,52,.1)':'rgba(226,75,74,.08)')+';color:'+(r.done?'var(--green)':'var(--red)')+';">'+(r.done?'✓ Avis déposé':'À noter')+'</div>'+
     '</div>';}).join('');
   }
   p14RenderAvisPublies();
@@ -2889,7 +2874,7 @@ function p14RenderAvisPublies(){
   var list=document.getElementById('avis-publies');if(!list)return;
   var all=P14_AVIS.concat([{rdvId:0,note:5,comment:"Excellente session ! Léo m'a donné des conseils très concrets pour mon CV et mon profil LinkedIn.",proName:'Léo Leszczynski',proAv:'LL',proBg:'#0D1B2E',proColor:'#C9A84C',date:'20 mars 2026',pubDate:'21 mars 2026'}]);
   list.innerHTML=all.map(function(a){
-    var stars='';for(var i=1;i<=5;i++)stars+='<span style="color:'+(i<=a.note?'#F5A623':'#DDD')+';">&#9733;</span>';
+    var stars='';for(var i=1;i<=5;i++)stars+='<span style="color:'+(i<=a.note?'#F5A623':'#DDD')+';">★</span>';
     return '<div class="avis-card"><div class="avis-header"><div class="avis-av" style="background:'+a.proBg+';color:'+a.proColor+';">'+a.proAv+'</div><div><div style="font-size:14px;font-weight:500;color:var(--navy);">'+a.proName+'</div><div style="font-size:11px;color:var(--text-light);">Session du '+a.date+'</div></div><div style="margin-left:auto;font-size:11px;color:var(--text-light);">Publié le '+a.pubDate+'</div></div>'+
       '<div style="background:var(--cream);border-radius:10px;padding:11px 14px;"><div>'+stars+'</div><p style="font-size:13px;color:var(--text-mid);margin-top:5px;line-height:1.6;">"'+a.comment+'"</p></div></div>';
   }).join('');
@@ -2918,23 +2903,14 @@ function p14BotSend(){
 function p14BotQ(q){var inp=document.getElementById('bot-inp');if(inp){inp.value=q;p14BotSend();}}
 
 /* ── Init showAppPage hook ───────────────────────────────── */
-var _p14origSAP = showAppPage;
-function showAppPage(name) {
+var _p14origSAP=showAppPage;
+function showAppPage(name){
   _p14origSAP(name);
-  
-  if(name === 'profil') { p14LoadProfil(); p14ToggleProfil(false); }
-  if(name === 'avis')   { p14LoadAvis(); }
-  
-  // AJOUT DE CETTE LIGNE POUR FIXER L'ACADÉMIE
-  if(name === 'academy'){ p14RenderAcademy(); } 
-  
-  if(name === 'stage') { 
-    p14RenderJobs(); 
-    var btn = document.getElementById('stage-add-btn');
-    if(btn) btn.style.display = currentUser && currentUser.role === 'admin' ? '' : 'none'; 
-  }
-  
-  if(name === 'admin-pros') { p14FPro(); }
+  if(name==='profil'){p14LoadProfil();p14ToggleProfil(false);}
+  if(name==='avis'){p14LoadAvis();}
+  if(name==='stage'){p14RenderJobs();var btn=document.getElementById('stage-add-btn');if(btn)btn.style.display=currentUser&&currentUser.role==='admin'?'':'none';}
+  if(name==='admin-pros'){p14FPro('all',null);}
+  if(name==='admin-cal'){p14BuildWeek();}
 }
 
 /* ── DOMContentLoaded ────────────────────────────────────── */
@@ -2948,5 +2924,240 @@ document.addEventListener('DOMContentLoaded',function(){
 });
 
 </script>
+
+<div id="module-modal" class="module-mo" onclick="if(event.target===this)p14CloseModule()">
+  <div class="module-mb">
+    <div id="module-thumb-hd" class="module-thumb-hd">🎓
+      <button class="module-close" onclick="p14CloseModule()">×</button>
+    </div>
+    <div class="module-body">
+      <span id="module-tag" class="module-tag">Carrière</span>
+      <div id="module-title" class="module-title">Titre du module</div>
+      <div id="module-desc" class="module-desc">Description du module.</div>
+
+      <div id="module-vids-sec" style="display:none;">
+        <div class="module-sec-title">Vidéos disponibles</div>
+        <div id="module-vids-list"></div>
+        <div id="module-vid-embed" class="video-embed-wrap"></div>
+      </div>
+
+      <div id="module-fiches-sec" style="display:none;">
+        <div class="module-sec-title">Fiches explicatives</div>
+        <div id="module-fiches-list" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+        <div id="module-fiche-content" style="display:none;background:var(--cream);border-radius:12px;padding:16px;margin-top:12px;font-size:13.5px;color:var(--text-mid);line-height:1.8;"></div>
+      </div>
+
+      <div id="module-pros-sec">
+        <div class="module-sec-title">Professionnels disponibles sur ce module</div>
+        <div id="module-pros-list"></div>
+      </div>
+
+      <div id="module-admin-btns" class="admin-only" style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);display:flex;gap:8px;">
+        <button id="module-add-vid-btn" onclick="p14ModuleAddVid()" style="background:var(--navy);color:white;border:none;padding:9px 18px;border-radius:50px;font-size:12.5px;cursor:pointer;font-family:'DM Sans',sans-serif;">+ Vidéo</button>
+        <button id="module-add-fiche-btn" onclick="p14ModuleAddFiche()" style="background:rgba(201,168,76,.15);color:var(--gold);border:none;padding:9px 18px;border-radius:50px;font-size:12.5px;cursor:pointer;font-family:'DM Sans',sans-serif;border:1px solid rgba(201,168,76,.3);">+ Fiche</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+/* ═══ PITCHFIELD V14 — Navigation Académie ═══ */
+
+// Données étendues des modules
+var P14_MODULES = {
+  'Préparer son entretien RH comme un pro': {desc:"Techniques, posture, éloquence et réponses aux questions pièges. Inclut des exercices de simulation d'entretien.",cat:'Carrière',thumb:'🎯',bg:'linear-gradient(135deg,#0D1B2E,#1A3A5C)',proDomains:['carriere']},
+  'Créer un CV qui passe les filtres IA (ATS)': {desc:"75% des grandes entreprises filtrent les CV avec une IA. Apprenez à rédiger un CV visible, lisible et percutant.",cat:'Carrière',thumb:'📄',bg:'linear-gradient(135deg,#1E7E34,#2E8B3A)',proDomains:['carriere']},
+  'Optimiser son LinkedIn pour être recruté': {desc:"Photo, titre accrocheur, résumé, mots-clés recruteurs. Transformez votre profil en aimant à opportunités.",cat:'Carrière',thumb:'💼',bg:'linear-gradient(135deg,#0077B5,#1A95D0)',proDomains:['carriere','business']},
+  "Maîtriser l'éloquence et l'art oratoire": {desc:"Prise de parole en public, gestion du stress, structure du discours. Devenez l'orateur que vous voulez être.",cat:'Soft Skills',thumb:'🎤',bg:'linear-gradient(135deg,#C9A84C,#E8C96A)',proDomains:['soft']},
+  'Monter son business en ligne de zéro': {desc:"De l'idée à la première vente. Modèle économique, acquisition clients, scaling. Par des entrepreneurs qui l'ont fait.",cat:'Business',thumb:'🚀',bg:'linear-gradient(135deg,#D85A30,#F07040)',proDomains:['business']},
+  'Introduction au trading et à l\'investissement': {desc:"Comprendre les marchés financiers, les crypto-actifs et les stratégies d'investissement. Risques et opportunités.",cat:'Finance',thumb:'📈',bg:'linear-gradient(135deg,#1A5FA5,#2A7FD5)',proDomains:['finance']},
+  'Créer son site internet sans coder': {desc:"V0.dev, Webflow, Framer. Construire un site professionnel en une journée sans coder.",cat:'Tech',thumb:'💻',bg:'linear-gradient(135deg,#5B2C8C,#7B4CAC)',proDomains:['tech']},
+  'Préparer son oral de bac de français': {desc:"Structure, introduction, analyse des œuvres. Fiches méthode + exemples pour décrocher les meilleures notes.",cat:'Lycée',thumb:'🎓',bg:'linear-gradient(135deg,#A32D2D,#E24B4A)',proDomains:['soft','carriere']},
+  'Bases de l\'investissement immobilier': {desc:"Comprendre le marché, les mécanismes de financement, investir dès 20 ans.",cat:'Finance',thumb:'🏠',bg:'linear-gradient(135deg,#085041,#1D9E75)',proDomains:['finance']},
+  'Gestion du stress avant un oral ou entretien': {desc:"Techniques de respiration, préparation mentale et routines pour performer.",cat:'Soft Skills',thumb:'🧠',bg:'linear-gradient(135deg,#1A3A5C,#2E75B6)',proDomains:['soft','business']},
+};
+
+var p14CurrentModule = null;
+var p14CurrentVidEmbed = null;
+
+function p14OpenModule(card) {
+  var title = card.dataset.title || card.querySelector('.course-title').textContent;
+  p14CurrentModule = title;
+  var info = P14_MODULES[title] || {desc:'',cat:'Module',thumb:'📚',bg:'#0D1B2E',proDomains:[]};
+
+  // Header
+  var hd = document.getElementById('module-thumb-hd');
+  if(hd) { hd.style.background = info.bg; hd.childNodes[0].textContent = info.thumb; }
+
+  // Infos
+  var tagEl = document.getElementById('module-tag'); if(tagEl) tagEl.textContent = info.cat;
+  var titleEl = document.getElementById('module-title'); if(titleEl) titleEl.textContent = title;
+  var descEl = document.getElementById('module-desc'); if(descEl) descEl.textContent = info.desc;
+
+  // Vidéos
+  var vids = (typeof videoDB !== 'undefined' && videoDB[title]) ? videoDB[title] : [];
+  // Aussi les vidéos locales P14
+  if(typeof P14_FICHES !== 'undefined' && P14_FICHES[title+'__vids']) {
+    vids = vids.concat(P14_FICHES[title+'__vids']);
+  }
+  var vidsSec = document.getElementById('module-vids-sec');
+  var vidsList = document.getElementById('module-vids-list');
+  var vidEmbed = document.getElementById('module-vid-embed');
+  if(vidEmbed) { vidEmbed.style.display='none'; vidEmbed.innerHTML=''; }
+  p14CurrentVidEmbed = null;
+
+  if(vids.length > 0 && vidsSec && vidsList) {
+    vidsSec.style.display = 'block';
+    vidsList.innerHTML = vids.map(function(v, i) {
+      return '<span onclick="p14PlayVid(event, this,\''+encodeURIComponent(title)+'\','+i+')" style="display:inline-flex;align-items:center;gap:6px;background:var(--green-light);color:var(--green);font-size:11.5px;padding:5px 12px;border-radius:50px;cursor:pointer;margin:3px 3px 0 0;font-weight:500;border:1px solid transparent;transition:all .2s;" onmouseover="this.style.background=\'var(--green)\';this.style.color=\'white\'" onmouseout="this.style.background=\'var(--green-light)\';this.style.color=\'var(--green)\'">► '+(v.dur?v.dur+' · ':'')+v.title+'</span>';
+    }).join('');
+  } else if(vidsSec) {
+    vidsSec.style.display = 'none';
+  }
+
+  // Fiches
+  var fiches = (typeof P14_FICHES !== 'undefined' && P14_FICHES[title]) ? P14_FICHES[title] : [];
+  var fichesSec = document.getElementById('module-fiches-sec');
+  var fichesList = document.getElementById('module-fiches-list');
+  var ficheContent = document.getElementById('module-fiche-content');
+  if(ficheContent) ficheContent.style.display = 'none';
+  if(fiches.length > 0 && fichesSec && fichesList) {
+    fichesSec.style.display = 'block';
+    fichesList.innerHTML = fiches.map(function(f, i) {
+      return '<span onclick="p14ShowFicheInModule(event, \''+encodeURIComponent(title)+'\','+i+')" class="fiche-pill">📄 '+f.ti+'</span>';
+    }).join('');
+  } else if(fichesSec) {
+    fichesSec.style.display = 'none';
+  }
+
+  // Pros rattachés
+  var prosList = document.getElementById('module-pros-list');
+  if(prosList) {
+    var matchedPros = (typeof P14_PROS !== 'undefined') ? P14_PROS.filter(function(p) {
+      return info.proDomains.some(function(d) { return p.do.indexOf(d) !== -1; });
+    }) : [];
+    if(matchedPros.length) {
+      prosList.innerHTML = matchedPros.slice(0,3).map(function(p) {
+        return '<div class="module-pro-row">'+
+          '<div class="module-pro-av" style="background:'+p.bg+';color:'+p.co+'">'+p.in+'</div>'+
+          '<div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--navy);">'+p.pr+' '+p.no+'</div><div style="font-size:11px;color:var(--text-light);">'+p.ti+'</div></div>'+
+          '<div style="display:flex;align-items:center;gap:5px;font-size:11px;color:'+(p.av?'var(--green)':'var(--text-light)')+'"><div style="width:7px;height:7px;border-radius:50%;background:'+(p.av?'var(--green)':'var(--text-light)')+'"></div>'+(p.av?'Dispo':'Indispo')+'</div>'+
+          '<button onclick="event.stopPropagation(); p14Mc(\'module-modal\'); p14StartMsg('+p.id+')" style="background:var(--navy);color:white;border:none;padding:5px 12px;border-radius:50px;font-size:11.5px;cursor:pointer;font-family:DM Sans,sans-serif;">Contacter</button>'+
+        '</div>';
+      }).join('');
+    } else {
+      prosList.innerHTML = '<div style="font-size:13px;color:var(--text-light);">Aucun mentor rattaché à ce module pour le moment.</div>';
+    }
+  }
+
+  // Admin buttons
+  var adminBtns = document.getElementById('module-admin-btns');
+  if(adminBtns) adminBtns.style.display = (currentUser && currentUser.role==='admin') ? 'flex' : 'none';
+
+  // Afficher la modale
+  var mo = document.getElementById('module-modal');
+  if(mo) { mo.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+}
+
+function p14CloseModule() {
+  var mo = document.getElementById('module-modal');
+  if(mo) { mo.style.display = 'none'; document.body.style.overflow = ''; }
+  p14CurrentModule = null;
+}
+
+function p14PlayVid(e, span, encTitle, idx) {
+  e.stopPropagation(); // On empêche la fermeture si jamais il y a un clic parent
+  var title = decodeURIComponent(encTitle);
+  var vids = (typeof videoDB !== 'undefined' && videoDB[title]) ? videoDB[title] : [];
+  var v = vids[idx];
+  if(!v) return;
+  var embed = document.getElementById('module-vid-embed');
+  if(!embed) return;
+
+  // Toggle
+  if(p14CurrentVidEmbed === idx && embed.style.display === 'block') {
+    embed.style.display = 'none';
+    embed.innerHTML = '';
+    p14CurrentVidEmbed = null;
+    span.style.background = 'var(--green-light)';
+    span.style.color = 'var(--green)';
+    return;
+  }
+  // Reset toutes les pills
+  document.querySelectorAll('#module-vids-list span').forEach(function(s) {
+    s.style.background = 'var(--green-light)'; s.style.color = 'var(--green)';
+  });
+  span.style.background = 'var(--green)';
+  span.style.color = 'white';
+  p14CurrentVidEmbed = idx;
+
+  embed.style.display = 'block';
+  if(v.isLocal) {
+    embed.innerHTML = '<video controls autoplay style="width:100%;border-radius:12px;"><source src="'+v.url+'" type="video/mp4">Votre navigateur ne supporte pas la vidéo.</video>';
+  } else {
+    var ytMatch = v.url.match(/(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+    var vmMatch = v.url.match(/vimeo\.com\/(\d+)/);
+    if(ytMatch) {
+      embed.innerHTML = '<iframe src="https://www.youtube.com/embed/'+ytMatch[1]+'?autoplay=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%; height:300px; border-radius:12px;"></iframe>';
+    } else if(vmMatch) {
+      embed.innerHTML = '<iframe src="https://player.vimeo.com/video/'+vmMatch[1]+'?autoplay=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen style="width:100%; height:300px; border-radius:12px;"></iframe>';
+    } else {
+      embed.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-light);">Lien vidéo non reconnu. <a href="'+v.url+'" target="_blank" style="color:var(--navy);">Ouvrir dans un nouvel onglet</a></div>';
+    }
+  }
+}
+
+function p14ShowFicheInModule(e, encTitle, idx) {
+  e.stopPropagation();
+  var title = decodeURIComponent(encTitle);
+  var fiches = (typeof P14_FICHES !== 'undefined' && P14_FICHES[title]) ? P14_FICHES[title] : [];
+  var f = fiches[idx];
+  if(!f) return;
+  var fc = document.getElementById('module-fiche-content');
+  if(!fc) return;
+  // Toggle
+  if(fc.dataset.activeIdx == idx && fc.style.display === 'block') {
+    fc.style.display = 'none'; return;
+  }
+  fc.dataset.activeIdx = idx;
+  var lines = f.co.split('\n').map(function(l) {
+    return l.startsWith('-') ? '<li style="margin-bottom:3px;">'+l.slice(1).trim()+'</li>' : '<p style="margin-bottom:6px;">'+l+'</p>';
+  });
+  fc.innerHTML = '<div style="font-family:Syne,sans-serif;font-size:15px;font-weight:700;color:var(--navy);margin-bottom:5px;">'+f.ti+'</div>'+
+    '<div style="font-size:11px;color:var(--text-light);margin-bottom:11px;">'+title+' · '+f.lv+'</div>'+
+    '<div>'+lines.join('')+'</div>';
+  fc.style.display = 'block';
+  fc.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+function p14ModuleAddVid() {
+  if(!p14CurrentModule) return;
+  // Trouver la card et simuler l'ouverture de la modale vidéo
+  var cards = Array.from(document.querySelectorAll('.course-card'));
+  var idx = cards.findIndex(function(c) {
+    return (c.dataset.title || c.querySelector('.course-title').textContent) === p14CurrentModule;
+  });
+  if(idx < 0) return;
+  p14CloseModule();
+  var fakeBtn = document.createElement('button');
+  fakeBtn.setAttribute('data-idx', idx);
+  openAddVideoByIndex(fakeBtn);
+}
+
+function p14ModuleAddFiche() {
+  if(!p14CurrentModule) return;
+  var cards = Array.from(document.querySelectorAll('.course-card'));
+  var idx = cards.findIndex(function(c) {
+    return (c.dataset.title || c.querySelector('.course-title').textContent) === p14CurrentModule;
+  });
+  if(idx < 0) return;
+  p14CloseModule();
+  var fakeBtn = document.createElement('button');
+  fakeBtn.setAttribute('data-idx', idx);
+  p14OpenFicheAdmin(fakeBtn);
+}
+</script>
+
 </body>
 </html>

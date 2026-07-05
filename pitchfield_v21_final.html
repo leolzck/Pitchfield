@@ -1900,6 +1900,7 @@ footer{background:var(--navy);color:var(--white);padding:64px 80px 32px;}
       <div><label style="font-size:12px;font-weight:500;color:var(--text-mid);display:block;margin-bottom:4px;">Prénom *</label><input id="ap-pr" class="form-input" placeholder="Marie" style="width:100%;"></div>
       <div><label style="font-size:12px;font-weight:500;color:var(--text-mid);display:block;margin-bottom:4px;">Nom *</label><input id="ap-no" class="form-input" placeholder="Andrieu" style="width:100%;"></div>
     </div>
+    <div style="margin-bottom:10px;"><label style="font-size:12px;font-weight:500;color:var(--text-mid);display:block;margin-bottom:4px;">Email du professionnel *</label><input id="ap-em" type="email" class="form-input" placeholder="prenom.nom@entreprise.fr" style="width:100%;"><div style="font-size:11px;color:var(--gold);margin-top:4px;">🔑 C'est avec cet email que le pro créera son compte : il recevra automatiquement son Espace Pro.</div></div>
     <div style="margin-bottom:10px;"><label style="font-size:12px;font-weight:500;color:var(--text-mid);display:block;margin-bottom:4px;">Titre / Poste *</label><input id="ap-ti" class="form-input" placeholder="DRH chez TotalEnergies" style="width:100%;"></div>
     <div style="margin-bottom:10px;"><label style="font-size:12px;font-weight:500;color:var(--text-mid);display:block;margin-bottom:4px;">Entreprise</label><input id="ap-co" class="form-input" placeholder="TotalEnergies" style="width:100%;"></div>
     <div style="margin-bottom:10px;"><label style="font-size:12px;font-weight:500;color:var(--text-mid);display:block;margin-bottom:4px;">Domaine</label>
@@ -2401,6 +2402,23 @@ async function loadCoreData(){
   S.progress = {};
   (res[3].data||[]).forEach(function(p){ if(String(p.user_id)===String(S.session.user.id)) S.progress[p.module_title]=true; });
   S.convs    = res[4].data || [];
+  // Fiche pro liée au compte connecté (accès Espace Pro)
+  S.myProId = null;
+  if(S.profile && S.profile.role==='pro'){
+    S.pros.forEach(function(p){ if((p.email||'').toLowerCase()===(S.profile.email||'').toLowerCase()) S.myProId=p.id; });
+  }
+  // Profils des étudiants liés (visibles par admin & pros via RLS)
+  S.convUsers = {};
+  if(S.profile && (S.profile.role==='admin'||S.profile.role==='pro')){
+    var uids = {};
+    S.convs.forEach(function(c){ uids[c.user_id]=1; });
+    S.bookings.forEach(function(b){ uids[b.user_id]=1; });
+    var ids = Object.keys(uids);
+    if(ids.length){
+      var pr2 = await sb.from('profiles').select('id,prenom,nom,email,level,school').in('id',ids);
+      (pr2.data||[]).forEach(function(u){ S.convUsers[u.id]=u; });
+    }
+  }
   // Contenu payant (RLS a le dernier mot)
   var pay = await Promise.all([ sb.from('videos').select('*').order('position'), sb.from('fiches').select('*').order('id') ]);
   S.videos={}; (pay[0].data||[]).forEach(function(v){ (S.videos[v.module_title]=S.videos[v.module_title]||[]).push(v); });
@@ -2436,10 +2454,11 @@ function applyRole(){
     }
     if($('sb-role')) $('sb-role').textContent = isAdmin ? 'Fondateur · Pitchfield' : (S.profile.level ? S.profile.level+(S.profile.school?' · '+S.profile.school:'') : 'Membre Pitchfield');
   }
-  // Sections admin
-  ['sb-admin-sec','sb-admin-nav'].forEach(function(id){ var el=$(id); if(el) el.style.display = isAdmin?'':'none'; });
-  ['sb-pro-sec','sb-pro-nav'].forEach(function(id){ var el=$(id); if(el) el.style.display = isPro?'':'none'; });
-  document.querySelectorAll('.admin-only').forEach(function(el){ el.style.display = isAdmin?'':'none'; });
+  // Sections admin (classe body + display explicite pour surpasser la règle CSS .admin-only{display:none})
+  document.body.classList.toggle('role-admin', isAdmin);
+  ['sb-admin-sec','sb-admin-nav'].forEach(function(id){ var el=$(id); if(el) el.style.display = isAdmin?'block':'none'; });
+  ['sb-pro-sec','sb-pro-nav'].forEach(function(id){ var el=$(id); if(el) el.style.display = isPro?'block':'none'; });
+  document.querySelectorAll('.admin-only').forEach(function(el){ el.style.display = isAdmin?(el.id==='module-admin-btns'?'flex':'block'):'none'; });
 }
 
 // ── INITIALISATION ─────────────────────────────────────────────
@@ -2528,12 +2547,16 @@ function renderDashboard(){
   // Espace pro
   if(S.profile.role==='pro' || S.profile.role==='admin'){ renderProSessions(); }
 }
+function studentName(uid){
+  var u=S.convUsers&&S.convUsers[uid];
+  return u ? ((u.prenom+' '+u.nom).trim()||u.email) : 'Étudiant';
+}
 function renderProSessions(){
   var el=$('pro-rdv-list');
   if(el){
-    var fut = S.bookings.filter(function(b){ return b.status==='confirmed'; });
+    var fut = S.bookings.filter(function(b){ return b.status==='confirmed' && (S.profile.role==='admin' || (S.myProId!=null && String(b.pro_id)===String(S.myProId))); });
     el.innerHTML = fut.length ? fut.map(function(b){ var p=proById(b.pro_id); var d=new Date(b.date);
-      return '<div style="display:flex;justify-content:space-between;padding:10px 12px;background:var(--cream);border-radius:10px;font-size:13px;"><span>'+esc(b.rdv_type||'Session')+' · '+esc(p?proName(p):'')+'</span><span style="color:var(--gold);font-weight:600;">'+fdate(d)+' · '+esc(b.time||'')+'</span></div>';
+      return '<div style="display:flex;justify-content:space-between;padding:10px 12px;background:var(--cream);border-radius:10px;font-size:13px;"><span>'+esc(b.rdv_type||'Session')+' · avec '+esc(studentName(b.user_id))+(S.profile.role==='admin'&&p?' ('+esc(proName(p))+')':'')+'</span><span style="color:var(--gold);font-weight:600;">'+fdate(d)+' · '+esc(b.time||'')+'</span></div>';
     }).join('') : '<div style="font-size:13px;color:var(--text-light);text-align:center;padding:16px;">Aucune session à venir.</div>';
   }
   var av=$('pro-avis-list');
@@ -3073,15 +3096,16 @@ function renderProsAdmin(){
 }
 async function p14SavePro(){
   function v(id){ var el=$(id); return el?el.value.trim():''; }
-  var pr=v('ap-pr'), no=v('ap-no'), ti=v('ap-ti');
+  var pr=v('ap-pr'), no=v('ap-no'), ti=v('ap-ti'), em=v('ap-em').toLowerCase();
   if(!pr||!no||!ti){ showToast('Prénom, nom et titre requis'); return; }
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){ showToast('Email du professionnel requis (clé de son accès)'); return; }
   var specs=v('ap-sp')?v('ap-sp').split(',').map(function(s){ return s.trim(); }).filter(Boolean):[];
   var exps=v('ap-ex')?v('ap-ex').split('\n').map(function(s){ return s.trim(); }).filter(Boolean):[];
-  var r=await sb.from('pros').insert({prenom:pr, nom:no, initials:(pr[0]+(no[0]||'')).toUpperCase(), title:ti+(v('ap-co')?' · '+v('ap-co'):''), domains:[v('ap-do')||'carriere'], specs:specs, experiences:exps, linkedin:v('ap-li')});
+  var r=await sb.from('pros').insert({prenom:pr, nom:no, email:em, initials:(pr[0]+(no[0]||'')).toUpperCase(), title:ti+(v('ap-co')?' · '+v('ap-co'):''), domains:[v('ap-do')||'carriere'], specs:specs, experiences:exps, linkedin:v('ap-li')});
   if(r.error){ showToast('Erreur : '+r.error.message); return; }
   var pd=await sb.from('pros').select('*').order('id'); S.pros=pd.data||[];
   p14Mc('add-pro'); showToast('Professionnel ajouté ✓');
-  ['ap-pr','ap-no','ap-ti','ap-co','ap-sp','ap-ex','ap-li'].forEach(function(id){ if($(id)) $(id).value=''; });
+  ['ap-pr','ap-no','ap-em','ap-ti','ap-co','ap-sp','ap-ex','ap-li'].forEach(function(id){ if($(id)) $(id).value=''; });
   renderProsAdmin(); p18FilterMentors();
 }
 async function deletePro(id){
@@ -3326,10 +3350,10 @@ async function loadConvs(){
 }
 function convTitle(c){
   if(S.profile && S.profile.role==='admin'){
-    var u=null; S.users.forEach(function(x){ if(String(x.id)===String(c.user_id)) u=x; });
     var p=proById(c.pro_id);
-    return (u?(u.prenom+' '+u.nom).trim()||u.email:'Étudiant')+' ↔ '+(p?proName(p):'Pro');
+    return studentName(c.user_id)+' ↔ '+(p?proName(p):'Pro');
   }
+  if(S.profile && S.profile.role==='pro'){ return studentName(c.user_id); }
   var p2=proById(c.pro_id); return p2?proName(p2):'Conversation';
 }
 function renderConvs(filter){
@@ -3357,17 +3381,17 @@ async function p14SwitchConv(id){
   var r=await sb.from('messages').select('*').eq('conv_id',id).order('created_at');
   S.msgs=r.data||[];
   var area=$('chat-messages-area'); if(!area) return;
-  var isAdmin=S.profile&&S.profile.role==='admin';
+  var asPro=S.profile&&(S.profile.role==='admin'||S.profile.role==='pro');
   area.innerHTML=S.msgs.length? S.msgs.map(function(m){
-    var minePos = isAdmin ? (m.sender==='pro') : (m.sender==='user');
+    var minePos = asPro ? (m.sender==='pro') : (m.sender==='user');
     return '<div style="align-self:'+(minePos?'flex-end':'flex-start')+';background:'+(minePos?'var(--navy)':'white')+';color:'+(minePos?'white':'var(--navy)')+';padding:11px 15px;border-radius:14px;'+(minePos?'border-bottom-right-radius:3px;':'border-bottom-left-radius:3px;border:1px solid var(--border);')+'max-width:78%;font-size:13.5px;line-height:1.6;">'+esc(m.text)+'<div style="font-size:10px;opacity:.55;margin-top:4px;">'+new Date(m.created_at).toLocaleString('fr-FR',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})+'</div></div>';
   }).join('') : '<div style="text-align:center;color:var(--text-light);font-size:13px;padding:30px;">Démarre la conversation 👋</div>';
   area.scrollTop=area.scrollHeight;
 }
 async function sendMsg(){
   var inp=$('chat-input'); if(!inp||!inp.value.trim()||!S.activeConv) return;
-  var isAdmin=S.profile&&S.profile.role==='admin';
-  var r=await sb.from('messages').insert({conv_id:S.activeConv, sender:isAdmin?'pro':'user', text:inp.value.trim()});
+  var asPro=S.profile&&(S.profile.role==='admin'||S.profile.role==='pro');
+  var r=await sb.from('messages').insert({conv_id:S.activeConv, sender:asPro?'pro':'user', text:inp.value.trim()});
   if(r.error){ showToast('Erreur : '+r.error.message); return; }
   inp.value='';
   p14SwitchConv(S.activeConv);
@@ -3494,6 +3518,24 @@ function openAddVideoEncoded(){} function openAddVideoByIndex(){} function updat
 function playVideoByAttr(){} function deleteRdv(){} function p17CloseSocialMo(){} function p14SocialRegister(){}
 function p14BuildWeek(){ buildWeekGrid(); } function applyRoleCompat(){ applyRole(); }
 
+</script>
+<script>
+/* Diagnostic admin : signale un compte admin@pitchfield.fr sans rôle admin en base */
+(function(){
+  var _ar = applyRole;
+  applyRole = function(){
+    _ar();
+    var b=document.getElementById('admin-diag');
+    var need = S.session && S.session.user && (S.session.user.email||'').toLowerCase()==='admin@pitchfield.fr' && (!S.profile || S.profile.role!=='admin');
+    if(need && !b){
+      b=document.createElement('div'); b.id='admin-diag';
+      b.style.cssText='position:fixed;top:0;left:0;right:0;z-index:500;background:#0D1B2E;color:#F9F6F0;padding:12px 20px;font-size:13px;font-family:DM Sans,sans-serif;text-align:center;border-bottom:2px solid #C9A84C;box-shadow:0 4px 18px rgba(13,27,46,.3);';
+      b.innerHTML='👑 Compte admin détecté, mais le rôle admin n\u2019est pas encore activé en base. Exécutez <b>pitchfield_fix_admin.sql</b> dans Supabase \u2192 SQL Editor, puis rechargez cette page (F5). <span style="color:#E8C96A;cursor:pointer;text-decoration:underline;margin-left:8px;" onclick="this.parentElement.remove()">Fermer</span>';
+      document.body.appendChild(b);
+    } else if(!need && b){ b.remove(); }
+  };
+  if(S.session) applyRole();
+})();
 </script>
 </body>
 </html>
